@@ -1,4 +1,46 @@
 {
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
+        }
+    },
+    "doctrine/cache": {
+        "version": "v1.8.0"
+    },
+    "doctrine/collections": {
+        "version": "v1.5.0"
+    },
+    "doctrine/common": {
+        "version": "v2.9.0"
+    },
+    "doctrine/event-manager": {
+        "version": "v1.0.0"
+    },
+    "doctrine/inflector": {
+        "version": "v1.3.0"
+    },
+    "doctrine/lexer": {
+        "version": "v1.0.1"
+    },
+    "doctrine/persistence": {
+        "version": "v1.0.1"
+    },
+    "doctrine/reflection": {
+        "version": "v1.0.0"
+    },
+    "friendsofsymfony/rest-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
+        }
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -10,6 +52,15 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        }
     },
     "symfony/cache": {
         "version": "v4.1.7"
@@ -83,6 +134,15 @@
             "ref": "5f514d9d3b8a8aac3d62ae6a86b18b90ed0c7826"
         }
     },
+    "symfony/security-core": {
+        "version": "v4.1.7"
+    },
+    "symfony/serializer": {
+        "version": "v4.1.7"
+    },
+    "symfony/templating": {
+        "version": "v4.1.7"
+    },
     "symfony/web-server-bundle": {
         "version": "3.3",
         "recipe": {
@@ -94,5 +154,11 @@
     },
     "symfony/yaml": {
         "version": "v4.1.7"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
     }
 }
