@@ -8,10 +8,12 @@
         "friendsofsymfony/rest-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^3.3",
         "sensio/framework-extra-bundle": "^5.2",
+        "symfony/asset": "4.1.*",
         "symfony/console": "4.1.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.1.*",
         "symfony/serializer": "4.1.*",
+        "symfony/twig-bundle": "4.1.*",
         "symfony/yaml": "4.1.*"
     },
     "require-dev": {
