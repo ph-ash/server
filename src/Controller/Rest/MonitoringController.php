@@ -6,6 +6,7 @@ namespace App\Controller\Rest;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,9 +35,12 @@ class MonitoringController extends FOSRestController
      * )
      *
      * @SWG\Tag(name="Monitoring")
+     *
+     * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      */
-    public function postMonitoringData(): JsonResponse
+    public function postMonitoringData(MonitoringData $monitoringData): JsonResponse
     {
+        //TODO dispatch incoming monitoring data event via service
         return new JsonResponse(null, Response::HTTP_CREATED);
     }
 }
