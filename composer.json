@@ -17,6 +17,8 @@
         "symfony/yaml": "4.1.*"
     },
     "require-dev": {
+        "phpmd/phpmd": "^2.6",
+        "squizlabs/php_codesniffer": "^3.3",
         "symfony/dotenv": "4.1.*",
         "symfony/web-server-bundle": "4.1.*"
     },
