@@ -53,6 +53,9 @@
             "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
         }
     },
+    "pdepend/pdepend": {
+        "version": "2.5.2"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -61,6 +64,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "phpmd/phpmd": {
+        "version": "2.6.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -81,6 +87,15 @@
             "branch": "master",
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        }
+    },
+    "squizlabs/php_codesniffer": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
         }
     },
     "symfony/asset": {
