@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest;
 
+use App\Service\IncomingMonitoringDataDispatcher;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -38,9 +39,10 @@ class MonitoringController extends FOSRestController
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      */
-    public function postMonitoringData(MonitoringData $monitoringData): JsonResponse
+    public function postMonitoringData(IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher, MonitoringData $monitoringData): JsonResponse
     {
-        //TODO dispatch incoming monitoring data event via service
+        //TODO add tests
+        $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
     }
 }
