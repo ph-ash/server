@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "friendsofsymfony/rest-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^3.3",
+        "react/zmq": "^0.4.0",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "4.1.*",
         "symfony/console": "4.1.*",

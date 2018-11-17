@@ -32,6 +32,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "evenement/evenement": {
+        "version": "v3.0.1"
+    },
     "exsyst/swagger": {
         "version": "v0.4.1"
     },
@@ -79,6 +82,12 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "react/event-loop": {
+        "version": "v1.0.0"
+    },
+    "react/zmq": {
+        "version": "v0.4.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
