@@ -27,6 +27,6 @@ class BoardSubscriber implements EventSubscriberInterface
     {
         //TODO test
         //TODO exception handling
-        $this->monitoringDataPush->invoke();
+        $this->monitoringDataPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
     }
 }
