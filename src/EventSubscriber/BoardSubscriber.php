@@ -18,12 +18,12 @@ class BoardSubscriber implements EventSubscriberInterface
         $this->monitoringDataPush = $monitoringDataPush;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => 'pushDataToBoard'];
     }
 
-    public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent)
+    public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
         //TODO test
         //TODO exception handling

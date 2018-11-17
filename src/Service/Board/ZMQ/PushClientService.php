@@ -8,7 +8,7 @@ use App\Dto\MonitoringData;
 
 class PushClientService implements PushClient
 {
-    public function send(MonitoringData $monitoringData)
+    public function send(MonitoringData $monitoringData): void
     {
         //TODO implement ZMQ send
         //TODO test

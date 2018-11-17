@@ -8,5 +8,5 @@ use App\Dto\MonitoringData;
 
 interface MonitoringDataPush
 {
-    public function invoke(MonitoringData $monitoringData);
+    public function invoke(MonitoringData $monitoringData): void;
 }

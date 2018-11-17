@@ -20,7 +20,7 @@ class IncomingMonitoringDataDispatcherService implements IncomingMonitoringDataD
         $this->incomingMonitoringDataEvent = $incomingMonitoringDataEvent;
     }
 
-    public function invoke(MonitoringData $monitoringData)
+    public function invoke(MonitoringData $monitoringData): void
     {
         $event = $this->incomingMonitoringDataEvent->create($monitoringData);
         $this->eventDispatcher->dispatch(Event::EVENT_INCOMING_MONITORING_DATA, $event);

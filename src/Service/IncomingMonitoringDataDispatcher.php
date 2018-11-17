@@ -6,5 +6,5 @@ use App\Dto\MonitoringData;
 
 interface IncomingMonitoringDataDispatcher
 {
-    public function invoke(MonitoringData $monitoringData);
+    public function invoke(MonitoringData $monitoringData): void;
 }

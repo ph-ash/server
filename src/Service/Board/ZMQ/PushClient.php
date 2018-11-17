@@ -6,5 +6,5 @@ use App\Dto\MonitoringData;
 
 interface PushClient
 {
-    public function send(MonitoringData $monitoringData);
+    public function send(MonitoringData $monitoringData): void;
 }

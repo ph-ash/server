@@ -16,7 +16,7 @@ class MonitoringDataPushService implements MonitoringDataPush
         $this->pushClient = $pushClient;
     }
 
-    public function invoke(MonitoringData $monitoringData)
+    public function invoke(MonitoringData $monitoringData): void
     {
         //TODO test
         //TODO exception handling
