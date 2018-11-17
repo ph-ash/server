@@ -18,23 +18,8 @@ class IncomingMonitoringDataEvent extends Event
         $this->monitoringData = $monitoringData;
     }
 
-    public function getId(): string
+    public function getMonitoringData(): MonitoringData
     {
-        $this->monitoringData->getId();
-    }
-
-    public function getStatus(): string
-    {
-        return $this->monitoringData->getStatus();
-    }
-
-    public function getPayload(): string
-    {
-        return $this->monitoringData->getPayload();
-    }
-
-    public function getIdleTimeoutInMinutes(): int
-    {
-        return $this->monitoringData->getIdleTimeoutInMinutes();
+        return $this->monitoringData;
     }
 }
