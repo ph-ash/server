@@ -26,6 +26,8 @@ class PushClientService implements PushClient
     {
         //TODO test
         //TODO exception handling
+
+        //TODO add security, see https://github.com/mkoppanen/php-zmq/blob/master/examples/ironhouse.php
         $loop = Factory::create();
         $context = new Context($loop);
         $push = $context->getSocket(ZMQ::SOCKET_PUSH);
