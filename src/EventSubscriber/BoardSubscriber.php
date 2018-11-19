@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Event\IncomingMonitoringDataEvent;
+use App\Exception\PushClientException;
 use App\Service\Board\MonitoringDataPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -23,6 +24,9 @@ class BoardSubscriber implements EventSubscriberInterface
         return [IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => 'pushDataToBoard'];
     }
 
+    /**
+     * @throws PushClientException
+     */
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
         //TODO test
