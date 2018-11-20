@@ -17,6 +17,7 @@
         "symfony/serializer": "4.1.*",
         "symfony/twig-bundle": "4.1.*",
         "symfony/yaml": "4.1.*",
+        "thruway/pawl-transport": "^0.5.0",
         "voryx/thruway": "^0.5.3"
     },
     "require-dev": {
