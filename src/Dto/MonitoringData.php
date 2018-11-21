@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use DateTimeImmutable;
 use Swagger\Annotations as SWG;
 
 class MonitoringData
