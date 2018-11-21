@@ -28,6 +28,9 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     /** @var Connection */
     private $thruwayConnection;
 
+    /** @var OutputInterface */
+    private $output;
+
     /**
      * @throws Exception
      */
@@ -41,6 +44,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         $this->loop = Factory::create();
         $this->startZMQServer();
         $this->startThruwayClient();
@@ -63,7 +67,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
         Logger::set(new NullLogger());
         $this->ZMQPullSocket->on('message', function ($payload) {
-            echo "Received on ZMQ: $payload\n";
+            $this->info('ZMQ Received: ' . $payload);
             $this->thruwayConnection->emit('monitoringData', [$payload]);
         });
     }
@@ -90,7 +94,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->thruwayConnection->on(
             'monitoringData',
             function ($payload) {
-                echo "Sending through thruway: $payload\n";
+                $this->info('Thruway sending: ' . $payload);
                 $this->thruwayConnection->getClient()->getSession()->publish('phashtopic', [$payload]);
             }
         );
@@ -108,6 +112,11 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         if ($this->thruwayConnection) {
             $this->thruwayConnection->close();
         }
+    }
+
+    private function info(string $msg): void
+    {
+        $this->output->writeln(sprintf('<info>%s</info>', $msg));
     }
 
     public function __destruct()
