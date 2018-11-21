@@ -62,7 +62,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         //});
 
         Logger::set(new NullLogger());
-        $this->ZMQPullSocket->on('message', function ($payload){
+        $this->ZMQPullSocket->on('message', function ($payload) {
             echo "Received on ZMQ: $payload\n";
             $this->thruwayConnection->emit('monitoringData', [$payload]);
         });
@@ -98,18 +98,24 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
     private function shutDownMZMQServer(): void
     {
-        $this->ZMQPullSocket->close();
+        if ($this->ZMQPullSocket) {
+            $this->ZMQPullSocket->close();
+        }
     }
 
     private function shutDownThruwayClient(): void
     {
-        $this->thruwayConnection->close();
+        if ($this->thruwayConnection) {
+            $this->thruwayConnection->close();
+        }
     }
 
     public function __destruct()
     {
         $this->shutDownMZMQServer();
         $this->shutDownThruwayClient();
-        $this->loop->stop();
+        if ($this->loop) {
+            $this->loop->stop();
+        }
     }
 }
