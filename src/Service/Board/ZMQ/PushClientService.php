@@ -32,7 +32,6 @@ class PushClientService implements PushClient
         $context = new Context($loop);
         $push = $context->getSocket(ZMQ::SOCKET_PUSH);
         try {
-            $push->setSockOpt(ZMQ::SOCKOPT_LINGER, 1);
             $push->connect('tcp://127.0.0.1:5555');
             $push->on('error', function ($e) {
                 throw new PushClientException('Server responded with an error.', 0, $e);
