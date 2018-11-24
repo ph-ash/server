@@ -21,6 +21,7 @@ class BoardSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        //TODO add some priority
         return [IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => 'pushDataToBoard'];
     }
 
