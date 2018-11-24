@@ -6,6 +6,8 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-zmq": "*",
+        "alcaeus/mongo-php-adapter": "^1.1",
+        "doctrine/mongodb-odm-bundle": "^3.5",
         "friendsofsymfony/rest-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^3.3",
         "react/zmq": "^0.4.0",
@@ -33,7 +35,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-mongo": "1.6.16"
+        }
     },
     "autoload": {
         "psr-4": {
