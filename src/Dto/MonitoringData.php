@@ -28,6 +28,12 @@ class MonitoringData
 
     /**
      * @var int
+     * @SWG\Property(description="The priority of the Data, different numbers show different sizes on the board", example=1)
+     */
+    private $priority;
+
+    /**
+     * @var int
      * @SWG\Property(description="The idle timeout of the data, after this time the tile turns yellow", example=60)
      */
     private $idleTimeoutInSeconds;
@@ -50,5 +56,10 @@ class MonitoringData
     public function getIdleTimeoutInSeconds(): int
     {
         return $this->idleTimeoutInSeconds;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 }
