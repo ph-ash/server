@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="App\Repository\MonitoringDataRepository")
  */
 class MonitoringData
 {
