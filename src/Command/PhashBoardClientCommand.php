@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Repository\MonitoringDataRepository;
 use Exception;
 use Psr\Log\NullLogger;
 use React\EventLoop\Factory;
@@ -13,6 +14,8 @@ use React\ZMQ\SocketWrapper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Thruway\ClientSession;
 use Thruway\Connection;
 use Thruway\Logging\Logger;
 use ZMQ;
@@ -30,6 +33,20 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
     /** @var OutputInterface */
     private $output;
+
+    /** @var SerializerInterface */
+    private $serializer;
+
+    /** @var MonitoringDataRepository */
+    private $monitoringDataRepository;
+
+    public function __construct(SerializerInterface $serializer, MonitoringDataRepository $monitoringDataRepository)
+    {
+        parent::__construct();
+        $this->serializer = $serializer;
+        $this->monitoringDataRepository = $monitoringDataRepository;
+    }
+
 
     /**
      * @throws Exception
@@ -66,10 +83,13 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         //});
 
         Logger::set(new NullLogger());
-        $this->ZMQPullSocket->on('message', function ($payload) {
-            $this->info('ZMQ Received: ' . $payload);
-            $this->thruwayConnection->emit('monitoringData', [$payload]);
-        });
+        $this->ZMQPullSocket->on(
+            'message',
+            function ($payload) {
+                $this->info('ZMQ Received: ' . $payload);
+                $this->thruwayConnection->emit('monitoringData', [$payload]);
+            }
+        );
     }
 
     /**
@@ -96,6 +116,28 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             function ($payload) {
                 $this->info('Thruway sending: ' . $payload);
                 $this->thruwayConnection->getClient()->getSession()->publish('phashtopic', [$payload]);
+            }
+        );
+
+        $serializer = $this->serializer;
+        $monitoringDataRepository = $this->monitoringDataRepository;
+
+        $this->thruwayConnection->on(
+            'open',
+            function (ClientSession $clientSession) use ($serializer, $monitoringDataRepository) {
+
+                var_dump('1234');
+                var_dump('1235');
+
+                var_dump('1236');
+                $monitoringDatasets = $monitoringDataRepository->findAll();
+                var_dump('1237');
+                foreach ($monitoringDatasets as $monitoringData) {
+                    $payload = $serializer->serialize($monitoringData, 'json');
+                    var_dump($payload);
+                    $this->thruwayConnection->emit('monitoringData', [$payload]);
+                }
+
             }
         );
     }
