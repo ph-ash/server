@@ -37,7 +37,8 @@ class PersistanceSubscriber implements EventSubscriberInterface
             $monitoringDataDto->getStatus(),
             $monitoringDataDto->getPayload(),
             $monitoringDataDto->getPriority(),
-            $monitoringDataDto->getIdleTimeoutInSeconds()
+            $monitoringDataDto->getIdleTimeoutInSeconds(),
+            $monitoringDataDto->getDate()
         );
 
         //TODO handle excepptions

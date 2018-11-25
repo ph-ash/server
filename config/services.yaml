@@ -33,3 +33,8 @@ services:
         class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
         public: false
         tags: [serializer.normalizer]
+
+    date_time_normalizer:
+        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+        public: false
+        tags: [serializer.normalizer]

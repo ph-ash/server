@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Document;
 
+use DateTimeImmutable;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -41,13 +42,20 @@ class MonitoringData
      */
     private $idleTimeoutInSeconds;
 
-    public function __construct(string $id, string $status, string $payload, int $priority, int $idleTimeoutInSeconds)
+    /**
+     * @var DateTimeImmutable
+     * @MongoDB\Field(type="date")
+     */
+    private $date;
+
+    public function __construct(string $id, string $status, string $payload, int $priority, int $idleTimeoutInSeconds, DateTimeImmutable $date)
     {
         $this->id = $id;
         $this->status = $status;
         $this->payload = $payload;
         $this->priority = $priority;
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
+        $this->date = $date;
     }
 
     public function getId(): string
@@ -73,5 +81,10 @@ class MonitoringData
     public function getIdleTimeoutInSeconds(): int
     {
         return $this->idleTimeoutInSeconds;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
     }
 }
