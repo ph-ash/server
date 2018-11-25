@@ -47,7 +47,6 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->monitoringDataRepository = $monitoringDataRepository;
     }
 
-
     /**
      * @throws Exception
      */
@@ -124,20 +123,12 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
         $this->thruwayConnection->on(
             'open',
-            function (ClientSession $clientSession) use ($serializer, $monitoringDataRepository) {
-
-                var_dump('1234');
-                var_dump('1235');
-
-                var_dump('1236');
+            function () use ($serializer, $monitoringDataRepository) {
                 $monitoringDatasets = $monitoringDataRepository->findAll();
-                var_dump('1237');
                 foreach ($monitoringDatasets as $monitoringData) {
                     $payload = $serializer->serialize($monitoringData, 'json');
-                    var_dump($payload);
                     $this->thruwayConnection->emit('monitoringData', [$payload]);
                 }
-
             }
         );
     }
