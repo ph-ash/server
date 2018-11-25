@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use App\Document\MonitoringData;
+use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 
-class MonitoringDataRepository extends DocumentRepository
+class MonitoringDataRepository extends ServiceDocumentRepository
 {
-
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, MonitoringData::class);
+    }
 }
