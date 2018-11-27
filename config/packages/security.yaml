@@ -10,6 +10,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            stateless: true
             anonymous: true
             guard:
                 authenticators:
@@ -27,4 +28,4 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/*, roles: ROLE_API_USER }
+        - { path: ^/api, roles: ROLE_API_USER }
