@@ -25,6 +25,10 @@ class MonitoringController extends FOSRestController
      *     response=201,
      *     description="Expects the data that will be posted to the dashboard"
      * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="When authentication header is missing or wrong credentials are given"
+     * )
      *
      * @SWG\Parameter(
      *     name="body",
