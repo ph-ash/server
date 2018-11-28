@@ -4,7 +4,7 @@ security:
         in_memory:
             memory:
                 users:
-                    auxmoneyToken:  { roles: [ 'ROLE_API_USER' ] }
+                    someToken:  { roles: [ 'ROLE_API_USER' ] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
