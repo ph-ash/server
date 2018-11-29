@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest;
 
+use App\Dto\MonitoringData;
 use App\Service\IncomingMonitoringDataDispatcher;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Swagger\Annotations as SWG;
-use App\Dto\MonitoringData;
 
 /**
  * @Route("/api")
