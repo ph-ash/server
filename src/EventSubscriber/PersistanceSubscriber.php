@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Document\MonitoringData;
 use App\Event\IncomingMonitoringDataEvent;
-use Doctrine\ODM\MongoDB\DocumentManager;
-use InvalidArgumentException;
+use App\Exception\PersistenceLayerException;
+use App\Service\Persistance\PersistMonitoringData;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistanceSubscriber implements EventSubscriberInterface
 {
-    private $documentManager;
+    private $persistMonitoringData;
 
-    public function __construct(DocumentManager $documentManager)
+    public function __construct(PersistMonitoringData $persistMonitoringData)
     {
-        $this->documentManager = $documentManager;
+        $this->persistMonitoringData = $persistMonitoringData;
     }
 
     public static function getSubscribedEvents(): array
@@ -26,23 +25,11 @@ class PersistanceSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws PersistenceLayerException
      */
     public function persistMonitoringData(IncomingMonitoringDataEvent $event): void
     {
         $monitoringDataDto = $event->getMonitoringData();
-
-        $monitoringDataDocument = new MonitoringData(
-            $monitoringDataDto->getId(),
-            $monitoringDataDto->getStatus(),
-            $monitoringDataDto->getPayload(),
-            $monitoringDataDto->getPriority(),
-            $monitoringDataDto->getIdleTimeoutInSeconds(),
-            $monitoringDataDto->getDate()
-        );
-
-        //TODO handle excepptions
-        $this->documentManager->persist($monitoringDataDocument);
-        $this->documentManager->flush($monitoringDataDocument);
+        $this->persistMonitoringData->invoke($monitoringDataDto);
     }
 }
