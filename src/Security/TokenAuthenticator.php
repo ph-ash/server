@@ -18,7 +18,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         $data = array(
-            'message' => 'Authentication Required'
+            'message' => 'Authentication with Bearer Required'
         );
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'authorization']);
@@ -26,24 +26,29 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->headers->has('authorization');
+        $wholeToken = $request->headers->get('Authorization');
+        $token = explode('Bearer: ', $wholeToken);
+        return !empty($token[1]);
     }
 
     public function getCredentials(Request $request)
     {
-        return ['token' => $request->headers->get('authorization')];
+        $wholeToken = $request->headers->get('Authorization');
+        $token = explode('Bearer: ', $wholeToken);
+        return $token[1];
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
         //TODO implement own UserProvider
-        return $userProvider->loadUserByUsername($credentials['token']);
+        return $userProvider->loadUserByUsername($credentials);
     }
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
         //TODO later check if token is still valid and user is active
         //we have no passwords/credentials for now, username is token
+
         return true;
     }
 
