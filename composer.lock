@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fa6553d40da105109d9f631fc93bb25",
+    "content-hash": "af45b6245c7a36e1e54f49dde577b08c",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -1985,6 +1985,48 @@
             "time": "2018-06-25T12:52:40+00:00"
         },
         {
+            "name": "react/child-process",
+            "version": "v0.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/child-process.git",
+                "reference": "aae49d7f1340bafb695b9af3ce4421ea41a39620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/child-process/zipball/aae49d7f1340bafb695b9af3ce4421ea41a39620",
+                "reference": "aae49d7f1340bafb695b9af3ce4421ea41a39620",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3.0",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3.5",
+                "react/stream": "^1.0 || ^0.7.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35",
+                "sebastian/environment": "^3.0 || ^2.0 || ^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\ChildProcess\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Event-driven library for executing child processes with ReactPHP.",
+            "keywords": [
+                "event-driven",
+                "process",
+                "reactphp"
+            ],
+            "time": "2018-01-18T14:53:06+00:00"
+        },
+        {
             "name": "react/dns",
             "version": "v0.4.16",
             "source": {
@@ -2899,6 +2941,56 @@
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
             "time": "2018-11-26T10:26:29+00:00"
+        },
+        {
+            "name": "symfony/expression-language",
+            "version": "v4.1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/expression-language.git",
+                "reference": "14dcc63f0496ecb1ea42b7c9ac8b4d65ce05d29e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/expression-language/zipball/14dcc63f0496ecb1ea42b7c9ac8b4d65ce05d29e",
+                "reference": "14dcc63f0496ecb1ea42b7c9ac8b4d65ce05d29e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/cache": "~3.4|~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\ExpressionLanguage\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony ExpressionLanguage Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-11-11T19:51:29+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -4508,6 +4600,68 @@
             "time": "2018-04-09T12:07:34+00:00"
         },
         {
+            "name": "voryx/thruway-bundle",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voryx/ThruwayBundle.git",
+                "reference": "6a4c710581fddf9cb50162e81e066c90cdae1647"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voryx/ThruwayBundle/zipball/6a4c710581fddf9cb50162e81e066c90cdae1647",
+                "reference": "6a4c710581fddf9cb50162e81e066c90cdae1647",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6",
+                "react/child-process": "~0.4",
+                "symfony/event-dispatcher": "^2.7|^3.0|^4.0",
+                "symfony/finder": "^2.7|^3.0|^4.0",
+                "symfony/serializer": "^2.7|^3.0|^4.0",
+                "thruway/pawl-transport": "^0.5.0",
+                "voryx/thruway": "~0.5"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.1",
+                "phpunit/phpunit": "~5.0",
+                "symfony/symfony": "^2.7|^3.0|^4.0",
+                "symfony/yaml": "2.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Voryx\\ThruwayBundle": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Bonneau",
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "David Dan",
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "WebSockets (WAMP2) integration for Symfony2",
+            "keywords": [
+                "Autobahn",
+                "WAMP",
+                "WAMP2",
+                "WebSockets",
+                "sockets",
+                "symfony"
+            ],
+            "time": "2018-11-26T18:29:43+00:00"
+        },
+        {
             "name": "voryx/thruway-common",
             "version": "1.0.3",
             "source": {
@@ -4930,17 +5084,6 @@
         {
             "name": "roave/security-advisories",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "6acf968142215f1614f5909aa006b2bf1ec45cb1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/6acf968142215f1614f5909aa006b2bf1ec45cb1",
-                "reference": "6acf968142215f1614f5909aa006b2bf1ec45cb1",
-                "shasum": ""
-            },
             "conflict": {
                 "3f/pygmentize": "<1.2",
                 "adodb/adodb-php": "<5.20.12",
