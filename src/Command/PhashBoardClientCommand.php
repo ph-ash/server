@@ -15,9 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use Thruway\ClientSession;
-use Thruway\Connection;
 use Thruway\Logging\Logger;
+use Thruway\Peer\Client;
+use Thruway\Transport\PawlTransportProvider;
 use ZMQ;
 
 class PhashBoardClientCommand extends ContainerAwareCommand
@@ -28,20 +28,18 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     /** @var SocketWrapper */
     private $ZMQPullSocket;
 
-    /** @var Connection */
-    private $thruwayConnection;
+    /** @var Client */
+    private $thruwayClient;
 
     /** @var OutputInterface */
     private $output;
-
-    /** @var SerializerInterface */
     private $serializer;
-
-    /** @var MonitoringDataRepository */
     private $monitoringDataRepository;
 
-    public function __construct(SerializerInterface $serializer, MonitoringDataRepository $monitoringDataRepository)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        MonitoringDataRepository $monitoringDataRepository
+    ) {
         parent::__construct();
         $this->serializer = $serializer;
         $this->monitoringDataRepository = $monitoringDataRepository;
@@ -63,7 +61,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->output = $output;
         $this->loop = Factory::create();
         $this->startZMQServer();
-        $this->startThruwayClient();
+        $this->startVoryxThruwayClient();
         $this->loop->run();
     }
 
@@ -77,16 +75,14 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->ZMQPullSocket = $context->getSocket(ZMQ::SOCKET_PULL);
         $this->ZMQPullSocket->bind('tcp://127.0.0.1:5555');
 
-        //$this->ZMQPullSocket->on('error', function ($e) {
-        //    var_dump($e->getMessage());
-        //});
+        //TODO listen to errors
 
         Logger::set(new NullLogger());
         $this->ZMQPullSocket->on(
             'message',
             function ($payload) {
                 $this->info('ZMQ Received: ' . $payload);
-                $this->thruwayConnection->emit('monitoringData', [$payload]);
+                $this->thruwayClient->emit('monitoringData', [$payload]);
             }
         );
     }
@@ -94,43 +90,37 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     /**
      * @throws Exception
      */
-    private function startThruwayClient(): void
+    private function startVoryxThruwayClient(): void
     {
-        //TODO put this into a config
-        $thruwayConfiguration['realm'] = 'realm1';
-        $thruwayConfiguration['trusted_url'] = 'ws://127.0.0.1:8081';
-
-        Logger::set(new NullLogger());
-
-        $this->thruwayConnection = new Connection(
-            [
-                'realm' => $thruwayConfiguration['realm'],
-                'url' => $thruwayConfiguration['trusted_url'],
-            ],
-            $this->loop
-        );
-        $this->thruwayConnection->getClient()->start(false);
-        $this->thruwayConnection->on(
-            'monitoringData',
-            function ($payload) {
-                $this->info('Thruway sending: ' . $payload);
-                $this->thruwayConnection->getClient()->getSession()->publish('phashtopic', [$payload]);
-            }
-        );
+        $this->thruwayClient = new Client('realm1', $this->loop);
+        $this->thruwayClient->addTransportProvider(new PawlTransportProvider('ws://127.0.0.1:8081'));
 
         $serializer = $this->serializer;
         $monitoringDataRepository = $this->monitoringDataRepository;
 
-        $this->thruwayConnection->on(
+        //TODO handle errors
+        //TODO listen to reconnection of the board to resend all monitorings
+
+        $this->thruwayClient->on(
             'open',
             function () use ($serializer, $monitoringDataRepository) {
                 $monitoringDatasets = $monitoringDataRepository->findAll();
                 foreach ($monitoringDatasets as $monitoringData) {
                     $payload = $serializer->serialize($monitoringData, 'json');
-                    $this->thruwayConnection->emit('monitoringData', [$payload]);
+                    $this->thruwayClient->emit('monitoringData', [$payload]);
                 }
             }
         );
+
+        $this->thruwayClient->on(
+            'monitoringData',
+            function ($payload) {
+                $this->info('Thruway sending: ' . $payload);
+                $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+            }
+        );
+
+        $this->thruwayClient->start(false);
     }
 
     private function shutDownMZMQServer(): void
@@ -142,8 +132,8 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
     private function shutDownThruwayClient(): void
     {
-        if ($this->thruwayConnection) {
-            $this->thruwayConnection->close();
+        if ($this->thruwayClient) {
+            $this->thruwayClient->getSession()->close();
         }
     }
 
