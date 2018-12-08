@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Dto\MonitoringData;
+use App\Exception\PersistenceLayerException;
 use App\Service\IncomingMonitoringDataDispatcher;
 use DateTimeImmutable;
 use Exception;
@@ -43,11 +44,16 @@ class ApiPostTestCommand extends Command
                 'monitoring id '. $i,
                 $input->getArgument('status'),
                 'some payload from' . $i,
-                \random_int(1, 25),
+                \random_int(1, 15),
                 60,
                 new DateTimeImmutable()
             );
-            $this->monitoringDataDispatcher->invoke($monitoringData);
+            try {
+                $this->monitoringDataDispatcher->invoke($monitoringData);
+            } catch (PersistenceLayerException $e){ //it is thrown for sure
+                $output->write('<error>Persistance Layer Exception: </error>');
+                $output->writeln('<error>'.$e->getMessage().'</error>');
+            }
         }
     }
 }
