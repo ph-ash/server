@@ -113,6 +113,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                 $this->thruwayClient->getSubscriber()->subscribe($this->thruwayClient->getSession(), 'phashtopic',
                 function ($payload) {
                     if($payload[0] === 'boardAvailable') {
+                        $this->info('board is connected');
                         $this->thruwayClient->emit('resendMonitoringData');
                     }
                 });
