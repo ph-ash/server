@@ -18,7 +18,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         $data = array(
-            'message' => 'Authentication with Bearer Required'
+            'message' => "Authorization header with 'Bearer: AUTH-KEY' Required"
         );
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Authorization']);
@@ -26,9 +26,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request): bool
     {
+        $supports = false;
         $wholeToken = $request->headers->get('Authorization');
-        $token = explode('Bearer: ', $wholeToken);
-        return !empty($token[1]);
+        if ($wholeToken && substr_count($wholeToken, 'Bearer: ') > 0) {
+            $token = explode('Bearer: ', $wholeToken);
+            $supports = !empty($token[1]);
+        }
+        return $supports;
     }
 
     public function getCredentials(Request $request)
