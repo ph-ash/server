@@ -97,7 +97,6 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     {
         $this->thruwayClient = new Client($this->voryxConfig['realm'], $this->loop);
         $this->thruwayClient->addTransportProvider(new PawlTransportProvider($this->voryxConfig['trusted_url']));
-
         $serializer = $this->serializer;
         $monitoringDataRepository = $this->monitoringDataRepository;
 
@@ -106,7 +105,25 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
         $this->thruwayClient->on(
             'open',
+            function () {
+                $this->info('found connection to websocket router');
+                $this->thruwayClient->emit('resendMonitoringData');
+
+                //subscribe to the channel, to get messages from board
+                $this->thruwayClient->getSubscriber()->subscribe($this->thruwayClient->getSession(), 'phashtopic',
+                function ($payload) {
+                    if($payload[0] === 'boardAvailable') {
+                        $this->thruwayClient->emit('resendMonitoringData');
+                    }
+                });
+            }
+        );
+
+        //event for sending all data to the board
+        $this->thruwayClient->on(
+            'resendMonitoringData',
             function () use ($serializer, $monitoringDataRepository) {
+                $this->info('sending all data to board');
                 $monitoringDatasets = $monitoringDataRepository->findAll();
                 foreach ($monitoringDatasets as $monitoringData) {
                     $payload = $serializer->serialize($monitoringData, 'json');
@@ -115,11 +132,21 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             }
         );
 
+        //send monitoringdata to the board
         $this->thruwayClient->on(
             'monitoringData',
             function ($payload) {
                 $this->info('Thruway sending: ' . $payload);
                 $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+            }
+        );
+
+        //los connection to the board
+        $this->thruwayClient->on(
+            'close',
+            function () {
+                $this->info('lost connection to router');
+                $this->thruwayClient->retryConnection();
             }
         );
 
