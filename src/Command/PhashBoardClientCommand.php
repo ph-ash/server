@@ -35,14 +35,17 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     private $output;
     private $serializer;
     private $monitoringDataRepository;
+    private $voryxConfig;
 
     public function __construct(
         SerializerInterface $serializer,
-        MonitoringDataRepository $monitoringDataRepository
+        MonitoringDataRepository $monitoringDataRepository,
+        array $voryxConfig
     ) {
         parent::__construct();
         $this->serializer = $serializer;
         $this->monitoringDataRepository = $monitoringDataRepository;
+        $this->voryxConfig = $voryxConfig;
     }
 
     /**
@@ -92,8 +95,8 @@ class PhashBoardClientCommand extends ContainerAwareCommand
      */
     private function startVoryxThruwayClient(): void
     {
-        $this->thruwayClient = new Client('realm1', $this->loop);
-        $this->thruwayClient->addTransportProvider(new PawlTransportProvider('ws://127.0.0.1:8081'));
+        $this->thruwayClient = new Client($this->voryxConfig['realm'], $this->loop);
+        $this->thruwayClient->addTransportProvider(new PawlTransportProvider($this->voryxConfig['trusted_url']));
 
         $serializer = $this->serializer;
         $monitoringDataRepository = $this->monitoringDataRepository;
