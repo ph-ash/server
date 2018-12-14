@@ -1,0 +1,7 @@
+.git*
+.idea
+documentation/
+public/bundles/nelmioapidoc
+tests/
+var/cache/*
+var/log/*

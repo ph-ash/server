@@ -1,29 +1,26 @@
-FROM php:7.2-fpm-alpine
-RUN apk add autoconf \
-      gcc \
-      libzmq \
-      zeromq-dev \
-      zeromq \
-      coreutils \
-      build-base \
-      zlib \
-      zlib-dev \
-      supervisor \
-   && pecl install zmq-beta \
-      mongodb \
-   && docker-php-ext-install zip \
-   && docker-php-ext-enable zmq \
-      mongodb \
-      zip \
-   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
-
+FROM composer:1 as composer
 COPY . /var/www/html
-RUN cd /var/www/html \
-    && composer install \
+WORKDIR /var/www/html
+ENV APP_ENV prod
+RUN composer install --no-dev --no-scripts --optimize-autoloader --ignore-platform-reqs \
+    && composer run auto-scripts \
     && php bin/console cache:warmup
 
-RUN mkdir -p /var/log/supervisord
+FROM php:7.2-fpm-alpine
+COPY --from=composer /var/www/html /var/www/html
+WORKDIR /var/www/html
+ENV APP_ENV prod
+RUN apk add autoconf \
+       gcc \
+       libzmq \
+       zeromq-dev \
+       zeromq \
+       coreutils \
+       build-base \
+       supervisor \
+    && pecl install zmq-beta \
+       mongodb \
+    && docker-php-ext-enable zmq \
+       mongodb
 
-COPY ./Docker/supervisord.conf /etc/supervisord.conf
-
-ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
+ENTRYPOINT ["supervisord", "--configuration", "/var/www/html/docker/supervisord.conf"]
