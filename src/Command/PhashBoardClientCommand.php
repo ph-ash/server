@@ -110,9 +110,9 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                 $this->thruwayClient->emit('resendMonitoringData');
 
                 //subscribe to the channel, to get messages from board
-                $this->thruwayClient->getSubscriber()->subscribe($this->thruwayClient->getSession(), 'phashtopic',
+                $this->thruwayClient->getSubscriber()->subscribe($this->thruwayClient->getSession(), 'phashcontrol',
                 function ($payload) {
-                    if($payload[0] === 'boardAvailable') {
+                    if ($payload[0] === 'boardAvailable') {
                         $this->info('board is connected');
                         $this->thruwayClient->emit('resendMonitoringData');
                     }
@@ -130,6 +130,8 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                     $payload = $serializer->serialize($monitoringData, 'json');
                     $this->thruwayClient->emit('monitoringData', [$payload]);
                 }
+                $this->info('sent all data to board');
+                $this->thruwayClient->getSession()->publish('phashcontrol');
             }
         );
 
