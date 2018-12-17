@@ -83,6 +83,9 @@
     "mongodb/mongodb": {
         "version": "1.4.2"
     },
+    "monolog/monolog": {
+        "version": "1.24.0"
+    },
     "nelmio/api-doc-bundle": {
         "version": "3.0",
         "recipe": {
@@ -256,6 +259,18 @@
     },
     "symfony/inflector": {
         "version": "v4.1.7"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.1.9"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.1",
+            "ref": "18ebf5a940573a20de06f9c4060101eeb438cf3d"
+        }
     },
     "symfony/options-resolver": {
         "version": "v4.1.7"
