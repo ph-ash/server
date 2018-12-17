@@ -9,12 +9,22 @@ use App\Exception\PersistenceLayerException;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 use Exception;
+use LogicException;
 
 class MonitoringDataRepository extends ServiceDocumentRepository
 {
+    /**
+     * @throws LogicException
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MonitoringData::class);
+    }
+
+    public function findAll()
+    {
+        $this->getDocumentManager()->clear(MonitoringData::class);
+        return parent::findAll();
     }
 
     /**
