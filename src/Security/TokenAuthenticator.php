@@ -15,21 +15,23 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
+    private const AUTH_TYPE_BEARER = 'Bearer ';
+
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         $data = array(
-            'message' => "Authorization header with 'Bearer: AUTH-KEY' Required"
+            'message' => "Authorization header with 'Bearer TOKEN' Required"
         );
 
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Authorization']);
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Bearer']);
     }
 
     public function supports(Request $request): bool
     {
         $supports = false;
         $wholeToken = $request->headers->get('Authorization');
-        if ($wholeToken && substr_count($wholeToken, 'Bearer: ') > 0) {
-            $token = explode('Bearer: ', $wholeToken);
+        if ($wholeToken && substr_count($wholeToken, self::AUTH_TYPE_BEARER) > 0) {
+            $token = explode(self::AUTH_TYPE_BEARER, $wholeToken);
             $supports = !empty($token[1]);
         }
         return $supports;
@@ -38,7 +40,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         $wholeToken = $request->headers->get('Authorization');
-        $token = explode('Bearer: ', $wholeToken);
+        $token = explode(self::AUTH_TYPE_BEARER, $wholeToken);
         return $token[1];
     }
 
@@ -54,7 +56,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse(['wrong credentials'], Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Authorization']);
+        return new JsonResponse(['wrong credentials'], Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Bearer']);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
