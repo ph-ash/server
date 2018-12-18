@@ -131,7 +131,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                     $this->thruwayClient->emit('monitoringData', [$payload]);
                 }
                 $this->info('sent all data to board');
-                $this->thruwayClient->getSession()->publish('phashcontrol');
+                $this->thruwayClient->getSession()->publish('phashcontrol', ['"all data sent"']);
             }
         );
 
