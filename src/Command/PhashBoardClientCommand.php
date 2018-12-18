@@ -101,7 +101,6 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $monitoringDataRepository = $this->monitoringDataRepository;
 
         //TODO handle errors
-        //TODO listen to reconnection of the board to resend all monitorings
 
         $this->thruwayClient->on(
             'open',
@@ -131,7 +130,9 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                     $this->thruwayClient->emit('monitoringData', [$payload]);
                 }
                 $this->info('sent all data to board');
-                $this->thruwayClient->getSession()->publish('phashcontrol', ['"all data sent"']);
+                if ($this->thruwayClient->getSession()) {
+                    $this->thruwayClient->getSession()->publish('phashcontrol', ['"all data sent"']);
+                }
             }
         );
 
@@ -139,8 +140,10 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->thruwayClient->on(
             'monitoringData',
             function ($payload) {
-                $this->info('Thruway sending: ' . $payload);
-                $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+                if ($this->thruwayClient->getSession()) {
+                    $this->info('Thruway sending: ' . $payload);
+                    $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+                }
             }
         );
 
