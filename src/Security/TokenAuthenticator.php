@@ -44,15 +44,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
-        //TODO implement own UserProvider
         return $userProvider->loadUserByUsername($credentials);
     }
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        //TODO later check if token is still valid and user is active
-        //we have no passwords/credentials for now, username is token
-
         return true;
     }
 
