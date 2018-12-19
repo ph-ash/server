@@ -13,6 +13,7 @@ use React\ZMQ\Context;
 use React\ZMQ\SocketWrapper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Thruway\Logging\Logger;
@@ -22,6 +23,9 @@ use ZMQ;
 
 class PhashBoardClientCommand extends ContainerAwareCommand
 {
+    private const THRUWAY_PREFIX = 'THRUWAY WEBSOCKET: ';
+    private const ZMQ_PREFIX = 'ZMQ: ';
+
     /** @var LoopInterface */
     private $loop;
 
@@ -31,11 +35,13 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     /** @var Client */
     private $thruwayClient;
 
-    /** @var OutputInterface */
-    private $output;
+    /** @var ConsoleLogger */
+    private $consoleLogger;
+
     private $serializer;
     private $monitoringDataRepository;
     private $voryxConfig;
+
 
     public function __construct(
         SerializerInterface $serializer,
@@ -59,9 +65,9 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     /**
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $this->output = $output;
+        $this->consoleLogger = new ConsoleLogger($output);
         $this->loop = Factory::create();
         $this->startZMQServer();
         $this->startVoryxThruwayClient();
@@ -78,14 +84,32 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->ZMQPullSocket = $context->getSocket(ZMQ::SOCKET_PULL);
         $this->ZMQPullSocket->bind('tcp://127.0.0.1:5555');
 
-        //TODO listen to errors
-
         Logger::set(new NullLogger());
         $this->ZMQPullSocket->on(
             'message',
             function ($payload) {
-                $this->info('ZMQ Received: ' . $payload);
-                $this->thruwayClient->emit('monitoringData', [$payload]);
+                $this->consoleLogger->info(self::ZMQ_PREFIX . 'Received {payload}', ['payload' => $payload]);
+                if ($this->thruwayClient) {
+                    $this->thruwayClient->emit('monitoringData', [$payload]);
+                } else {
+                    $this->consoleLogger->critical(self::ZMQ_PREFIX . 'No Websocket Client started');
+                }
+            }
+        );
+
+        $this->ZMQPullSocket->on(
+            'error',
+            function ($payload) {
+                $this->consoleLogger->critical(self::ZMQ_PREFIX . 'error {payload}', ['payload' => $payload]);
+                //TODO how to handle errors?
+            }
+        );
+
+        $this->ZMQPullSocket->on(
+            'end',
+            function () {
+                $this->consoleLogger->info(self::ZMQ_PREFIX . 'pullsocket closed');
+                //TODO how to handle end of connection while running?
             }
         );
     }
@@ -100,22 +124,28 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $serializer = $this->serializer;
         $monitoringDataRepository = $this->monitoringDataRepository;
 
-        //TODO handle errors
-
         $this->thruwayClient->on(
             'open',
             function () {
-                $this->info('found connection to websocket router');
+                $this->consoleLogger->info(self::THRUWAY_PREFIX . 'found connection to websocket router');
                 $this->thruwayClient->emit('resendMonitoringData');
 
                 //subscribe to the channel, to get messages from board
-                $this->thruwayClient->getSubscriber()->subscribe($this->thruwayClient->getSession(), 'phashcontrol',
-                function ($payload) {
-                    if ($payload[0] === 'boardAvailable') {
-                        $this->info('board is connected');
-                        $this->thruwayClient->emit('resendMonitoringData');
+                $this->thruwayClient->getSubscriber()->subscribe(
+                    $this->thruwayClient->getSession(),
+                    'phashcontrol',
+                    function ($payload) {
+                        if ($payload[0] === 'boardAvailable') {
+                            $this->consoleLogger->info(self::THRUWAY_PREFIX . 'a new board connected');
+                            $this->thruwayClient->emit('resendMonitoringData');
+                        } else {
+                            $this->consoleLogger->critical(
+                                self::THRUWAY_PREFIX . 'unknown payload {payload}',
+                                ['payload' => implode(' - ', $payload)]
+                            );
+                        }
                     }
-                });
+                );
             }
         );
 
@@ -123,15 +153,32 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->thruwayClient->on(
             'resendMonitoringData',
             function () use ($serializer, $monitoringDataRepository) {
-                $this->info('sending all data to board');
-                $monitoringDatasets = $monitoringDataRepository->findAll();
-                foreach ($monitoringDatasets as $monitoringData) {
-                    $payload = $serializer->serialize($monitoringData, 'json');
-                    $this->thruwayClient->emit('monitoringData', [$payload]);
+                $this->consoleLogger->info(self::THRUWAY_PREFIX . 'publishing all data to board');
+                $monitoringDatasets = [];
+
+                try {
+                    $monitoringDatasets = $monitoringDataRepository->findAll();
+                } catch (Exception $exception) {
+                    $this->consoleLogger->critical(
+                        self::THRUWAY_PREFIX . 'probably no mongodb connection -> {message}',
+                        ['message' => $exception->getMessage()]
+                    );
                 }
-                $this->info('sent all data to board');
+
                 if ($this->thruwayClient->getSession()) {
+                    if (!empty($monitoringDatasets)) {
+                        foreach ($monitoringDatasets as $monitoringData) {
+                            $payload = $serializer->serialize($monitoringData, 'json');
+                            $this->thruwayClient->emit('monitoringData', [$payload]);
+                        }
+                        $this->consoleLogger->info(self::THRUWAY_PREFIX . 'published all data');
+                    } else {
+                        $this->consoleLogger->info(self::THRUWAY_PREFIX . 'no data for publishing available');
+                    }
+
                     $this->thruwayClient->getSession()->publish('phashcontrol', ['"all data sent"']);
+                } else {
+                    $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no connection available, please reconnect');
                 }
             }
         );
@@ -141,8 +188,10 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             'monitoringData',
             function ($payload) {
                 if ($this->thruwayClient->getSession()) {
-                    $this->info('Thruway sending: ' . $payload);
+                    $this->consoleLogger->info(self::THRUWAY_PREFIX . 'publishing {payload}', ['payload' => $payload]);
                     $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+                } else {
+                    $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no session available, please reconnect');
                 }
             }
         );
@@ -151,7 +200,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         $this->thruwayClient->on(
             'close',
             function () {
-                $this->info('lost connection to router');
+                $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'lost connection to router, trying to reconnect');
                 $this->thruwayClient->retryConnection();
             }
         );
@@ -171,11 +220,6 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         if ($this->thruwayClient) {
             $this->thruwayClient->getSession()->close();
         }
-    }
-
-    private function info(string $msg): void
-    {
-        $this->output->writeln(sprintf('<info>%s</info>', $msg));
     }
 
     public function __destruct()
