@@ -1,7 +1,3 @@
-parameters:
-    env(MONGODB_URL): 'not set by environment'
-    env(MONGODB_DB): 'not set by environment'
-
 doctrine_mongodb:
     auto_generate_proxy_classes: '%kernel.debug%'
     auto_generate_hydrator_classes: '%kernel.debug%'

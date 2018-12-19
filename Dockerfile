@@ -13,6 +13,8 @@ COPY --from=composer /var/www/html /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod \
     API_TOKEN=pleaseChooseASecretTokenForThePublicAPI \
+    MONGODB_URL=mongodb://mongo:27017 \
+    MONGODB_DB=phash \
     WEBSOCKET_SERVICE_NAME=board \
     WEBSOCKET_REALM=realm1
 
