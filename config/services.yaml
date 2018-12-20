@@ -5,13 +5,13 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     env(API_TOKEN): ''
-    env(WEBSOCKET_SERVICE_NAME): ''
-    env(WEBSOCKET_REALM): ''
+    env(WAMP_HOST): ''
+    env(WAMP_REALM): ''
     env(MONGODB_URL): ''
     env(MONGODB_DB): ''
 
-    websocket.internal-url: 'ws://%env(WEBSOCKET_SERVICE_NAME)%:8081'
-    websocket.realm: '%env(WEBSOCKET_REALM)%'
+    websocket.internal-url: 'ws://%env(WAMP_HOST)%:8081'
+    websocket.realm: '%env(WAMP_REALM)%'
 services:
     # default configuration for services in *this* file
     _defaults:
