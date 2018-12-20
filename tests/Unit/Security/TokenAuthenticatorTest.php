@@ -26,7 +26,10 @@ class TokenAuthenticatorTest extends TestCase
         $this->subject = new TokenAuthenticator();
     }
 
-    public function testStart()
+    /**
+     * @throws Exception
+     */
+    public function testStart(): void
     {
         $request = new Request();
 
