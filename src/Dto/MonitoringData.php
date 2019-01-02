@@ -65,7 +65,7 @@ class MonitoringData
         int $priority,
         int $idleTimeoutInSeconds,
         DateTimeImmutable $date,
-        string $path = null
+        ?string $path
     ) {
         $this->id = $id;
         $this->status = $status;
