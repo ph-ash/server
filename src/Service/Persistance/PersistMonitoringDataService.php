@@ -25,7 +25,8 @@ class PersistMonitoringDataService implements PersistMonitoringData
             $monitoringDataDto->getPayload(),
             $monitoringDataDto->getPriority(),
             $monitoringDataDto->getIdleTimeoutInSeconds(),
-            $monitoringDataDto->getDate()
+            $monitoringDataDto->getDate(),
+            $monitoringDataDto->getPath()
         );
 
         $this->monitoringDataRepository->save($monitoringDataDocument);
