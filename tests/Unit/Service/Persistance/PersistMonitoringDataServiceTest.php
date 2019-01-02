@@ -36,7 +36,15 @@ class PersistMonitoringDataServiceTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $monitoringDataDto = new MonitoringDataDto('id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf');
+        $monitoringDataDto = new MonitoringDataDto(
+            'id',
+            'satus',
+            'payload',
+            1,
+            60,
+            new DateTimeImmutable(),
+            'root.branch.leaf'
+        );
         $this->monitoringDataRepository->save(Argument::type(MonitoringData::class))->shouldBeCalledOnce();
 
         $this->subject->invoke($monitoringDataDto);
