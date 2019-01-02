@@ -53,7 +53,7 @@ class MonitoringData
      * @SWG\Property(
      *      description="The path in the in the monitoring treemap, format: rootName.branchName.leafName.
      *      If no path is set, root is used",
-     *      example={"monitoring.database.user.login", "monitoring.security.ddos", "monitoring.team_1"}
+     *      example="monitoring.team_phash.database"
      * )
      */
     private $path;
