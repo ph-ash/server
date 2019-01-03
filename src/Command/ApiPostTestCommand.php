@@ -41,18 +41,19 @@ class ApiPostTestCommand extends Command
     {
         for ($i = 0; $i < $input->getArgument('count'); $i++) {
             $monitoringData = new MonitoringData(
-                'monitoring id '. $i,
+                'monitoring id ' . $i,
                 $input->getArgument('status'),
                 'some payload from' . $i,
                 \random_int(1, 15),
                 \random_int(1, 240),
-                new DateTimeImmutable()
+                new DateTimeImmutable(),
+                null
             );
             try {
                 $this->monitoringDataDispatcher->invoke($monitoringData);
             } catch (PersistenceLayerException $e) {
                 $output->write('<error>Persistence Layer Exception: </error>');
-                $output->writeln('<error>'.$e->getMessage().'</error>');
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
             }
         }
     }

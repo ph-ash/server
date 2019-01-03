@@ -48,14 +48,28 @@ class MonitoringData
      */
     private $date;
 
-    public function __construct(string $id, string $status, string $payload, int $priority, int $idleTimeoutInSeconds, DateTimeImmutable $date)
-    {
+    /**
+     * @var string|null
+     * @MongoDB\Field(type="string")
+     */
+    private $path;
+
+    public function __construct(
+        string $id,
+        string $status,
+        string $payload,
+        int $priority,
+        int $idleTimeoutInSeconds,
+        DateTimeImmutable $date,
+        ?string $path
+    ) {
         $this->id = $id;
         $this->status = $status;
         $this->payload = $payload;
         $this->priority = $priority;
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
+        $this->path = $path;
     }
 
     public function getId(): string
@@ -86,5 +100,10 @@ class MonitoringData
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
     }
 }

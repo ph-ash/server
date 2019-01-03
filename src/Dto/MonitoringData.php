@@ -29,7 +29,10 @@ class MonitoringData
 
     /**
      * @var int
-     * @SWG\Property(description="The priority of the Data, different numbers show different sizes on the board", example=1)
+     * @SWG\Property(
+     *     description="The priority of the Data, different numbers show different sizes on the board",
+     *     example=1
+     * )
      */
     private $priority;
 
@@ -45,13 +48,24 @@ class MonitoringData
      */
     private $date;
 
+    /**
+     * @var string|null
+     * @SWG\Property(
+     *      description="The path in the in the monitoring treemap, format: rootName.branchName.leafName.
+     *      If no path is set, root is used",
+     *      example="monitoring.team_phash.database"
+     * )
+     */
+    private $path;
+
     public function __construct(
         string $id,
         string $status,
         string $payload,
         int $priority,
         int $idleTimeoutInSeconds,
-        DateTimeImmutable $date
+        DateTimeImmutable $date,
+        ?string $path
     ) {
         $this->id = $id;
         $this->status = $status;
@@ -59,6 +73,7 @@ class MonitoringData
         $this->priority = $priority;
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
+        $this->path = $path;
     }
 
     public function getId(): string
@@ -89,5 +104,10 @@ class MonitoringData
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
     }
 }
