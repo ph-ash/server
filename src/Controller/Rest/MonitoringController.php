@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Rest;
 
 use App\Dto\MonitoringData;
+use App\Exception\PersistenceLayerException;
 use App\Service\IncomingMonitoringDataDispatcher;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -42,9 +43,13 @@ class MonitoringController extends FOSRestController
      * @SWG\Tag(name="Monitoring")
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     *
+     * @throws PersistenceLayerException
      */
-    public function postMonitoringData(IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher, MonitoringData $monitoringData): JsonResponse
-    {
+    public function postMonitoringData(
+        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        MonitoringData $monitoringData
+    ): JsonResponse {
         //TODO add tests
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
