@@ -31,6 +31,11 @@ class MonitoringController extends FOSRestController
      *     description="When authentication header is missing or wrong credentials are given"
      * )
      *
+     * @SWG\Response(
+     *     response=422,
+     *     description="When you try to push monitoringdata into a branch"
+     * )
+     *
      * @SWG\Parameter(
      *     name="body",
      *     in="body",
