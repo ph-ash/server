@@ -21,6 +21,7 @@
         "symfony/security-bundle": "4.1.*",
         "symfony/serializer": "4.1.*",
         "symfony/twig-bundle": "4.1.*",
+        "symfony/validator": "4.1.*",
         "symfony/yaml": "4.1.*",
         "voryx/thruway-bundle": "^0.4.1"
     },
