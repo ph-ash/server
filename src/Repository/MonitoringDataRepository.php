@@ -21,7 +21,7 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         parent::__construct($registry, MonitoringData::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         $this->getDocumentManager()->clear(MonitoringData::class);
         return parent::findAll();
