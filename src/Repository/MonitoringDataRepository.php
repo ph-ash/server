@@ -50,7 +50,6 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         try {
             $qb->field('path')->equals(new MongoRegex('/^' . $path . '\..*/'));
             return $qb->getQuery()->execute();
-
         } catch (Exception $exception) {
             throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
         }
