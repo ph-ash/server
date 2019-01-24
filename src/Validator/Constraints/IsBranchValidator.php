@@ -30,11 +30,13 @@ class IsBranchValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, IsBranch::class);
         }
 
-        $result = $this->monitoringDataRepository->findLeafs($value);
+        if ($value !== null) {
+            $result = $this->monitoringDataRepository->findLeafs($value);
 
-        if (count($result)) {
-            $this->context->buildViolation($constraint->message)
-                ->addViolation();
+            if (count($result)) {
+                $this->context->buildViolation($constraint->message)
+                    ->addViolation();
+            }
         }
     }
 }
