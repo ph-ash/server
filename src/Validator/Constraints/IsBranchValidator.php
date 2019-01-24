@@ -33,7 +33,7 @@ class IsBranchValidator extends ConstraintValidator
         if ($value !== null) {
             $result = $this->monitoringDataRepository->findLeafs($value);
 
-            if (count($result)) {
+            if ($result->count()) {
                 $this->context->buildViolation($constraint->message)
                     ->addViolation();
             }
