@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace App\Service\Validation;
 
 use App\Dto\MonitoringData;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MonitoringDataValidationService implements MonitoringDataValidation
 {
-    /**
-     * TODO throw validation exception
-     */
-    public function invoke(MonitoringData $monitoringData)
+    private $validator;
+
+    public function __construct(ValidatorInterface $validator)
     {
-        // TODO: Implement invoke() method.
-        //TODO use symfony validator
-        //TODO add custom validator for path validation
+        $this->validator = $validator;
+    }
+
+    public function invoke(MonitoringData $monitoringData): void
+    {
+        $errors = $this->validator->validate($monitoringData);
+        if (count($errors) > 0) {
+            throw new \Exception('NOOOO');
+        }
     }
 }
