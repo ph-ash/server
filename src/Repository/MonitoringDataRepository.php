@@ -10,6 +10,7 @@ use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 use Exception;
 use LogicException;
+use MongoRegex;
 
 class MonitoringDataRepository extends ServiceDocumentRepository
 {
@@ -37,6 +38,21 @@ class MonitoringDataRepository extends ServiceDocumentRepository
             $this->getDocumentManager()->flush($monitoringData);
         } catch (Exception $exception) {
             throw new PersistenceLayerException('MonitoringData save failed.', 0, $exception);
+        }
+    }
+
+    /**
+     * @throws PersistenceLayerException
+     */
+    public function findLeafs(string $path)
+    {
+        $qb = $this->getDocumentManager()->createQueryBuilder('m');
+        try {
+            $qb->field('path')->equals(new MongoRegex('/^' . $path . '\..*/'));
+            return $qb->getQuery()->execute();
+
+        } catch (Exception $exception) {
+            throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
         }
     }
 }
