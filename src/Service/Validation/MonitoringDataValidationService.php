@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Validation;
 
 use App\Dto\MonitoringData;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MonitoringDataValidationService implements MonitoringDataValidation
@@ -20,7 +21,7 @@ class MonitoringDataValidationService implements MonitoringDataValidation
     {
         $errors = $this->validator->validate($monitoringData);
         if (count($errors) > 0) {
-            throw new \Exception('NOOOO');
+            throw new ValidatorException($errors->get(0)->getMessage()); //TOOD show path which is broken
         }
     }
 }
