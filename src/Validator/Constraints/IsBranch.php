@@ -8,5 +8,5 @@ use Symfony\Component\Validator\Constraint;
 
 class IsBranch extends Constraint
 {
-    public $message = 'This Path is a Branch and cannot contrain Monitoringdata';
+    public $message = 'Path \'{{path}}\' is a Branch and cannot contrain Monitoringdata';
 }

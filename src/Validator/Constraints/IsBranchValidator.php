@@ -21,8 +21,9 @@ class IsBranchValidator extends ConstraintValidator
     }
 
     /**
-     * @throws UnexpectedTypeException
+     * @param mixed $value
      * @throws PersistenceLayerException
+     * @throws UnexpectedTypeException
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -33,8 +34,9 @@ class IsBranchValidator extends ConstraintValidator
         if ($value !== null) {
             $result = $this->monitoringDataRepository->findLeafs($value);
 
-            if ($result->count()) {
+            if ($result->count(true)) {
                 $this->context->buildViolation($constraint->message)
+                    ->setParameter('{{path}}', $value)
                     ->addViolation();
             }
         }
