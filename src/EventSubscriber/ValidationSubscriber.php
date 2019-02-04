@@ -6,7 +6,10 @@ namespace App\EventSubscriber;
 
 use App\Event\IncomingMonitoringDataEvent;
 use App\Service\Validation\MonitoringDataValidation;
+use Exception;
+use OutOfBoundsException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class ValidationSubscriber implements EventSubscriberInterface
 {
@@ -26,8 +29,16 @@ class ValidationSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function validateMonitoringData(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        try {
+            $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        } catch (Exception $exception) {
+            $incomingMonitoringDataEvent->stopPropagation();
+            throw $exception;
+        }
     }
 }
