@@ -16,7 +16,6 @@ class IsBranchValidator extends ConstraintValidator
 
     public function __construct(MonitoringDataRepository $monitoringDataRepository)
     {
-
         $this->monitoringDataRepository = $monitoringDataRepository;
     }
 
