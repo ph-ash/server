@@ -50,7 +50,7 @@ class IncomingMonitoringDataDispatcherServiceTest extends TestCase
 
         $monitoringDataEvent = new Event($monitoringData);
 
-        $this->incomingMonitoringDataEvent->create($monitoringData)->willReturn($monitoringDataEvent)->shouldBeCalledOnce();
+        $this->incomingMonitoringDataEvent->createFrom($monitoringData)->willReturn($monitoringDataEvent)->shouldBeCalledOnce();
         $this->eventDispatcher->dispatch(Event::EVENT_INCOMING_MONITORING_DATA, $monitoringDataEvent)->shouldBeCalledOnce();
         $this->subject->invoke($monitoringData);
     }

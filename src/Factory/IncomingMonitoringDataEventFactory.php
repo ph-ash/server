@@ -9,7 +9,7 @@ use App\Event\IncomingMonitoringDataEvent as Event;
 
 class IncomingMonitoringDataEventFactory implements IncomingMonitoringDataEvent
 {
-    public function create(MonitoringData $monitoringData): Event
+    public function createFrom(MonitoringData $monitoringData): Event
     {
         return new Event($monitoringData);
     }
