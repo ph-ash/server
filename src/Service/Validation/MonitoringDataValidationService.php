@@ -21,7 +21,7 @@ class MonitoringDataValidationService implements MonitoringDataValidation
     {
         $errors = $this->validator->validate($monitoringData);
         if (count($errors) > 0) {
-            throw new ValidatorException($errors->get(0)->getMessage()); //TOOD show path which is broken
+            throw new ValidatorException($errors->get(0)->getMessage());
         }
     }
 }
