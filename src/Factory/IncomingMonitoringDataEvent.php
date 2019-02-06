@@ -7,5 +7,5 @@ use App\Event\IncomingMonitoringDataEvent as Event;
 
 interface IncomingMonitoringDataEvent
 {
-    public function create(MonitoringData $monitoringData): Event;
+    public function createFrom(MonitoringData $monitoringData): Event;
 }

@@ -14,15 +14,17 @@ class IncomingMonitoringDataDispatcherService implements IncomingMonitoringDataD
     private $eventDispatcher;
     private $incomingMonitoringDataEvent;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, IncomingMonitoringDataEvent $incomingMonitoringDataEvent)
-    {
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        IncomingMonitoringDataEvent $incomingMonitoringDataEvent
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->incomingMonitoringDataEvent = $incomingMonitoringDataEvent;
     }
 
     public function invoke(MonitoringData $monitoringData): void
     {
-        $event = $this->incomingMonitoringDataEvent->create($monitoringData);
+        $event = $this->incomingMonitoringDataEvent->createFrom($monitoringData);
         $this->eventDispatcher->dispatch(Event::EVENT_INCOMING_MONITORING_DATA, $event);
     }
 }

@@ -8,6 +8,7 @@ use App\Document\MonitoringData;
 use App\Exception\PersistenceLayerException;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
+use Doctrine\ODM\MongoDB\Cursor;
 use Exception;
 use LogicException;
 
@@ -21,7 +22,7 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         parent::__construct($registry, MonitoringData::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         $this->getDocumentManager()->clear(MonitoringData::class);
         return parent::findAll();
@@ -37,6 +38,21 @@ class MonitoringDataRepository extends ServiceDocumentRepository
             $this->getDocumentManager()->flush($monitoringData);
         } catch (Exception $exception) {
             throw new PersistenceLayerException('MonitoringData save failed.', 0, $exception);
+        }
+    }
+
+    /**
+     * @throws PersistenceLayerException
+     */
+    public function findLeafs(string $path): Cursor
+    {
+        $qb = $this->getDocumentManager()->createQueryBuilder(MonitoringData::class);
+        try {
+            $qb->field('path')->equals(new \MongoRegex('/' . $path . '..*/'))->limit(1);
+            /** @var Cursor $result */
+            return $qb->getQuery()->execute();
+        } catch (Exception $exception) {
+            throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
         }
     }
 }

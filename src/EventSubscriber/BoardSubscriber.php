@@ -10,7 +10,6 @@ use App\Service\Board\MonitoringDataPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BoardSubscriber implements EventSubscriberInterface
-
 {
     private $monitoringDataPush;
 
@@ -21,8 +20,9 @@ class BoardSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        //TODO add some priority
-        return [IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => 'pushDataToBoard'];
+        return [
+            IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['pushDataToBoard', -20]
+        ];
     }
 
     /**
@@ -30,7 +30,6 @@ class BoardSubscriber implements EventSubscriberInterface
      */
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        //TODO test
         //TODO exception handling
         $this->monitoringDataPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Rest;
 
 use App\Dto\MonitoringData;
+use App\Exception\PersistenceLayerException;
 use App\Service\IncomingMonitoringDataDispatcher;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -30,6 +31,11 @@ class MonitoringController extends FOSRestController
      *     description="When authentication header is missing or wrong credentials are given"
      * )
      *
+     * @SWG\Response(
+     *     response=422,
+     *     description="When you try to push monitoringdata into a branch"
+     * )
+     *
      * @SWG\Parameter(
      *     name="body",
      *     in="body",
@@ -42,9 +48,13 @@ class MonitoringController extends FOSRestController
      * @SWG\Tag(name="Monitoring")
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     *
+     * @throws PersistenceLayerException
      */
-    public function postMonitoringData(IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher, MonitoringData $monitoringData): JsonResponse
-    {
+    public function postMonitoringData(
+        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        MonitoringData $monitoringData
+    ): JsonResponse {
         //TODO add tests
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);

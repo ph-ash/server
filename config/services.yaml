@@ -11,6 +11,7 @@ parameters:
     env(MONGODB_DB): ''
 
     websocket.internal-url: 'ws://%env(WAMP_HOST)%:8081'
+    locale: 'en'
     websocket.realm: '%env(WAMP_REALM)%'
 services:
     # default configuration for services in *this* file
