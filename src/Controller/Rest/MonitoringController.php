@@ -7,6 +7,7 @@ namespace App\Controller\Rest;
 use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
 use App\Service\IncomingMonitoringDataDispatcher;
+use Exception;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -58,5 +59,49 @@ class MonitoringController extends FOSRestController
         //TODO add tests
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/monitoring/data/bulk", methods={"POST"})
+     * @SWG\Response(
+     *     response=201,
+     *     description="Expects the data that will be posted to the dashboard"
+     * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="When authentication header is missing or wrong credentials are given"
+     * )
+     *
+     * @SWG\Response(
+     *     response=422,
+     *     description="When you try to push monitoringdata into a branch"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     required=true,
+     *     allowEmptyValue=false,
+     *     @SWG\Schema(ref=@Model(type=BulkMonitoringData::class))
+     *
+     * )
+     *
+     * @SWG\Tag(name="Monitoring")
+     *
+     * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     *
+     * @throws PersistenceLayerException
+     */
+    public function postBulkMonitoringData(
+        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        BulkMonitoringData $bulkMonitoringData
+    ): JsonResponse {
+        foreach ($bulkMonitoringData->getMonitoringData() as $monitoringData) {
+            try {
+                $incomingMonitoringDataDispatcher->invoke($monitoringData);
+            } catch (Exception $exception) {
+                //TODO catch and gather exceptions, return some response
+            }
+        }
     }
 }
