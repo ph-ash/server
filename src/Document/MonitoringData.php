@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Document;
 
+use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -23,6 +25,12 @@ class MonitoringData
      * @MongoDB\Field(type="string")
      */
     private $status;
+
+    /**
+     * @var DateTime
+     * @MongoDB\Field(type="date")
+     */
+    private $statusChangedAt;
 
     /**
      * @var string
@@ -57,6 +65,7 @@ class MonitoringData
     public function __construct(
         string $id,
         string $status,
+        DateTimeInterface $statusChangedAt,
         string $payload,
         int $priority,
         int $idleTimeoutInSeconds,
@@ -65,6 +74,7 @@ class MonitoringData
     ) {
         $this->id = $id;
         $this->status = $status;
+        $this->statusChangedAt = $statusChangedAt;
         $this->payload = $payload;
         $this->priority = $priority;
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
@@ -80,6 +90,11 @@ class MonitoringData
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getStatusChangedAt(): DateTime
+    {
+        return $this->statusChangedAt;
     }
 
     public function getPayload(): string

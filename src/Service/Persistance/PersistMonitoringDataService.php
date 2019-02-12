@@ -6,7 +6,9 @@ namespace App\Service\Persistance;
 
 use App\Document\MonitoringData;
 use App\Dto\MonitoringData as MonitoringDataDto;
+use App\Exception\PersistenceLayerException;
 use App\Repository\MonitoringDataRepository;
+use DateTimeInterface;
 
 class PersistMonitoringDataService implements PersistMonitoringData
 {
@@ -22,6 +24,7 @@ class PersistMonitoringDataService implements PersistMonitoringData
         $monitoringDataDocument = new MonitoringData(
             $monitoringDataDto->getId(),
             $monitoringDataDto->getStatus(),
+            $this->getStatusChangedAt($monitoringDataDto),
             $monitoringDataDto->getPayload(),
             $monitoringDataDto->getPriority(),
             $monitoringDataDto->getIdleTimeoutInSeconds(),
@@ -30,5 +33,20 @@ class PersistMonitoringDataService implements PersistMonitoringData
         );
 
         $this->monitoringDataRepository->save($monitoringDataDocument);
+    }
+
+    /**
+     * @throws PersistenceLayerException
+     */
+    private function getStatusChangedAt(MonitoringDataDto $monitoringDataDto): DateTimeInterface
+    {
+        $statusChangedAt = $monitoringDataDto->getDate();
+
+        $oldMonitoringDataDocument = $this->monitoringDataRepository->find($monitoringDataDto->getId());
+        if ($oldMonitoringDataDocument && $oldMonitoringDataDocument->getStatus() === $monitoringDataDto->getStatus()) {
+            $statusChangedAt = $oldMonitoringDataDocument->getStatusChangedAt();
+        }
+
+        return $statusChangedAt;
     }
 }
