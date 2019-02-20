@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Rest;
-
-use App\Dto\MonitoringData;
+namespace App\Dto;
 
 class BulkMonitoringData
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest;
 
+use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
 use App\Service\IncomingMonitoringDataDispatcher;
