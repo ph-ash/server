@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\BulkMonitoringData;
+use App\Exception\BulkValidationException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 class BulkIncomingMonitoringDataDispatcherService implements BulkIncomingMonitoringDataDispatcher
@@ -18,12 +19,17 @@ class BulkIncomingMonitoringDataDispatcherService implements BulkIncomingMonitor
 
     public function invoke(BulkMonitoringData $bulkMonitoringData): void
     {
+        $validatorExceptions = [];
         foreach ($bulkMonitoringData->getMonitoringData() as $monitoringData) {
             try {
                 $this->incomingMonitoringDataDispatcher->invoke($monitoringData);
             } catch (ValidatorException $exception) {
-                //TODO catch and gather exceptions, return some response
+                $validatorExceptions[] = $exception;
             }
+        }
+
+        if (!empty($validatorExceptions)) {
+            throw new BulkValidationException($validatorExceptions);
         }
     }
 }
