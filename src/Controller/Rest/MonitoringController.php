@@ -7,15 +7,17 @@ namespace App\Controller\Rest;
 use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
+use App\Service\BulkIncomingMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
-use Exception;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use OutOfBoundsException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * @Route("/api")
@@ -92,17 +94,13 @@ class MonitoringController extends FOSRestController
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      *
      * @throws PersistenceLayerException
+     * @throws OutOfBoundsException
+     * @throws ValidatorException
      */
     public function postBulkMonitoringData(
-        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        BulkIncomingMonitoringDataDispatcher $bulkIncomingMonitoringDataDispatcher,
         BulkMonitoringData $bulkMonitoringData
     ): JsonResponse {
-        foreach ($bulkMonitoringData->getMonitoringData() as $monitoringData) {
-            try {
-                $incomingMonitoringDataDispatcher->invoke($monitoringData);
-            } catch (Exception $exception) {
-                //TODO catch and gather exceptions, return some response
-            }
-        }
+        $bulkIncomingMonitoringDataDispatcher->invoke($bulkMonitoringData);
     }
 }
