@@ -6,7 +6,9 @@ namespace App\Controller\Rest;
 
 use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
+use App\Exception\BulkValidationException;
 use App\Exception\PersistenceLayerException;
+use App\Exception\ValidationException;
 use App\Service\BulkIncomingMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -17,7 +19,6 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * @Route("/api")
@@ -36,7 +37,7 @@ class MonitoringController extends FOSRestController
      * )
      *
      * @SWG\Response(
-     *     response=422,
+     *     response=404,
      *     description="When you try to push monitoringdata into a branch"
      * )
      *
@@ -53,7 +54,9 @@ class MonitoringController extends FOSRestController
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      *
+     * @throws OutOfBoundsException
      * @throws PersistenceLayerException
+     * @throws ValidationException
      */
     public function postMonitoringData(
         IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
@@ -76,7 +79,7 @@ class MonitoringController extends FOSRestController
      * )
      *
      * @SWG\Response(
-     *     response=422,
+     *     response=404,
      *     description="When you try to push monitoringdata into a branch"
      * )
      *
@@ -91,16 +94,17 @@ class MonitoringController extends FOSRestController
      *
      * @SWG\Tag(name="Monitoring")
      *
-     * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     * @ParamConverter("bulkMonitoringData", converter="fos_rest.request_body")
      *
-     * @throws PersistenceLayerException
      * @throws OutOfBoundsException
-     * @throws ValidatorException
+     * @throws PersistenceLayerException
+     * @throws BulkValidationException
      */
     public function postBulkMonitoringData(
         BulkIncomingMonitoringDataDispatcher $bulkIncomingMonitoringDataDispatcher,
         BulkMonitoringData $bulkMonitoringData
     ): JsonResponse {
         $bulkIncomingMonitoringDataDispatcher->invoke($bulkMonitoringData);
+        return new JsonResponse(null, Response::HTTP_CREATED);
     }
 }
