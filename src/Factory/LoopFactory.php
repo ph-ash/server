@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Board\ZMQ;
+namespace App\Factory;
 
 use React\EventLoop\LoopInterface;
 

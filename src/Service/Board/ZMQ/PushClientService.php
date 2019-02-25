@@ -6,9 +6,9 @@ namespace App\Service\Board\ZMQ;
 
 use App\Dto\MonitoringData;
 use App\Exception\PushClientException;
+use App\Factory\ContextFactory;
+use App\Factory\LoopFactory;
 use InvalidArgumentException;
-use React\EventLoop\Factory;
-use React\ZMQ\Context;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZMQ;
 use ZMQSocketException;
@@ -16,20 +16,20 @@ use ZMQSocketException;
 class PushClientService implements PushClient
 {
     private $serializer;
+    private $contextFactory;
+    private $loopFactory;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, ContextFactory $contextFactory, LoopFactory $loopFactory)
     {
         $this->serializer = $serializer;
+        $this->contextFactory = $contextFactory;
+        $this->loopFactory = $loopFactory;
     }
 
     public function send(MonitoringData $monitoringData): void
     {
-        //TODO test
-        //TODO exception handling
-
-        //TODO add security, see https://github.com/mkoppanen/php-zmq/blob/master/examples/ironhouse.php
-        $loop = Factory::create();
-        $context = new Context($loop);
+        $loop = $this->loopFactory->create();
+        $context = $this->contextFactory->create($loop);
         $push = $context->getSocket(ZMQ::SOCKET_PUSH);
         try {
             $push->connect('tcp://127.0.0.1:5555');
