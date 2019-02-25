@@ -6,14 +6,14 @@ namespace App\Service;
 
 use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
+use App\Exception\ValidationException;
 use OutOfBoundsException;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
 interface IncomingMonitoringDataDispatcher
 {
     /**
      * @throws PersistenceLayerException
-     * @throws ValidatorException
+     * @throws ValidationException
      * @throws OutOfBoundsException
      */
     public function invoke(MonitoringData $monitoringData): void;
