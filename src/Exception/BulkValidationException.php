@@ -13,13 +13,13 @@ class BulkValidationException extends RuntimeException
     private $validatonExceptions;
 
     public function __construct(
-        array $validatorExceptions,
+        array $validatonExceptions,
         string $message = '',
         int $code = 0,
         Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
-        $this->validatonExceptions = $validatorExceptions;
+        $this->validatonExceptions = $validatonExceptions;
     }
 
     public function getValidatonExceptions(): array
