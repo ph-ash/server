@@ -5,25 +5,30 @@ declare(strict_types=1);
 namespace App\Service\Normalizer;
 
 use App\Exception\BulkValidationException;
-use Symfony\Component\Debug\Exception\FlattenException;
+use App\Exception\ValidationException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class BulkValidationExceptionNormalizer implements NormalizerInterface
 {
     public function normalize($object, $format = null, array $context = [])
     {
-        //TODO implement -> where to get the BulkValidationException from? is it in the context or in object?
         $templateData = $context['template_data'];
+        $errors = [];
 
-        /** @var FlattenException $exception */
-        $exception = $templateData['exception'];
-
+        /** @var ValidationException $validatorException */
+        foreach ($object->getValidatonExceptions() as $validatorException) {
+            $errors[] = [
+                'message' => $validatorException->getMessage(),
+                'path' => $validatorException->getPath(),
+                'id' => $validatorException->getId()
+            ];
+        }
 
         return [
             'status' => $templateData['status'],
-            'message' => $exception->getMessage(),
+            'message' => $object->getMessage(),
+            'errors' => $errors,
             'statusCode' => $templateData['status_code']
-
         ];
     }
 
