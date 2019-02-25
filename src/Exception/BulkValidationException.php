@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Exception;
 
 use RuntimeException;
-use Symfony\Component\Validator\Exception\ValidatorException;
 use Throwable;
 
 class BulkValidationException extends RuntimeException
 {
-    /** @var ValidatorException[] */
-    private $validatorExceptions;
+    /** @var ValidationException[] */
+    private $validatonExceptions;
 
     public function __construct(
         array $validatorExceptions,
@@ -20,11 +19,11 @@ class BulkValidationException extends RuntimeException
         Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
-        $this->validatorExceptions = $validatorExceptions;
+        $this->validatonExceptions = $validatorExceptions;
     }
 
-    public function getValidatorExceptions(): array
+    public function getValidatonExceptions(): array
     {
-        return $this->validatorExceptions;
+        return $this->validatonExceptions;
     }
 }
