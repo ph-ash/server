@@ -34,7 +34,7 @@ class MonitoringDataPushServiceTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), null);
+        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), null, null, null);
         $this->pushClient->send($monitoringDataDto)->shouldBeCalledOnce();
         $this->subject->invoke($monitoringDataDto);
     }
