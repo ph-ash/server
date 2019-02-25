@@ -15,4 +15,9 @@ class BulkMonitoringData
     {
         return $this->monitoringData;
     }
+
+    public function setMonitoringData(array $monitoringData): void
+    {
+        $this->monitoringData = $monitoringData;
+    }
 }
