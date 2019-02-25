@@ -14,9 +14,13 @@ fos_rest:
         enabled: true
         codes:
             App\Exception\PersistenceLayerException: HTTP_SERVICE_UNAVAILABLE
+            App\Exception\ValidationException: HTTP_BAD_REQUEST
+            App\Exception\BulkValidationException: HTTP_BAD_REQUEST
             Symfony\Component\HttpKernel\Exception\NotFoundHttpException: HTTP_NOT_FOUND
             Exception: HTTP_INTERNAL_SERVER_ERROR
         messages:
             App\Exception\PersistenceLayerException: false
+            App\Exception\ValidationException: false
+            App\Exception\BulkValidationException: false
             Symfony\Component\HttpKernel\Exception\NotFoundHttpException: false
             Exception: false
