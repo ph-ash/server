@@ -9,6 +9,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -122,10 +123,20 @@ class TokenAuthenticatorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testSupportsRememberMe()
+    public function testSupportsRememberMe(): void
     {
         self::assertFalse($this->subject->supportsRememberMe());
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testOnAuthenticationSuccess(): void
+    {
+        $request = new Request();
+        $token = new UsernamePasswordToken('user', 'credentials', 'key');
 
+        $result = $this->subject->onAuthenticationSuccess($request, $token, 'key');
+        self::assertNull($result);
+    }
 }
