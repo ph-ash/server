@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use DateTimeImmutable;
+use DateTimeInterface;
 use Swagger\Annotations as SWG;
 
 class MonitoringData
@@ -43,7 +43,7 @@ class MonitoringData
     private $idleTimeoutInSeconds;
 
     /**
-     * @var DateTimeImmutable
+     * @var DateTimeInterface
      * @SWG\Property(description="The time when this monitoring Data was generated")
      */
     private $date;
@@ -64,7 +64,7 @@ class MonitoringData
         string $payload,
         int $priority,
         int $idleTimeoutInSeconds,
-        DateTimeImmutable $date,
+        DateTimeInterface $date,
         ?string $path
     ) {
         $this->id = $id;
@@ -101,7 +101,7 @@ class MonitoringData
         return $this->priority;
     }
 
-    public function getDate(): DateTimeImmutable
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }
