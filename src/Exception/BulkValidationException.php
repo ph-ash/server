@@ -10,20 +10,20 @@ use Throwable;
 class BulkValidationException extends RuntimeException
 {
     /** @var ValidationException[] */
-    private $validatonExceptions;
+    private $validationExceptions;
 
     public function __construct(
-        array $validatonExceptions,
+        array $validationExceptions,
         string $message = '',
         int $code = 0,
         Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
-        $this->validatonExceptions = $validatonExceptions;
+        $this->validationExceptions = $validationExceptions;
     }
 
-    public function getValidatonExceptions(): array
+    public function getValidationExceptions(): array
     {
-        return $this->validatonExceptions;
+        return $this->validationExceptions;
     }
 }

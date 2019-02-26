@@ -19,17 +19,17 @@ class BulkIncomingMonitoringDataDispatcherService implements BulkIncomingMonitor
 
     public function invoke(BulkMonitoringData $bulkMonitoringData): void
     {
-        $validatonExceptions = [];
+        $validationExceptions = [];
         foreach ($bulkMonitoringData->getMonitoringData() as $monitoringData) {
             try {
                 $this->incomingMonitoringDataDispatcher->invoke($monitoringData);
             } catch (ValidationException $exception) {
-                $validatonExceptions[] = $exception;
+                $validationExceptions[] = $exception;
             }
         }
 
-        if (!empty($validatonExceptions)) {
-            throw new BulkValidationException($validatonExceptions);
+        if (!empty($validationExceptions)) {
+            throw new BulkValidationException($validationExceptions);
         }
     }
 }

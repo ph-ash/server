@@ -37,7 +37,7 @@ class MonitoringController extends FOSRestController
      * )
      *
      * @SWG\Response(
-     *     response=404,
+     *     response=400,
      *     description="When you try to push monitoringdata into a branch"
      * )
      *
@@ -79,7 +79,7 @@ class MonitoringController extends FOSRestController
      * )
      *
      * @SWG\Response(
-     *     response=404,
+     *     response=400,
      *     description="When you try to push monitoringdata into a branch"
      * )
      *
