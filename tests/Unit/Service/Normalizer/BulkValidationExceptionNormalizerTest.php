@@ -12,6 +12,7 @@ use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 
 class BulkValidationExceptionNormalizerTest extends TestCase
 {
@@ -48,7 +49,6 @@ class BulkValidationExceptionNormalizerTest extends TestCase
      */
     public function testNormalize(): void
     {
-
         $dateTime = new DateTimeImmutable();
         $id = 'id';
         $status = 'status';
@@ -88,5 +88,16 @@ class BulkValidationExceptionNormalizerTest extends TestCase
         self::assertSame($id, $result['errors'][0]['id']);
         self::assertSame($valdtionExceptionMessage, $result['errors'][0]['message']);
         self::assertSame($bulkValidationExceptionMessage, $result['message']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testWrongObject(): void
+    {
+        $object = new stdClass();
+
+        $this->expectException(NotNormalizableValueException::class);
+        $this->subject->normalize($object);
     }
 }
