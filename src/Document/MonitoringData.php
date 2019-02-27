@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Document;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -97,7 +98,7 @@ class MonitoringData
         return $this->idleTimeoutInSeconds;
     }
 
-    public function getDate(): DateTimeImmutable
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }
