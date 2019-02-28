@@ -50,7 +50,7 @@ class MonitoringController extends FOSRestController
      *
      * )
      *
-     * @SWG\Tag(name="Monitoring")
+     * @SWG\Tag(name="Single-Monitoring")
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      *
@@ -65,6 +65,43 @@ class MonitoringController extends FOSRestController
         //TODO add tests
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/monitoring/data", methods={"DELETE"})
+     * @SWG\Response(
+     *     response=200,
+     *     description="When the data has been deleted successfully"
+     * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="When authentication header is missing or wrong credentials are given"
+     * )
+     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="When you try to delete a branch which has leafs"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     required=true,
+     *     allowEmptyValue=false,
+     *     @SWG\Schema(ref=@Model(type=MonitoringData::class))
+     *
+     * )
+     *
+     * @SWG\Tag(name="Monitoring")
+     *
+     * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     */
+    public function deleteMonitoringData(
+        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        MonitoringData $monitoringData
+    ): JsonResponse
+    {
+
     }
 
     /**
@@ -92,7 +129,7 @@ class MonitoringController extends FOSRestController
      *
      * )
      *
-     * @SWG\Tag(name="Monitoring")
+     * @SWG\Tag(name="Bulk-Monitoring")
      *
      * @ParamConverter("bulkMonitoringData", converter="fos_rest.request_body")
      *
