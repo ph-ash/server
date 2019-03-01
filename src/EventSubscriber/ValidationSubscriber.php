@@ -25,16 +25,8 @@ class ValidationSubscriber implements EventSubscriberInterface
             IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => [
                 ['validateMonitoringData', 0]
             ],
-            DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['onDeleteMonitoringData', -20]
+            DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['validateMonitoringData', -20]
         ];
-    }
-
-    public function onDeleteMonitoringData(DeleteMonitoringDataEvent $deleteMonitoringDataEvent): void
-    {
-        $monitoringDataDto = $deleteMonitoringDataEvent->getMonitoringData();
-        //TODO implement validaton before deleting -> check if its a branch which has leafs
-        //TODO if branch without leafs -> ok
-        //TODO if leaf -> ok
     }
 
     /**
