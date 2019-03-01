@@ -7,16 +7,20 @@ namespace App\EventSubscriber;
 use App\Event\DeleteMonitoringDataEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\PersistenceLayerException;
-use App\Service\Persistance\PersistMonitoringData;
+use App\Factory\MonitoringDataDocument;
+use App\Repository\MonitoringData as MonitoringDataRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistanceSubscriber implements EventSubscriberInterface
 {
-    private $persistMonitoringData;
 
-    public function __construct(PersistMonitoringData $persistMonitoringData)
+    private $monitoringDataRepository;
+    private $monitoringDataDocument;
+
+    public function __construct(MonitoringDataRepository $monitoringDataRepository, MonitoringDataDocument $monitoringDataDocument)
     {
-        $this->persistMonitoringData = $persistMonitoringData;
+        $this->monitoringDataRepository = $monitoringDataRepository;
+        $this->monitoringDataDocument = $monitoringDataDocument;
     }
 
     public static function getSubscribedEvents(): array
@@ -27,10 +31,13 @@ class PersistanceSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws PersistenceLayerException
+     */
     public function onDeleteMonitoringData(DeleteMonitoringDataEvent $deleteMonitoringDataEvent): void
     {
         $monitoringDataDto = $deleteMonitoringDataEvent->getMonitoringData();
-        //TODO implement deletion in database
+        $this->monitoringDataRepository->delete($monitoringDataDto->getId());
     }
 
     /**
@@ -39,6 +46,7 @@ class PersistanceSubscriber implements EventSubscriberInterface
     public function persistMonitoringData(IncomingMonitoringDataEvent $event): void
     {
         $monitoringDataDto = $event->getMonitoringData();
-        $this->persistMonitoringData->invoke($monitoringDataDto);
+        $monitoringDataDocument = $this->monitoringDataDocument->createFrom($monitoringDataDto);
+        $this->monitoringDataRepository->save($monitoringDataDocument);
     }
 }
