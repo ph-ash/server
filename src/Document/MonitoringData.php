@@ -61,7 +61,7 @@ class MonitoringData
         string $payload,
         int $priority,
         int $idleTimeoutInSeconds,
-        DateTimeImmutable $date,
+        DateTimeInterface $date,
         ?string $path
     ) {
         $this->id = $id;
