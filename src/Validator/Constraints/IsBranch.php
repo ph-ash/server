@@ -8,5 +8,5 @@ use Symfony\Component\Validator\Constraint;
 
 class IsBranch extends Constraint
 {
-    public $message = 'Path \'{{path}}\' is a Branch and cannot contain Monitoringdata';
+    public $message = 'Path \'{{path}}\' is a Branch and can not be deleted or contain MonitoringData';
 }
