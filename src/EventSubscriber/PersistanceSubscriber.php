@@ -13,7 +13,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PersistanceSubscriber implements EventSubscriberInterface
 {
-
     private $monitoringDataRepository;
     private $monitoringDataDocument;
 
