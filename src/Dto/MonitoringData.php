@@ -81,8 +81,8 @@ class MonitoringData
         int $idleTimeoutInSeconds,
         DateTimeInterface $date,
         ?string $path,
-        ?int $tileExpansionIntervalCount,
-        ?string $tileExpansionGrowthExpression
+        int $tileExpansionIntervalCount = null,
+        string $tileExpansionGrowthExpression = null
     ) {
         $this->id = $id;
         $this->status = $status;
