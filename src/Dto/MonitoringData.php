@@ -60,7 +60,10 @@ class MonitoringData
 
     /**
      * @var int
-     * @SWG\Property(description="The number of idle timeout intervals after which a red tile grows in priority", example=1)
+     * @SWG\Property(
+     *     description="The number of idle timeout intervals after which a red tile grows in priority",
+     *     example=1
+     * )
      */
     private $tileExpansionIntervalCount;
 
