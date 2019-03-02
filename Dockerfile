@@ -26,10 +26,12 @@ RUN apk add autoconf \
        coreutils \
        build-base \
        supervisor \
+       fcgi \
     && pecl install zmq-beta \
        mongodb \
     && docker-php-ext-enable zmq \
        mongodb \
-    && php bin/console cache:warmup
+    && php bin/console cache:warmup \
+    && crontab /var/www/html/docker/crontab
 
 ENTRYPOINT ["supervisord", "--configuration", "/var/www/html/docker/supervisord.conf"]
