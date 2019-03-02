@@ -19,11 +19,8 @@ class PushClientService implements PushClient
     private $contextFactory;
     private $loopFactory;
 
-    public function __construct(
-        SerializerInterface $serializer,
-        ContextFactory $contextFactory,
-        LoopFactory $loopFactory
-    ) {
+    public function __construct(SerializerInterface $serializer, ContextFactory $contextFactory, LoopFactory $loopFactory)
+    {
         $this->serializer = $serializer;
         $this->contextFactory = $contextFactory;
         $this->loopFactory = $loopFactory;

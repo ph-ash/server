@@ -15,7 +15,7 @@ class BulkValidationExceptionNormalizer implements NormalizerInterface
     {
         if (!$object instanceof BulkValidationException) {
             throw new NotNormalizableValueException(
-                sprintf('Object %s is not a BulkValidationException', \get_class($object))
+                sprintf('Object %s is not a BulkValidationException', get_class($object))
             );
         }
 

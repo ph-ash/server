@@ -19,8 +19,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
-        $data = [
-            'message' => "Authorization header with 'Bearer TOKEN' Required"];
+        $data = array(
+            'message' => "Authorization header with 'Bearer TOKEN' Required"
+        );
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Bearer']);
     }

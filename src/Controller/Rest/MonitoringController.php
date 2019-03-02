@@ -11,7 +11,7 @@ use App\Exception\PersistenceLayerException;
 use App\Exception\ValidationException;
 use App\Service\BulkIncomingMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OutOfBoundsException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api")
  */
-class MonitoringController extends AbstractFOSRestController
+class MonitoringController extends FOSRestController
 {
     /**
      * @Route("/monitoring/data", methods={"POST"})
