@@ -32,6 +32,11 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         return parent::findAll();
     }
 
+    public function findAllErroneousMonitorings(): array
+    {
+        return $this->findBy(['status' => 'error']);
+    }
+
     /**
      * @param mixed $id Identifier.
      * @throws PersistenceLayerException
@@ -69,7 +74,6 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         $qb = $this->getDocumentManager()->createQueryBuilder(MonitoringData::class);
         try {
             $qb->field('path')->equals(new MongoRegex('/' . $path . '..*/'))->limit(1);
-            /** @var Cursor $result */
             return $qb->getQuery()->execute();
         } catch (Exception $exception) {
             throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
