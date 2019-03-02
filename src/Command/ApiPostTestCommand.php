@@ -48,8 +48,8 @@ class ApiPostTestCommand extends Command
                 \random_int(1, 240),
                 new DateTimeImmutable(),
                 null,
-                null, // TODO growing tiles
-                null // TODO growing tiles
+                null,
+                null
             );
             try {
                 $this->monitoringDataDispatcher->invoke($monitoringData);
