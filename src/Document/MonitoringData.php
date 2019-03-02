@@ -61,6 +61,18 @@ class MonitoringData
      */
     private $path;
 
+    /**
+     * @var int|null
+     * @MongoDB\Field(type="int")
+     */
+    private $tileExpansionIntervalCount;
+
+    /**
+     * @var string|null
+     * @MongoDB\Field(type="string")
+     */
+    private $tileExpansionGrowthExpression;
+
     public function __construct(
         string $id,
         string $status,
@@ -69,7 +81,9 @@ class MonitoringData
         int $priority,
         int $idleTimeoutInSeconds,
         DateTimeInterface $date,
-        ?string $path
+        ?string $path,
+        ?int $tileExpansionIntervalCount,
+        ?string $tileExpansionGrowthExpression
     ) {
         $this->id = $id;
         $this->status = $status;
@@ -79,6 +93,8 @@ class MonitoringData
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
         $this->path = $path;
+        $this->tileExpansionIntervalCount = $tileExpansionIntervalCount;
+        $this->tileExpansionGrowthExpression = $tileExpansionGrowthExpression;
     }
 
     public function getId(): string
@@ -119,5 +135,15 @@ class MonitoringData
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getTileExpansionIntervalCount(): ?int
+    {
+        return $this->tileExpansionIntervalCount;
+    }
+
+    public function getTileExpansionGrowthExpression(): ?string
+    {
+        return $this->tileExpansionGrowthExpression;
     }
 }

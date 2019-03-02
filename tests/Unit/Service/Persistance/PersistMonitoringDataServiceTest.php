@@ -67,8 +67,8 @@ class PersistMonitoringDataServiceTest extends TestCase
             60,
             new DateTimeImmutable(),
             'root.branch.leaf',
-            null,
-            null
+            5,
+            '* 2'
         );
         $monitoringData = new MonitoringData(
             'id',
@@ -78,7 +78,9 @@ class PersistMonitoringDataServiceTest extends TestCase
             1,
             60,
             new DateTimeImmutable(),
-            'root.branch.leaf'
+            'root.branch.leaf',
+            5,
+            '* 2'
         );
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn($monitoringData);
         $this->monitoringDataRepository->save(Argument::that(function (MonitoringData $monitoringData) {

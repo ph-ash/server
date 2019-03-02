@@ -91,8 +91,8 @@ class MonitoringData
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
         $this->path = $path;
-        $this->tileExpansionIntervalCount = $tileExpansionIntervalCount ?? 1;
-        $this->tileExpansionGrowthExpression = $tileExpansionGrowthExpression ?? ' + 1';
+        $this->tileExpansionIntervalCount = $tileExpansionIntervalCount;
+        $this->tileExpansionGrowthExpression = $tileExpansionGrowthExpression;
     }
 
     public function getId(): string
@@ -130,12 +130,12 @@ class MonitoringData
         return $this->path;
     }
 
-    public function getTileExpansionIntervalCount(): int
+    public function getTileExpansionIntervalCount(): ?int
     {
         return $this->tileExpansionIntervalCount;
     }
 
-    public function getTileExpansionGrowthExpression(): string
+    public function getTileExpansionGrowthExpression(): ?string
     {
         return $this->tileExpansionGrowthExpression;
     }
