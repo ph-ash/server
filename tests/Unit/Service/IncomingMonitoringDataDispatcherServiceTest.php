@@ -46,7 +46,7 @@ class IncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             new DateTimeImmutable(),
-            null,
+            'somePath',
             null,
             null
         );

@@ -112,7 +112,7 @@ class MonitoringData
         return $this->idleTimeoutInSeconds;
     }
 
-    public function getDate(): DateTimeImmutable
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }

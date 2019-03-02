@@ -37,16 +37,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    get_set_method_normalizer:
-        class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
-        public: false
-        tags: [serializer.normalizer]
-
-    date_time_normalizer:
-        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
-        public: false
-        tags: [serializer.normalizer]
-
     App\Command\PhashBoardClientCommand:
         arguments:
             $voryxConfig: "%voryx_thruway%"
