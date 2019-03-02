@@ -12,5 +12,5 @@ interface PersistMonitoringData
     /**
      * @throws PersistenceLayerException
      */
-    public function invoke(MonitoringData $monitoringData);
+    public function invoke(MonitoringData $monitoringData): MonitoringData;
 }

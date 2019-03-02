@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Service\Persistance;
 
 use App\Document\MonitoringData;
 use App\Dto\MonitoringData as MonitoringDataDto;
+use App\Factory\MonitoringDataDtoFactory;
 use App\Repository\MonitoringDataRepository;
 use App\Service\Persistance\PersistMonitoringDataService;
 use DateTime;
@@ -16,6 +17,7 @@ use Prophecy\Argument;
 
 class PersistMonitoringDataServiceTest extends TestCase
 {
+    private $monitoringDataDtoFactory;
     private $monitoringDataRepository;
 
     /** @var PersistMonitoringDataService */
@@ -28,8 +30,12 @@ class PersistMonitoringDataServiceTest extends TestCase
     {
         parent::setUp();
         $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);
+        $this->monitoringDataDtoFactory = $this->prophesize(MonitoringDataDtoFactory::class);
 
-        $this->subject = new PersistMonitoringDataService($this->monitoringDataRepository->reveal());
+        $this->subject = new PersistMonitoringDataService(
+            $this->monitoringDataRepository->reveal(),
+            $this->monitoringDataDtoFactory->reveal()
+        );
     }
 
     /**
@@ -38,16 +44,9 @@ class PersistMonitoringDataServiceTest extends TestCase
     public function testInvoke(): void
     {
         $monitoringDataDto = new MonitoringDataDto(
-            'id',
-            'satus',
-            'payload',
-            1,
-            60,
-            new DateTimeImmutable(),
-            'root.branch.leaf',
-            null,
-            null
+            'id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', null, null
         );
+        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn(null);
         $this->monitoringDataRepository->save(Argument::type(MonitoringData::class))->shouldBeCalledOnce();
 
@@ -60,32 +59,20 @@ class PersistMonitoringDataServiceTest extends TestCase
     public function testInvokeNoStatusChange(): void
     {
         $monitoringDataDto = new MonitoringDataDto(
-            'id',
-            'satus',
-            'payload',
-            1,
-            60,
-            new DateTimeImmutable(),
-            'root.branch.leaf',
-            5,
-            '* 2'
+            'id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
         );
         $monitoringData = new MonitoringData(
-            'id',
-            'satus',
-            new DateTime('2019-01-01 00:00:00'),
-            'payload',
-            1,
-            60,
-            new DateTimeImmutable(),
-            'root.branch.leaf',
-            5,
-            '* 2'
+            'id', 'satus', new DateTime('2019-01-01 00:00:00'), 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
         );
+        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn($monitoringData);
-        $this->monitoringDataRepository->save(Argument::that(function (MonitoringData $monitoringData) {
-            return $monitoringData->getStatusChangedAt() == new DateTimeImmutable('2019-01-01 00:00:00');
-        }))->shouldBeCalledOnce();
+        $this->monitoringDataRepository->save(
+            Argument::that(
+                function (MonitoringData $monitoringData) {
+                    return $monitoringData->getStatusChangedAt() == new DateTimeImmutable('2019-01-01 00:00:00');
+                }
+            )
+        )->shouldBeCalledOnce();
 
         $this->subject->invoke($monitoringDataDto);
     }

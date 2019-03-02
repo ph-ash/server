@@ -6,27 +6,31 @@ namespace App\Service\Persistance;
 
 use App\Document\MonitoringData;
 use App\Dto\MonitoringData as MonitoringDataDto;
-use App\Exception\PersistenceLayerException;
+use App\Factory\MonitoringDataDtoFactory;
 use App\Repository\MonitoringDataRepository;
 use DateTimeInterface;
 
 class PersistMonitoringDataService implements PersistMonitoringData
 {
     private $monitoringDataRepository;
+    private $monitoringDataDtoFactory;
 
-    public function __construct(MonitoringDataRepository $monitoringDataRepository)
+    public function __construct(MonitoringDataRepository $monitoringDataRepository, MonitoringDataDtoFactory $monitoringDataDtoFactory)
     {
         $this->monitoringDataRepository = $monitoringDataRepository;
+        $this->monitoringDataDtoFactory = $monitoringDataDtoFactory;
     }
 
-    public function invoke(MonitoringDataDto $monitoringDataDto): void
+    public function invoke(MonitoringDataDto $monitoringDataDto): MonitoringDataDto
     {
+        $oldMonitoringDataDocument = $this->monitoringDataRepository->find($monitoringDataDto->getId());
+
         $monitoringDataDocument = new MonitoringData(
             $monitoringDataDto->getId(),
             $monitoringDataDto->getStatus(),
-            $this->getStatusChangedAt($monitoringDataDto),
+            $this->getStatusChangedAt($monitoringDataDto, $oldMonitoringDataDocument),
             $monitoringDataDto->getPayload(),
-            $monitoringDataDto->getPriority(),
+            $this->getPriority($monitoringDataDto, $oldMonitoringDataDocument),
             $monitoringDataDto->getIdleTimeoutInSeconds(),
             $monitoringDataDto->getDate(),
             $monitoringDataDto->getPath(),
@@ -35,20 +39,29 @@ class PersistMonitoringDataService implements PersistMonitoringData
         );
 
         $this->monitoringDataRepository->save($monitoringDataDocument);
+
+        return $this->monitoringDataDtoFactory->createFrom($monitoringDataDocument);
     }
 
-    /**
-     * @throws PersistenceLayerException
-     */
-    private function getStatusChangedAt(MonitoringDataDto $monitoringDataDto): DateTimeInterface
+    private function getStatusChangedAt(MonitoringDataDto $monitoringDataDto, ?MonitoringData $oldMonitoringDataDocument): DateTimeInterface
     {
         $statusChangedAt = $monitoringDataDto->getDate();
 
-        $oldMonitoringDataDocument = $this->monitoringDataRepository->find($monitoringDataDto->getId());
         if ($oldMonitoringDataDocument && $oldMonitoringDataDocument->getStatus() === $monitoringDataDto->getStatus()) {
             $statusChangedAt = $oldMonitoringDataDocument->getStatusChangedAt();
         }
 
         return $statusChangedAt;
+    }
+
+    private function getPriority(MonitoringDataDto $monitoringDataDto, ?MonitoringData $oldMonitoringDataDocument): int
+    {
+        $priority = $monitoringDataDto->getPriority();
+
+        if ($oldMonitoringDataDocument && $oldMonitoringDataDocument->getPriority() > $monitoringDataDto->getPriority()) {
+            $priority = $oldMonitoringDataDocument->getPriority();
+        }
+
+        return $priority;
     }
 }
