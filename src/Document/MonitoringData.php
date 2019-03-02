@@ -122,6 +122,11 @@ class MonitoringData
         return $this->priority;
     }
 
+    public function setPriority(int $priority): void
+    {
+        $this->priority = $priority;
+    }
+
     public function getIdleTimeoutInSeconds(): int
     {
         return $this->idleTimeoutInSeconds;
