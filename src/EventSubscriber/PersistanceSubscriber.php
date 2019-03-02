@@ -31,6 +31,7 @@ class PersistanceSubscriber implements EventSubscriberInterface
     public function persistMonitoringData(IncomingMonitoringDataEvent $event): void
     {
         $monitoringDataDto = $event->getMonitoringData();
-        $this->persistMonitoringData->invoke($monitoringDataDto);
+        $newDto = $this->persistMonitoringData->invoke($monitoringDataDto);
+        $event->setMonitoringData($newDto);
     }
 }
