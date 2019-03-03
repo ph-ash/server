@@ -7,13 +7,17 @@ namespace App\Tests\Unit\Service\Board;
 use App\Dto\MonitoringData;
 use App\Service\Board\MonitoringDataPushService;
 use App\Service\Board\ZMQ\Client;
+use App\ValueObject\Channel;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MonitoringDataPushServiceTest extends TestCase
 {
     private $pushClient;
+    private $serializer;
 
     /** @var MonitoringDataPushService */
     private $subject;
@@ -25,8 +29,9 @@ class MonitoringDataPushServiceTest extends TestCase
     {
         parent::setUp();
         $this->pushClient = $this->prophesize(Client::class);
+        $this->serializer = $this->prophesize(SerializerInterface::class);
 
-        $this->subject = new MonitoringDataPushService($this->pushClient->reveal());
+        $this->subject = new MonitoringDataPushService($this->pushClient->reveal(), $this->serializer->reveal());
     }
 
     /**
@@ -35,7 +40,10 @@ class MonitoringDataPushServiceTest extends TestCase
     public function testInvoke(): void
     {
         $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'some.path');
-        $this->pushClient->send($monitoringDataDto)->shouldBeCalledOnce();
+
+        $this->serializer->serialize($monitoringDataDto, 'json')->willReturn('someString');
+        $channel = new Channel('push');
+        $this->pushClient->send('someString', $channel)->shouldBeCalledOnce();
         $this->subject->invoke($monitoringDataDto);
     }
 }
