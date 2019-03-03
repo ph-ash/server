@@ -2,19 +2,17 @@
 
 namespace App\Tests\Unit\Service\Board\ZMQ;
 
-use App\Dto\MonitoringData;
 use App\Exception\ZMQClientException;
 use App\Factory\ContextFactory;
 use App\Factory\LoopFactory;
 use App\Service\Board\ZMQ\ClientService;
-use DateTime;
+use App\ValueObject\Channel;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use React\EventLoop\LoopInterface;
 use React\ZMQ\Context;
 use React\ZMQ\SocketWrapper;
-use Symfony\Component\Serializer\SerializerInterface;
 use ZMQ;
 use ZMQSocketException;
 
@@ -31,12 +29,11 @@ class PushClientServiceTest extends TestCase
     {
         parent::setUp();
 
-        $serializer = $this->prophesize(SerializerInterface::class);
         $this->contextFactory = $this->prophesize(ContextFactory::class);
         $this->loopFactory = $this->prophesize(LoopFactory::class);
 
 
-        $this->subject = new ClientService($serializer->reveal(), $this->contextFactory->reveal(), $this->loopFactory->reveal());
+        $this->subject = new ClientService($this->contextFactory->reveal(), $this->loopFactory->reveal());
     }
 
     /**
@@ -44,8 +41,6 @@ class PushClientServiceTest extends TestCase
      */
     public function testSendZMQException(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
-
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 
         $loop
@@ -62,18 +57,18 @@ class PushClientServiceTest extends TestCase
 
         $socketWrapper->method('__call')->with(
             $this->equalTo('connect'),
-            $this->equalTo(['tcp://127.0.0.1:5555'])
+            $this->equalTo(['tcp://127.0.0.1:5555', true])
         )->willThrowException(new ZMQSocketException());
 
         $context->method('__call')->with(
             $this->equalTo('getSocket'),
-            $this->equalTo([ZMQ::SOCKET_PUSH])
+            $this->equalTo([ZMQ::SOCKET_PUB])
         )->willReturn($socketWrapper);
 
         $this->contextFactory->create($loop)->willReturn($context);
 
         $this->expectException(ZMQClientException::class);
-        $this->subject->send($monitoringData);
+        $this->subject->send('string', new Channel('push'));
     }
 
     /**
@@ -81,8 +76,6 @@ class PushClientServiceTest extends TestCase
      */
     public function testInvalidArgumentException(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
-
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 
         $loop
@@ -99,7 +92,7 @@ class PushClientServiceTest extends TestCase
 
         $socketWrapper->method('__call')->with(
             $this->equalTo('connect'),
-            $this->equalTo(['tcp://127.0.0.1:5555'])
+            $this->equalTo(['tcp://127.0.0.1:5555', true])
         );
 
         $socketWrapper->method('on')->with(
@@ -111,13 +104,13 @@ class PushClientServiceTest extends TestCase
 
         $context->method('__call')->with(
             $this->equalTo('getSocket'),
-            $this->equalTo([ZMQ::SOCKET_PUSH])
+            $this->equalTo([ZMQ::SOCKET_PUB])
         )->willReturn($socketWrapper);
 
         $this->contextFactory->create($loop)->willReturn($context);
 
         $this->expectException(ZMQClientException::class);
-        $this->subject->send($monitoringData);
+        $this->subject->send('string', new Channel('push'));
     }
 
     /**
@@ -125,8 +118,6 @@ class PushClientServiceTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
-
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 
         $loop
@@ -143,11 +134,13 @@ class PushClientServiceTest extends TestCase
 
         $context->method('__call')->with(
             $this->equalTo('getSocket'),
-            $this->equalTo([ZMQ::SOCKET_PUSH])
+            $this->equalTo([ZMQ::SOCKET_PUB])
         )->willReturn($socketWrapper);
+
+        $channel = new Channel('push');
 
         $this->contextFactory->create($loop)->willReturn($context);
 
-        $this->subject->send($monitoringData);
+        $this->subject->send('message', $channel);
     }
 }
