@@ -7,7 +7,7 @@ namespace App\Event;
 use App\Dto\MonitoringData;
 use Symfony\Component\EventDispatcher\Event;
 
-class IncomingMonitoringDataEvent extends Event
+class IncomingMonitoringDataEvent extends Event implements MonitoringDataEvent
 {
     public const EVENT_INCOMING_MONITORING_DATA = 'monitoring.incoming_data';
 
