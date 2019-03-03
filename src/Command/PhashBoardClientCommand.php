@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Repository\MonitoringDataRepository;
+use App\ValueObject\Channel;
 use Exception;
 use Psr\Log\NullLogger;
 use React\EventLoop\Factory;
@@ -47,7 +48,8 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         SerializerInterface $serializer,
         MonitoringDataRepository $monitoringDataRepository,
         array $voryxConfig
-    ) {
+    )
+    {
         parent::__construct();
         $this->serializer = $serializer;
         $this->monitoringDataRepository = $monitoringDataRepository;
@@ -81,16 +83,24 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     {
         $context = new Context($this->loop);
 
-        $this->ZMQPullSocket = $context->getSocket(ZMQ::SOCKET_PULL);
+        $this->ZMQPullSocket = $context->getSocket(ZMQ::SOCKET_SUB);
         $this->ZMQPullSocket->bind('tcp://127.0.0.1:5555');
-
+        $this->ZMQPullSocket->subscribe(Channel::PUSH);
+        $this->ZMQPullSocket->subscribe(Channel::DELETE);
         Logger::set(new NullLogger());
         $this->ZMQPullSocket->on(
-            'message',
+            'messages',
             function ($payload) {
-                $this->consoleLogger->info(self::ZMQ_PREFIX . 'Received {payload}', ['payload' => $payload]);
+                $this->consoleLogger->info(self::ZMQ_PREFIX . 'Received {message} on channel {channel}', ['message' => $payload[1], 'channel' => $payload[0]]);
                 if ($this->thruwayClient) {
-                    $this->thruwayClient->emit('monitoringData', [$payload]);
+                    switch ($payload[0]) {
+                        case Channel::PUSH:
+                            $this->thruwayClient->emit('pushMonitoringData', [$payload[1]]);
+                            break;
+                        case Channel::DELETE:
+                            $this->thruwayClient->emit('deleteMonitoringData', [$payload[1]]);
+                            break;
+                    }
                 } else {
                     $this->consoleLogger->critical(self::ZMQ_PREFIX . 'No Websocket Client started');
                 }
@@ -166,14 +176,14 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                 }
 
                 if ($this->thruwayClient->getSession()) {
-                    if (!empty($monitoringDatasets)) {
+                    if (empty($monitoringDatasets)) {
+                        $this->consoleLogger->info(self::THRUWAY_PREFIX . 'no data for publishing available');
+                    } else {
                         foreach ($monitoringDatasets as $monitoringData) {
                             $payload = $serializer->serialize($monitoringData, 'json');
-                            $this->thruwayClient->emit('monitoringData', [$payload]);
+                            $this->thruwayClient->emit('pushMonitoringData', [$payload]);
                         }
                         $this->consoleLogger->info(self::THRUWAY_PREFIX . 'published all data');
-                    } else {
-                        $this->consoleLogger->info(self::THRUWAY_PREFIX . 'no data for publishing available');
                     }
 
                     $this->thruwayClient->getSession()->publish('phashcontrol', ['"all data sent"']);
@@ -185,11 +195,24 @@ class PhashBoardClientCommand extends ContainerAwareCommand
 
         //send monitoringdata to the board
         $this->thruwayClient->on(
-            'monitoringData',
+            'pushMonitoringData',
             function ($payload) {
                 if ($this->thruwayClient->getSession()) {
                     $this->consoleLogger->info(self::THRUWAY_PREFIX . 'publishing {payload}', ['payload' => $payload]);
-                    $this->thruwayClient->getSession()->publish('phashtopic', [$payload]);
+                    $this->thruwayClient->getSession()->publish('phashtopic-push', [$payload]);
+                } else {
+                    $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no session available, please reconnect');
+                }
+            }
+        );
+
+        //send monitoringdata to the board
+        $this->thruwayClient->on(
+            'deleteMonitoringData',
+            function ($payload) {
+                if ($this->thruwayClient->getSession()) {
+                    $this->consoleLogger->info(self::THRUWAY_PREFIX . 'deleting {payload}', ['payload' => $payload]);
+                    $this->thruwayClient->getSession()->publish('phashtopic-delete', [$payload]);
                 } else {
                     $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no session available, please reconnect');
                 }
