@@ -40,3 +40,8 @@ services:
     App\Command\PhashBoardClientCommand:
         arguments:
             $voryxConfig: "%voryx_thruway%"
+
+    App\EventSubscriber\BoardSubscriber:
+        arguments:
+            $monitoringDataPush: App\Service\Board\MonitoringDataPushService
+            $monitoringDataDeletion: App\Service\Board\MonitoringDataDeletionService
