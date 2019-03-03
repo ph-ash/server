@@ -6,6 +6,7 @@ namespace App\Service\Board;
 
 use App\Dto\MonitoringData;
 use App\Service\Board\ZMQ\Client;
+use App\ValueObject\Channel;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class MonitoringDataDeletionService implements MonitoringDataPush
@@ -21,6 +22,7 @@ class MonitoringDataDeletionService implements MonitoringDataPush
 
     public function invoke(MonitoringData $monitoringData): void
     {
-        $this->pushClient->send($this->serializer->serialize($monitoringData->getId(), 'json'));
+        $channel = new Channel(Channel::DELETE);
+        $this->pushClient->send($this->serializer->serialize($monitoringData->getId(), 'json'), $channel);
     }
 }
