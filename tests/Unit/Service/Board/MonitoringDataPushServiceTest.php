@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Service\Board;
 
 use App\Dto\MonitoringData;
 use App\Service\Board\MonitoringDataPushService;
-use App\Service\Board\ZMQ\PushClient;
+use App\Service\Board\ZMQ\Client;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class MonitoringDataPushServiceTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->pushClient = $this->prophesize(PushClient::class);
+        $this->pushClient = $this->prophesize(Client::class);
 
         $this->subject = new MonitoringDataPushService($this->pushClient->reveal());
     }

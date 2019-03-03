@@ -3,10 +3,10 @@
 namespace App\Tests\Unit\Service\Board\ZMQ;
 
 use App\Dto\MonitoringData;
-use App\Exception\PushClientException;
+use App\Exception\ZMQClientException;
 use App\Factory\ContextFactory;
 use App\Factory\LoopFactory;
-use App\Service\Board\ZMQ\PushClientService;
+use App\Service\Board\ZMQ\ClientService;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
@@ -36,7 +36,7 @@ class PushClientServiceTest extends TestCase
         $this->loopFactory = $this->prophesize(LoopFactory::class);
 
 
-        $this->subject = new PushClientService($serializer->reveal(), $this->contextFactory->reveal(), $this->loopFactory->reveal());
+        $this->subject = new ClientService($serializer->reveal(), $this->contextFactory->reveal(), $this->loopFactory->reveal());
     }
 
     /**
@@ -72,7 +72,7 @@ class PushClientServiceTest extends TestCase
 
         $this->contextFactory->create($loop)->willReturn($context);
 
-        $this->expectException(PushClientException::class);
+        $this->expectException(ZMQClientException::class);
         $this->subject->send($monitoringData);
     }
 
@@ -105,7 +105,7 @@ class PushClientServiceTest extends TestCase
         $socketWrapper->method('on')->with(
             $this->equalTo('error'),
             $this->equalTo(function ($e) {
-                throw new PushClientException('Server responded with an error.', 0, $e);
+                throw new ZMQClientException('Server responded with an error.', 0, $e);
             })
         )->willThrowException(new InvalidArgumentException());
 
@@ -116,7 +116,7 @@ class PushClientServiceTest extends TestCase
 
         $this->contextFactory->create($loop)->willReturn($context);
 
-        $this->expectException(PushClientException::class);
+        $this->expectException(ZMQClientException::class);
         $this->subject->send($monitoringData);
     }
 
