@@ -26,6 +26,8 @@
                 <directory>src/Command</directory>
                 <directory>src/Controller</directory>
                 <directory>src/Repository</directory>
+                <file>src/.bootstrap.php</file>
+                <file>src/Kernel.php</file>
             </exclude>
         </whitelist>
     </filter>
