@@ -6,7 +6,7 @@ namespace App\Service\GrowTiles;
 
 use App\Document\MonitoringData;
 
-interface Calculator
+interface PriorityGrowth
 {
     public function calculateNewPriority(MonitoringData $monitoringData): int;
 }

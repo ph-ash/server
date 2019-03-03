@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace App\Service\GrowTiles;
 
 use App\Document\MonitoringData;
+use DateTimeImmutable;
+use Exception;
+use Psr\Log\LoggerInterface;
 
 class DetermineGrowingTilesService implements DetermineGrowingTiles
 {
-    private $calculator;
+    private $priorityGrowth;
+    private $logger;
 
-    public function __construct(Calculator $calculator)
+    public function __construct(PriorityGrowth $priorityGrowth, LoggerInterface $logger)
     {
-        $this->calculator = $calculator;
+        $this->priorityGrowth = $priorityGrowth;
+        $this->logger = $logger;
     }
 
     public function invoke(array $monitorings): array
@@ -21,10 +26,18 @@ class DetermineGrowingTilesService implements DetermineGrowingTiles
 
         /** @var MonitoringData $monitoring */
         foreach ($monitorings as $monitoring) {
-            $newPriority = $this->calculator->calculateNewPriority($monitoring);
+            $newPriority = $this->priorityGrowth->calculateNewPriority($monitoring);
             if ($newPriority !== $monitoring->getPriority()) {
-                $monitoring->setPriority($newPriority);
-                $updatedMonitorings[] = $monitoring;
+                try {
+                    $monitoring->setPriority($newPriority);
+                    $monitoring->setLastTileExpansion(new DateTimeImmutable());
+                    $updatedMonitorings[] = $monitoring;
+                } catch (Exception $exception) {
+                    $this->logger->error(
+                        sprintf('GROWING TILES: %s', $exception->getMessage()),
+                        ['exception' => $exception]
+                    );
+                }
             }
         }
 
