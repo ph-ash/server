@@ -73,6 +73,12 @@ class MonitoringData
      */
     private $tileExpansionGrowthExpression;
 
+    /**
+     * @var DateTime
+     * @MongoDB\Field(type="date")
+     */
+    private $lastTileExpansion;
+
     public function __construct(
         string $id,
         string $status,
@@ -150,5 +156,15 @@ class MonitoringData
     public function getTileExpansionGrowthExpression(): ?string
     {
         return $this->tileExpansionGrowthExpression;
+    }
+
+    public function getLastTileExpansion(): ?DateTimeInterface
+    {
+        return $this->lastTileExpansion;
+    }
+
+    public function setLastTileExpansion(DateTimeInterface $lastTileExpansion): void
+    {
+        $this->lastTileExpansion = $lastTileExpansion;
     }
 }
