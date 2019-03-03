@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace App\Service\Board;
 
 use App\Dto\MonitoringData;
-use App\Service\Board\ZMQ\PushClient;
+use App\Service\Board\ZMQ\Client;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MonitoringDataPushService implements MonitoringDataPush
 {
     private $pushClient;
+    private $serializer;
 
-    public function __construct(PushClient $pushClient)
+    public function __construct(Client $pushClient, SerializerInterface $serializer)
     {
         $this->pushClient = $pushClient;
+        $this->serializer = $serializer;
     }
 
     public function invoke(MonitoringData $monitoringData): void
     {
-        $this->pushClient->send($monitoringData);
+        $this->pushClient->send($this->serializer->serialize($monitoringData, 'json'));
     }
 }

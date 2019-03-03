@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Service\Board;
 
 use App\Dto\MonitoringData;
-use App\Exception\PushClientException;
+use App\Exception\ZMQClientException;
 
 interface MonitoringDataPush
 {
     /**
-     * @throws PushClientException
+     * @throws ZMQClientException
      */
     public function invoke(MonitoringData $monitoringData): void;
 }
