@@ -76,4 +76,28 @@ class PersistMonitoringDataServiceTest extends TestCase
 
         $this->subject->invoke($monitoringDataDto);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testInvokeNoPriorityChange(): void
+    {
+        $monitoringDataDto = new MonitoringDataDto(
+            'id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
+        );
+        $monitoringData = new MonitoringData(
+            'id', 'satus', new DateTime('2019-01-01 00:00:00'), 'payload', 5, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
+        );
+        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
+        $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn($monitoringData);
+        $this->monitoringDataRepository->save(
+            Argument::that(
+                function (MonitoringData $monitoringData) {
+                    return $monitoringData->getPriority() === 5;
+                }
+            )
+        )->shouldBeCalledOnce();
+
+        $this->subject->invoke($monitoringDataDto);
+    }
 }
