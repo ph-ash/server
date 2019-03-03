@@ -17,7 +17,6 @@ class BoardSubscriber implements EventSubscriberInterface
 
     public function __construct(MonitoringDataPush $monitoringDataPush, MonitoringDataPush $monitoringDataDeletion)
     {
-        //TODO configure service manually
         $this->monitoringDataPush = $monitoringDataPush;
         $this->monitoringDataDeletion = $monitoringDataDeletion;
     }
