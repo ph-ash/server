@@ -7,6 +7,7 @@ namespace App\Controller\Rest;
 use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
 use App\Service\BulkIncomingMonitoringDataDispatcher;
+use App\Service\DeleteMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
 use Exception;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -92,11 +93,11 @@ class MonitoringController extends FOSRestController
      * @throws Exception
      */
     public function deleteMonitoringData(
-        IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
+        DeleteMonitoringDataDispatcher $deleteMonitoringDataDispatcher,
         MonitoringData $monitoringData
     ): JsonResponse
     {
-        $incomingMonitoringDataDispatcher->invoke($monitoringData);
+        $deleteMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse();
     }
 
