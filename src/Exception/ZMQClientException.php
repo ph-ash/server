@@ -6,6 +6,6 @@ namespace App\Exception;
 
 use Exception;
 
-class PushClientException extends Exception
+class ZMQClientException extends Exception
 {
 }
