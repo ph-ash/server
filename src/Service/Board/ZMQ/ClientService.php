@@ -7,6 +7,7 @@ namespace App\Service\Board\ZMQ;
 use App\Exception\ZMQClientException;
 use App\Factory\ContextFactory;
 use App\Factory\LoopFactory;
+use App\ValueObject\Channel;
 use InvalidArgumentException;
 use React\EventLoop\LoopInterface;
 use React\ZMQ\SocketWrapper;
@@ -38,11 +39,11 @@ final class ClientService implements Client
         if ($this->loop === null || $this->socket === null) {
             $this->loop = $this->loopFactory->create();
             $context = $this->contextFactory->create($this->loop);
-            $this->socket = $context->getSocket(ZMQ::SOCKET_PUSH);
+            $this->socket = $context->getSocket(ZMQ::SOCKET_PUB);
         }
 
         try {
-            $this->socket->connect('tcp://127.0.0.1:5555');
+            $this->socket->connect('tcp://127.0.0.1:5555', true);
             $this->socket->on('error', function ($e) {
                 throw new ZMQClientException('Server responded with an error.', 0, $e);
             });
@@ -62,13 +63,17 @@ final class ClientService implements Client
     /**
      * @throws ZMQClientException
      */
-    public function send(string $data): void
+    public function send(string $message, Channel $channel): void
     {
         if ($this->loop === null || $this->socket === null) {
             $this->initSocket();
         }
 
-        $this->socket->send($data);
+        $this->loop->addPeriodicTimer(1, function ($timer) use ($message, $channel) {
+            $this->socket->sendmulti([$channel, $message]);
+            $this->loop->cancelTimer($timer);
+        });
+
         $this->teardown();
     }
 }
