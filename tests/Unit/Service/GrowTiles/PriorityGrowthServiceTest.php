@@ -48,6 +48,8 @@ class PriorityGrowthServiceTest extends TestCase
             'default expression' => [2, 1, null],
             'addition' => [3, 1, '+2'],
             'multiplication' => [6, 2, '* 3'],
+            'upper bound addition' => [PHP_INT_MAX, PHP_INT_MAX - 10, '+ 20'],
+            'upper bound multiplication' => [PHP_INT_MAX, PHP_INT_MAX / 10, '*30'],
         ];
     }
 }

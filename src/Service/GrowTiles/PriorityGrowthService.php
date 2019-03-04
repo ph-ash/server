@@ -9,6 +9,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class PriorityGrowthService implements PriorityGrowth
 {
+    private const EVLUATION_CRITERIA = 'priority %s';
+
     private $expressionLanguage;
 
     public function __construct()
@@ -19,9 +21,18 @@ class PriorityGrowthService implements PriorityGrowth
     public function calculateNewPriority(MonitoringData $monitoringData): int
     {
         $growthExpression = $monitoringData->getTileExpansionGrowthExpression() ?? '+ 1';
+        $invertedExpression = str_replace(['+', '*'], ['-', '/'], $growthExpression);
+
+        $maximumCurrentPriority = $this->expressionLanguage->evaluate(
+            sprintf(self::EVLUATION_CRITERIA, $invertedExpression),
+            ['priority' => PHP_INT_MAX]
+        );
+        if ($monitoringData->getPriority() > $maximumCurrentPriority) {
+            return PHP_INT_MAX;
+        }
 
         $newPriority = $this->expressionLanguage->evaluate(
-            sprintf('priority %s', $growthExpression),
+            sprintf(self::EVLUATION_CRITERIA, $growthExpression),
             ['priority' => $monitoringData->getPriority()]
         );
 
