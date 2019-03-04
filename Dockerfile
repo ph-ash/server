@@ -3,7 +3,8 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod
 
-RUN composer install --no-dev --no-scripts --optimize-autoloader --ignore-platform-reqs \
+RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
+    && composer dump-autoload --optimize \
     && composer run auto-scripts
 
 # next stage #
