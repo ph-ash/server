@@ -1,12 +1,12 @@
 dist: xenial
 
-language: php
+language: minimal
 
-php:
-  - '7.2'
+services:
+  - docker
 
 install:
-  - composer install
+  - docker build . -t phashserver
 
 script:
-  - bin/phpunit
+  - docker run --rm -it --entrypoint /var/www/html/docker/runTests.sh phashserver

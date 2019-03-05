@@ -1,10 +1,10 @@
-.env*
+.env.local
+.env.*.local
 .git*
 .idea
 .web-server-pid
 Dockerfile
 documentation/
 public/bundles/nelmioapidoc
-tests/
 var/cache/*
 var/log/*

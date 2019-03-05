@@ -25,9 +25,11 @@ RUN apk add autoconf \
        zeromq \
        coreutils \
        build-base \
+       zlib-dev \
        supervisor \
     && pecl install zmq-beta \
        mongodb \
+    && docker-php-ext-install zip \
     && docker-php-ext-enable zmq \
        mongodb \
     && php bin/console cache:warmup
