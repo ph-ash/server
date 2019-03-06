@@ -27,25 +27,15 @@ class ValidationSubscriber implements EventSubscriberInterface
         return [
             IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => [
                 ['validateMonitoringData', 0]
-            ],
-            DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['validateMonitoringData', 0]
+            ]
         ];
     }
 
     /**
      * @throws Exception
      */
-    public function validateMonitoringData(MonitoringDataEvent $incomingMonitoringDataEvent): void
+    public function validateMonitoringData(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        if (!$incomingMonitoringDataEvent instanceof Event) {
-            throw new RuntimeException(sprintf('%s does not extend Event in %s', \get_class($incomingMonitoringDataEvent), __METHOD__));
-        }
-
-        try {
-            $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
-        } catch (Exception $exception) {
-            $incomingMonitoringDataEvent->stopPropagation();
-            throw $exception;
-        }
+        $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
     }
 }
