@@ -62,9 +62,9 @@ class MonitoringController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/monitoring/data", methods={"DELETE"})
+     * @Route("/monitoring/{id}", methods={"DELETE"})
      * @SWG\Response(
-     *     response=200,
+     *     response=204,
      *     description="When the data has been deleted successfully"
      * )
      * @SWG\Response(
@@ -77,25 +77,15 @@ class MonitoringController extends AbstractFOSRestController
      *     description="When you try to delete a branch which has leafs"
      * )
      *
-     * @SWG\Parameter(
-     *     name="body",
-     *     in="body",
-     *     required=true,
-     *     allowEmptyValue=false,
-     *     @SWG\Schema(ref=@Model(type=MonitoringData::class))
-     * )
-     *
-     * @SWG\Tag(name="Monitoring")
-     *
-     * @ParamConverter("monitoringData", converter="fos_rest.request_body")
+     * @SWG\Tag(name="Single-Monitoring")
      *
      * @throws Exception
      */
     public function deleteMonitoringData(
         DeleteMonitoringDataDispatcher $deleteMonitoringDataDispatcher,
-        MonitoringData $monitoringData
+        string $id
     ): JsonResponse {
-        $deleteMonitoringDataDispatcher->invoke($monitoringData);
+        $deleteMonitoringDataDispatcher->invoke($id);
         return new JsonResponse();
     }
 
