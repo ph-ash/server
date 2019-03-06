@@ -27,10 +27,6 @@ class DetermineGrowingTilesSubscriber implements EventSubscriberInterface
     public function determineGrowingTiles(GrowTilesEvent $event): void
     {
         $growingMonitorings = $this->determineGrowingTiles->invoke($event->getMonitorings());
-        if ($growingMonitorings) {
-            $event->setMonitorings($growingMonitorings);
-        } else {
-            $event->stopPropagation();
-        }
+        $event->setMonitorings($growingMonitorings);
     }
 }

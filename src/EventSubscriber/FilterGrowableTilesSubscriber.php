@@ -10,7 +10,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class FilterGrowableTilesSubscriber implements EventSubscriberInterface
 {
-
     private $filterGrowableTiles;
 
     public function __construct(FilterGrowableTiles $filterGrowableTiles)
@@ -28,10 +27,6 @@ class FilterGrowableTilesSubscriber implements EventSubscriberInterface
     public function filterGrowableTiles(GrowTilesEvent $event): void
     {
         $growableMonitorings = $this->filterGrowableTiles->invoke($event->getMonitorings());
-        if ($growableMonitorings) {
-            $event->setMonitorings($growableMonitorings);
-        } else {
-            $event->stopPropagation();
-        }
+        $event->setMonitorings($growableMonitorings);
     }
 }

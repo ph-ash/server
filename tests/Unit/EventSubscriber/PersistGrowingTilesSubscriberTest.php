@@ -31,21 +31,6 @@ class PersistGrowingTilesSubscriberTest extends TestCase
         self::assertArrayHasKey('monitoring.grow-tiles', $subscribedEvents);
     }
 
-    public function testPersistGrowingTilesStopPropagation(): void
-    {
-        $monitoring = new MonitoringData(
-            '1', 'ok', new DateTimeImmutable(), '', 1, 60, new DateTimeImmutable(), null, null, null
-        );
-        $monitorings = [$monitoring];
-        $growEvent = new GrowTilesEvent($monitorings);
-
-        $this->persistGrowingTiles->invoke($monitorings)->shouldBeCalled()->willReturn([]);
-
-        $this->subject->persistGrowingTiles($growEvent);
-
-        self::assertTrue($growEvent->isPropagationStopped());
-    }
-
     public function testPersistGrowingTiles(): void
     {
         $monitoring = new MonitoringData(

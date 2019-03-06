@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Factory;
 
-use App\Event\GrowTilesEvent;
 use App\Factory\GrowTilesEventFactory;
 use App\Repository\MonitoringDataRepository;
 use PHPUnit\Framework\TestCase;
@@ -23,11 +22,13 @@ class GrowTilesEventFactoryTest extends TestCase
         $this->subject = new GrowTilesEventFactory($this->monitoringDataRepository->reveal());
     }
 
-    public function testCreateNoEvent(): void
+    public function testCreateEmptyEvent(): void
     {
         $this->monitoringDataRepository->findAllErroneousMonitorings()->willReturn([]);
 
-        self::assertNull($this->subject->create());
+        $event = $this->subject->create();
+
+        self::assertEmpty($event->getMonitorings());
     }
 
     public function testCreate(): void

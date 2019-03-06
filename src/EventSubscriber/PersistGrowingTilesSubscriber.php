@@ -27,10 +27,6 @@ class PersistGrowingTilesSubscriber implements EventSubscriberInterface
     public function persistGrowingTiles(GrowTilesEvent $event): void
     {
         $persistedMonitorings = $this->persistGrowingTiles->invoke($event->getMonitorings());
-        if ($persistedMonitorings) {
-            $event->setMonitorings($persistedMonitorings);
-        } else {
-            $event->stopPropagation();
-        }
+        $event->setMonitorings($persistedMonitorings);
     }
 }

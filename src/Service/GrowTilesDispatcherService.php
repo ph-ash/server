@@ -22,8 +22,6 @@ class GrowTilesDispatcherService implements GrowTilesDispatcher
     public function invoke(): void
     {
         $event = $this->growTilesEventFactory->create();
-        if ($event) {
-            $this->eventDispatcher->dispatch(GrowTilesEvent::EVENT_NAME, $event);
-        }
+        $this->eventDispatcher->dispatch(GrowTilesEvent::EVENT_NAME, $event);
     }
 }

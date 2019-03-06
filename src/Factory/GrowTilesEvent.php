@@ -8,5 +8,5 @@ use App\Event\GrowTilesEvent as Event;
 
 interface GrowTilesEvent
 {
-    public function create(): ?Event;
+    public function create(): Event;
 }

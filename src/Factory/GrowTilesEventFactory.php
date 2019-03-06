@@ -16,13 +16,9 @@ class GrowTilesEventFactory implements GrowTilesEvent
         $this->monitoringDataRepository = $monitoringDataRepository;
     }
 
-    public function create(): ?Event
+    public function create(): Event
     {
-        $event = null;
         $erroneousMonitorings = $this->monitoringDataRepository->findAllErroneousMonitorings();
-        if ($erroneousMonitorings) {
-            $event = new Event($erroneousMonitorings);
-        }
-        return $event;
+        return new Event($erroneousMonitorings);
     }
 }
