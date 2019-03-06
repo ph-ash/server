@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit\Service\Board\ZMQ;
 
 use App\Dto\MonitoringData;
@@ -44,7 +46,7 @@ class PushClientServiceTest extends TestCase
      */
     public function testSendZMQException(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
+        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath', null, null);
 
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 
@@ -81,7 +83,7 @@ class PushClientServiceTest extends TestCase
      */
     public function testInvalidArgumentException(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
+        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath', null, null);
 
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 
@@ -125,7 +127,7 @@ class PushClientServiceTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath');
+        $monitoringData = new MonitoringData('id', 'status', 'payload', 1, 10, new DateTime(), 'somepath', null, null);
 
         $loop = $this->getMockBuilder(LoopInterface::class)->getMock();
 

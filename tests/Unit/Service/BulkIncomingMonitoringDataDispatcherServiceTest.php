@@ -6,18 +6,13 @@ namespace App\Tests\Unit\Service;
 
 use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
-use App\Event\IncomingMonitoringDataEvent as Event;
 use App\Exception\BulkValidationException;
 use App\Exception\ValidationException;
-use App\Factory\IncomingMonitoringDataEvent;
 use App\Service\BulkIncomingMonitoringDataDispatcherService;
 use App\Service\IncomingMonitoringDataDispatcher;
-use App\Service\IncomingMonitoringDataDispatcherService;
-use DateTime;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
 {
@@ -48,7 +43,9 @@ class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             $date,
-            'somePath1'
+            'somePath1',
+            null,
+            null
         );
 
         $monitoringData2 = new MonitoringData(
@@ -58,7 +55,9 @@ class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             $date,
-            'somePath2'
+            'somePath2',
+            null,
+            null
         );
 
         $bulkMonitoringData = new BulkMonitoringData();
@@ -84,7 +83,9 @@ class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             $date,
-            'somePath1'
+            'somePath1',
+            null,
+            null
         );
 
         $monitoringData2 = new MonitoringData(
@@ -94,7 +95,9 @@ class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             $date,
-            'somePath2'
+            'somePath2',
+            null,
+            null
         );
 
         $bulkMonitoringData = new BulkMonitoringData();

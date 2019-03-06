@@ -58,6 +58,21 @@ class MonitoringData
      */
     private $path;
 
+    /**
+     * @var int
+     * @SWG\Property(
+     *     description="The number of idle timeout intervals after which a red tile grows in priority",
+     *     example=1
+     * )
+     */
+    private $tileExpansionIntervalCount;
+
+    /**
+     * @var string
+     * @SWG\Property(description="The expression of priority growth", example="+ 1")
+     */
+    private $tileExpansionGrowthExpression;
+
     public function __construct(
         string $id,
         string $status,
@@ -65,7 +80,9 @@ class MonitoringData
         int $priority,
         int $idleTimeoutInSeconds,
         DateTimeInterface $date,
-        ?string $path
+        ?string $path,
+        int $tileExpansionIntervalCount = null,
+        string $tileExpansionGrowthExpression = null
     ) {
         $this->id = $id;
         $this->status = $status;
@@ -74,6 +91,8 @@ class MonitoringData
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
         $this->path = $path;
+        $this->tileExpansionIntervalCount = $tileExpansionIntervalCount;
+        $this->tileExpansionGrowthExpression = $tileExpansionGrowthExpression;
     }
 
     public function getId(): string
@@ -101,6 +120,11 @@ class MonitoringData
         return $this->priority;
     }
 
+    public function setPriority(int $priority): void
+    {
+        $this->priority = $priority;
+    }
+
     public function getDate(): DateTimeInterface
     {
         return $this->date;
@@ -109,5 +133,15 @@ class MonitoringData
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getTileExpansionIntervalCount(): ?int
+    {
+        return $this->tileExpansionIntervalCount;
+    }
+
+    public function getTileExpansionGrowthExpression(): ?string
+    {
+        return $this->tileExpansionGrowthExpression;
     }
 }

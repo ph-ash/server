@@ -9,8 +9,12 @@ use App\Exception\PersistenceLayerException;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 use Doctrine\ODM\MongoDB\Cursor;
+use Doctrine\ODM\MongoDB\LockException;
+use Doctrine\ODM\MongoDB\LockMode;
+use Doctrine\ODM\MongoDB\Mapping\MappingException;
 use Exception;
 use LogicException;
+use MongoRegex;
 
 class MonitoringDataRepository extends ServiceDocumentRepository
 {
@@ -26,6 +30,27 @@ class MonitoringDataRepository extends ServiceDocumentRepository
     {
         $this->getDocumentManager()->clear(MonitoringData::class);
         return parent::findAll();
+    }
+
+    public function findAllErroneousMonitorings(): array
+    {
+        return $this->findBy(['status' => 'error']);
+    }
+
+    /**
+     * @param mixed $id Identifier.
+     * @throws PersistenceLayerException
+     */
+    public function find($id, $lockMode = LockMode::NONE, $lockVersion = null): ?MonitoringData
+    {
+        $document = null;
+        try {
+            /** @var MonitoringData $document */
+            $document = parent::find($id, $lockMode, $lockVersion);
+        } catch (LockException | MappingException $exception) {
+            throw new PersistenceLayerException('MonitoringData find failed.', 0, $exception);
+        }
+        return $document;
     }
 
     /**
@@ -48,8 +73,7 @@ class MonitoringDataRepository extends ServiceDocumentRepository
     {
         $qb = $this->getDocumentManager()->createQueryBuilder(MonitoringData::class);
         try {
-            $qb->field('path')->equals(new \MongoRegex('/' . $path . '..*/'))->limit(1);
-            /** @var Cursor $result */
+            $qb->field('path')->equals(new MongoRegex('/' . $path . '..*/'))->limit(1);
             return $qb->getQuery()->execute();
         } catch (Exception $exception) {
             throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);

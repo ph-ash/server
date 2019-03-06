@@ -3,7 +3,8 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod
 
-RUN composer install --no-dev --no-scripts --optimize-autoloader --ignore-platform-reqs \
+RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
+    && composer dump-autoload --optimize \
     && composer run auto-scripts
 
 # next stage #
@@ -26,10 +27,12 @@ RUN apk add autoconf \
        coreutils \
        build-base \
        supervisor \
+       fcgi \
     && pecl install zmq-beta \
        mongodb \
     && docker-php-ext-enable zmq \
        mongodb \
-    && php bin/console cache:warmup
+    && php bin/console cache:warmup \
+    && crontab /var/www/html/docker/crontab
 
 ENTRYPOINT ["supervisord", "--configuration", "/var/www/html/docker/supervisord.conf"]

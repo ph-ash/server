@@ -4,24 +4,31 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\PushClientException;
-use App\Service\Board\MonitoringDataPush;
+use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
+use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BoardSubscriber implements EventSubscriberInterface
 {
-    private $monitoringDataPush;
+    private $monitoringDataDtoPush;
+    private $monitoringDataDocumentPush;
 
-    public function __construct(MonitoringDataPush $monitoringDataPush)
-    {
-        $this->monitoringDataPush = $monitoringDataPush;
+    public function __construct(
+        MonitoringDataDtoPush $monitoringDataDtoPush,
+        MonitoringDataDocumentPush $monitoringDataDocumentPush
+    ) {
+        $this->monitoringDataDtoPush = $monitoringDataDtoPush;
+        $this->monitoringDataDocumentPush = $monitoringDataDocumentPush;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['pushDataToBoard', -20]
+            IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['pushDataToBoard', -20],
+            GrowTilesEvent::EVENT_NAME => ['pushUpdatedDataToBoard', -20]
         ];
     }
 
@@ -31,6 +38,11 @@ class BoardSubscriber implements EventSubscriberInterface
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
         //TODO exception handling
-        $this->monitoringDataPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        $this->monitoringDataDtoPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+    }
+
+    public function pushUpdatedDataToBoard(GrowTilesEvent $event): void
+    {
+        $this->monitoringDataDocumentPush->invoke($event->getMonitorings());
     }
 }

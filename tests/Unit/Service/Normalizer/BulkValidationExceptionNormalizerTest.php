@@ -49,21 +49,10 @@ class BulkValidationExceptionNormalizerTest extends TestCase
      */
     public function testNormalize(): void
     {
-        $dateTime = new DateTimeImmutable();
         $id = 'id';
-        $status = 'status';
-        $payload = 'payload';
-        $priority = 1;
-        $idleTimeoutInSeconds = 50;
         $path = 'path';
         $monitoringData = new MonitoringData(
-            $id,
-            $status,
-            $payload,
-            $priority,
-            $idleTimeoutInSeconds,
-            $dateTime,
-            $path
+            $id, 'status', 'payload', 1, 50, new DateTimeImmutable(), $path, null, null
         );
         $valdtionExceptionMessage = 'someErrorMessage';
         $bulkValidationExceptionMessage = 'bulkErrorMessage';
@@ -79,6 +68,7 @@ class BulkValidationExceptionNormalizerTest extends TestCase
             ]
         ];
 
+        /** @var array $result */
         $result = $this->subject->normalize($bulkValidationException, null, $context);
 
         self::assertSame('error', $result['status']);

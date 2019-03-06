@@ -22,4 +22,9 @@ class IncomingMonitoringDataEvent extends Event
     {
         return $this->monitoringData;
     }
+
+    public function setMonitoringData(MonitoringData $monitoringData): void
+    {
+        $this->monitoringData = $monitoringData;
+    }
 }

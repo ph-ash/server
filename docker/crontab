@@ -1,0 +1,2 @@
+# try to grow tiles every minute
+* * * * * /var/www/html/docker/requestUrl.sh POST /internal/grow-tiles

@@ -6,11 +6,12 @@ namespace App\Service\Persistance;
 
 use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
+use DateTimeInterface;
 
 interface PersistMonitoringData
 {
     /**
      * @throws PersistenceLayerException
      */
-    public function invoke(MonitoringData $monitoringData);
+    public function invoke(MonitoringData $monitoringData, DateTimeInterface $statusChangedAt): void;
 }
