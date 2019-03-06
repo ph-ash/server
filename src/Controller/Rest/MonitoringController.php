@@ -10,7 +10,7 @@ use App\Service\BulkIncomingMonitoringDataDispatcher;
 use App\Service\DeleteMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
 use Exception;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api")
  */
-class MonitoringController extends FOSRestController
+class MonitoringController extends AbstractFOSRestController
 {
     /**
      * @Route("/monitoring/data", methods={"POST"})
