@@ -6,28 +6,28 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\Document\MonitoringData;
 use App\Event\GrowTilesEvent;
-use App\EventSubscriber\DetermineGrowingTilesSubscriber;
-use App\Service\GrowTiles\DetermineGrowingTiles;
+use App\EventSubscriber\DetermineTileGrowthSubscriber;
+use App\Service\GrowTiles\DetermineTileGrowth;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-class DetermineGrowingTilesSubscriberTest extends TestCase
+class DetermineTileGrowthSubscriberTest extends TestCase
 {
-    private $determineGrowingTiles;
-    /** @var DetermineGrowingTilesSubscriber */
+    private $determineTileGrowth;
+    /** @var DetermineTileGrowthSubscriber */
     private $subject;
 
     public function setUp()
     {
         parent::setUp();
-        $this->determineGrowingTiles = $this->prophesize(DetermineGrowingTiles::class);
+        $this->determineTileGrowth = $this->prophesize(DetermineTileGrowth::class);
 
-        $this->subject = new DetermineGrowingTilesSubscriber($this->determineGrowingTiles->reveal());
+        $this->subject = new DetermineTileGrowthSubscriber($this->determineTileGrowth->reveal());
     }
 
     public function testGetSubscribedEvents(): void
     {
-        $subscribedEvents = DetermineGrowingTilesSubscriber::getSubscribedEvents();
+        $subscribedEvents = DetermineTileGrowthSubscriber::getSubscribedEvents();
         self::assertArrayHasKey('monitoring.grow-tiles', $subscribedEvents);
     }
 
@@ -39,9 +39,9 @@ class DetermineGrowingTilesSubscriberTest extends TestCase
         $monitorings = [$monitoring];
         $growEvent = new GrowTilesEvent($monitorings);
 
-        $this->determineGrowingTiles->invoke($monitorings)->shouldBeCalled()->willReturn([$monitoring]);
+        $this->determineTileGrowth->invoke($monitorings)->shouldBeCalled()->willReturn([$monitoring]);
 
-        $this->subject->determineGrowingTiles($growEvent);
+        $this->subject->determineTileGrowth($growEvent);
 
         self::assertFalse($growEvent->isPropagationStopped());
     }

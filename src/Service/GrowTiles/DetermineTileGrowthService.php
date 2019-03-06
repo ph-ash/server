@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use Exception;
 use Psr\Log\LoggerInterface;
 
-class DetermineGrowingTilesService implements DetermineGrowingTiles
+class DetermineTileGrowthService implements DetermineTileGrowth
 {
     private $priorityGrowth;
     private $logger;

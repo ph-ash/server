@@ -6,7 +6,7 @@ namespace App\Service\GrowTiles;
 
 use App\Document\MonitoringData;
 
-interface DetermineGrowingTiles
+interface DetermineTileGrowth
 {
     /**
      * @param MonitoringData[] $monitorings

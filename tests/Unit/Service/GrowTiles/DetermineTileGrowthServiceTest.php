@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Service\GrowTiles;
 
 use App\Document\MonitoringData;
-use App\Service\GrowTiles\DetermineGrowingTilesService;
+use App\Service\GrowTiles\DetermineTileGrowthService;
 use App\Service\GrowTiles\PriorityGrowth;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 
-class DetermineGrowingTilesServiceTest extends TestCase
+class DetermineTileGrowthServiceTest extends TestCase
 {
     private $priorityGrowth;
     private $logger;
-    /** @var DetermineGrowingTilesService */
+    /** @var DetermineTileGrowthService */
     private $subject;
 
     public function setUp()
@@ -25,7 +25,7 @@ class DetermineGrowingTilesServiceTest extends TestCase
         $this->priorityGrowth = $this->prophesize(PriorityGrowth::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
 
-        $this->subject = new DetermineGrowingTilesService($this->priorityGrowth->reveal(), $this->logger->reveal());
+        $this->subject = new DetermineTileGrowthService($this->priorityGrowth->reveal(), $this->logger->reveal());
     }
 
     public function testInvokeWithoutMonitorings(): void
