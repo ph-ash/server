@@ -120,6 +120,11 @@ class MonitoringData
         return $this->priority;
     }
 
+    public function setPriority(int $priority): void
+    {
+        $this->priority = $priority;
+    }
+
     public function getDate(): DateTimeInterface
     {
         return $this->date;

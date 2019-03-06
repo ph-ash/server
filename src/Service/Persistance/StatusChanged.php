@@ -8,10 +8,10 @@ use App\Dto\MonitoringData;
 use App\Exception\PersistenceLayerException;
 use DateTimeInterface;
 
-interface PersistMonitoringData
+interface StatusChanged
 {
     /**
      * @throws PersistenceLayerException
      */
-    public function invoke(MonitoringData $monitoringData, DateTimeInterface $statusChangedAt, int $priority): void;
+    public function calculate(MonitoringData $monitoringData): DateTimeInterface;
 }
