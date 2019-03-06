@@ -35,8 +35,8 @@ class PersistanceSubscriber implements EventSubscriberInterface
      */
     public function onDeleteMonitoringData(DeleteMonitoringDataEvent $deleteMonitoringDataEvent): void
     {
-        $monitoringDataDto = $deleteMonitoringDataEvent->getMonitoringData();
-        $this->monitoringDataRepository->delete($monitoringDataDto->getId());
+        $monitoringDataId = $deleteMonitoringDataEvent->getMonitoringDataId();
+        $this->monitoringDataRepository->delete($monitoringDataId);
     }
 
     /**

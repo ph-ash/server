@@ -7,15 +7,17 @@ namespace App\EventSubscriber;
 use App\Event\DeleteMonitoringDataEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\ZMQClientException;
+use App\Service\Board\MonitoringDataDeletion;
 use App\Service\Board\MonitoringDataPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use UnexpectedValueException;
 
 class BoardSubscriber implements EventSubscriberInterface
 {
     private $monitoringDataPush;
     private $monitoringDataDeletion;
 
-    public function __construct(MonitoringDataPush $monitoringDataPush, MonitoringDataPush $monitoringDataDeletion)
+    public function __construct(MonitoringDataPush $monitoringDataPush, MonitoringDataDeletion $monitoringDataDeletion)
     {
         $this->monitoringDataPush = $monitoringDataPush;
         $this->monitoringDataDeletion = $monitoringDataDeletion;
@@ -31,14 +33,16 @@ class BoardSubscriber implements EventSubscriberInterface
 
     /**
      * @throws ZMQClientException
+     * @throws UnexpectedValueException
      */
     public function onDeleteMonitoringData(DeleteMonitoringDataEvent $deleteMonitoringDataEvent): void
     {
-        $this->monitoringDataDeletion->invoke($deleteMonitoringDataEvent->getMonitoringData());
+        $this->monitoringDataDeletion->invoke($deleteMonitoringDataEvent->getMonitoringDataId());
     }
 
     /**
      * @throws ZMQClientException
+     * @throws UnexpectedValueException
      */
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {

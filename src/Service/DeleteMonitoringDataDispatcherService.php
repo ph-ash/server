@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Dto\MonitoringData;
 use App\Event\DeleteMonitoringDataEvent as Event;
-use App\Exception\PersistenceLayerException;
-use App\Exception\ValidationException;
 use App\Factory\DeleteMonitoringDataEvent;
-use OutOfBoundsException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DeleteMonitoringDataDispatcherService implements DeleteMonitoringDataDispatcher
@@ -23,9 +19,9 @@ class DeleteMonitoringDataDispatcherService implements DeleteMonitoringDataDispa
         $this->deleteMonitoringDataEvent = $deleteMonitoringDataEvent;
     }
 
-    public function invoke(MonitoringData $monitoringData): void
+    public function invoke(string $monitoringDataId): void
     {
-        $deleteMonitoringDataEvent = $this->deleteMonitoringDataEvent->createFrom($monitoringData);
+        $deleteMonitoringDataEvent = $this->deleteMonitoringDataEvent->createFrom($monitoringDataId);
         $this->eventDispatcher->dispatch(Event::EVENT_DELETE_MONITORING_DATA, $deleteMonitoringDataEvent);
     }
 }

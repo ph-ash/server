@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace App\Event;
 
-use App\Dto\MonitoringData;
 use Symfony\Component\EventDispatcher\Event;
 
-class DeleteMonitoringDataEvent extends Event implements MonitoringDataEvent
+class DeleteMonitoringDataEvent extends Event
 {
     public const EVENT_DELETE_MONITORING_DATA = 'monitoring.delete_data';
 
-    private $monitoringData;
+    private $monitoringDataId;
 
-    public function __construct(MonitoringData $monitoringData)
+    public function __construct(string $monitoringDataId)
     {
-        $this->monitoringData = $monitoringData;
+        $this->monitoringDataId = $monitoringDataId;
     }
 
-    public function getMonitoringData(): MonitoringData
+    public function getMonitoringDataId(): string
     {
-        return $this->monitoringData;
+        return $this->monitoringDataId;
     }
 }
