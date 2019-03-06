@@ -13,5 +13,5 @@ interface PersistMonitoringData
     /**
      * @throws PersistenceLayerException
      */
-    public function invoke(MonitoringData $monitoringData, DateTimeInterface $statusChangedAt, int $priority): void;
+    public function invoke(MonitoringData $monitoringData, DateTimeInterface $statusChangedAt): void;
 }

@@ -51,7 +51,7 @@ class PersistanceSubscriberTest extends TestCase
         $this->statusChanged->calculate($monitoringData)->shouldBeCalled()->willReturn($statusChanged);
         $this->priority->calculate($monitoringData)->shouldBeCalled()->willReturn($priority);
 
-        $this->persistMonitoringData->invoke($monitoringData, $statusChanged, $priority)->shouldBeCalled();
+        $this->persistMonitoringData->invoke($monitoringData, $statusChanged)->shouldBeCalled();
 
         $this->subject->persistMonitoringData($event);
 

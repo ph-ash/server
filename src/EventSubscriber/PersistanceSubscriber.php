@@ -48,7 +48,7 @@ class PersistanceSubscriber implements EventSubscriberInterface
         // update DTO to re-persist and communicate the correct data
         $monitoringDataDto->setPriority($priority);
 
-        $this->persistMonitoringData->invoke($monitoringDataDto, $statusChangedAt, $priority);
+        $this->persistMonitoringData->invoke($monitoringDataDto, $statusChangedAt);
         $event->setMonitoringData($monitoringDataDto);
     }
 }

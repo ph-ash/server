@@ -37,14 +37,13 @@ class PersistMonitoringDataServiceTest extends TestCase
     public function testInvoke(): void
     {
         $statusChangedAt = new DateTimeImmutable('2019-01-01 00:00:00');
-        $priority = 15;
         $monitoringDataDto = new MonitoringDataDto(
             'id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', null, null
         );
-        $this->monitoringDataRepository->save(Argument::that(function (MonitoringData $monitoringData) use ($statusChangedAt, $priority) {
-            return $monitoringData->getPriority() === $priority &&  $monitoringData->getStatusChangedAt() === $statusChangedAt;
+        $this->monitoringDataRepository->save(Argument::that(function (MonitoringData $monitoringData) use ($statusChangedAt) {
+            return $monitoringData->getStatusChangedAt() === $statusChangedAt;
         }))->shouldBeCalledOnce();
 
-        $this->subject->invoke($monitoringDataDto, $statusChangedAt, $priority);
+        $this->subject->invoke($monitoringDataDto, $statusChangedAt);
     }
 }

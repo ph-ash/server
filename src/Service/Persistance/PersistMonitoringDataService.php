@@ -18,14 +18,14 @@ class PersistMonitoringDataService implements PersistMonitoringData
         $this->monitoringDataRepository = $monitoringDataRepository;
     }
 
-    public function invoke(MonitoringDataDto $monitoringDataDto, DateTimeInterface $statusChangedAt, int $priority): void
+    public function invoke(MonitoringDataDto $monitoringDataDto, DateTimeInterface $statusChangedAt): void
     {
         $monitoringDataDocument = new MonitoringData(
             $monitoringDataDto->getId(),
             $monitoringDataDto->getStatus(),
             $statusChangedAt,
             $monitoringDataDto->getPayload(),
-            $priority,
+            $monitoringDataDto->getPriority(),
             $monitoringDataDto->getIdleTimeoutInSeconds(),
             $monitoringDataDto->getDate(),
             $monitoringDataDto->getPath(),
