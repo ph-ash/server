@@ -60,9 +60,6 @@ final class ClientService implements Client
         $this->socket->close();
     }
 
-    /**
-     * @throws ZMQClientException
-     */
     public function send(string $message, Channel $channel): void
     {
         if ($this->loop === null || $this->socket === null) {
