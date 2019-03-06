@@ -48,8 +48,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
         SerializerInterface $serializer,
         MonitoringDataRepository $monitoringDataRepository,
         array $voryxConfig
-    )
-    {
+    ) {
         parent::__construct();
         $this->serializer = $serializer;
         $this->monitoringDataRepository = $monitoringDataRepository;
@@ -206,7 +205,6 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             }
         );
 
-        //send monitoringdata to the board
         $this->thruwayClient->on(
             'deleteMonitoringData',
             function ($payload) {

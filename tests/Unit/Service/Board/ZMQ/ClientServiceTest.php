@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit\Service\Board\ZMQ;
 
 use App\Exception\ZMQClientException;
@@ -16,7 +18,7 @@ use React\ZMQ\SocketWrapper;
 use ZMQ;
 use ZMQSocketException;
 
-class PushClientServiceTest extends TestCase
+class ClientServiceTest extends TestCase
 {
     private $subject;
     private $loopFactory;

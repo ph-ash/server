@@ -56,8 +56,7 @@ class MonitoringController extends AbstractFOSRestController
     public function postMonitoringData(
         IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
         MonitoringData $monitoringData
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
     }
@@ -95,8 +94,7 @@ class MonitoringController extends AbstractFOSRestController
     public function deleteMonitoringData(
         DeleteMonitoringDataDispatcher $deleteMonitoringDataDispatcher,
         MonitoringData $monitoringData
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $deleteMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse();
     }
@@ -134,8 +132,7 @@ class MonitoringController extends AbstractFOSRestController
     public function postBulkMonitoringData(
         BulkIncomingMonitoringDataDispatcher $bulkIncomingMonitoringDataDispatcher,
         BulkMonitoringData $bulkMonitoringData
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $bulkIncomingMonitoringDataDispatcher->invoke($bulkMonitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
     }
