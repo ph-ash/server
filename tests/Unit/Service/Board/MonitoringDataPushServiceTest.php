@@ -11,7 +11,6 @@ use App\ValueObject\Channel;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class MonitoringDataPushServiceTest extends TestCase
