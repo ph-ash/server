@@ -19,7 +19,7 @@ class CronjobController extends AbstractController
      * @Route("/grow-tiles", methods={"POST"})
      * @throws InvalidArgumentException
      */
-    public function growTiles(GrowTilesDispatcher $growTilesDispatcher)
+    public function growTiles(GrowTilesDispatcher $growTilesDispatcher): Response
     {
         $growTilesDispatcher->invoke();
         return new Response('', Response::HTTP_NO_CONTENT);
