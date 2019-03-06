@@ -7,25 +7,21 @@ namespace App\EventSubscriber;
 use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\PushClientException;
-use App\Factory\MonitoringDataDtoFactory;
-use App\Service\Board\MonitoringDataPush;
-use Psr\Log\LoggerInterface;
+use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
+use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BoardSubscriber implements EventSubscriberInterface
 {
-    private $monitoringDataPush;
-    private $logger;
-    private $monitoringDataDtoFactory;
+    private $monitoringDataDtoPush;
+    private $monitoringDataDocumentPush;
 
     public function __construct(
-        MonitoringDataPush $monitoringDataPush,
-        MonitoringDataDtoFactory $monitoringDataDtoFactory,
-        LoggerInterface $logger
+        MonitoringDataDtoPush $monitoringDataDtoPush,
+        MonitoringDataDocumentPush $monitoringDataDocumentPush
     ) {
-        $this->monitoringDataPush = $monitoringDataPush;
-        $this->monitoringDataDtoFactory = $monitoringDataDtoFactory;
-        $this->logger = $logger;
+        $this->monitoringDataDtoPush = $monitoringDataDtoPush;
+        $this->monitoringDataDocumentPush = $monitoringDataDocumentPush;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,18 +38,11 @@ class BoardSubscriber implements EventSubscriberInterface
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
         //TODO exception handling
-        $this->monitoringDataPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        $this->monitoringDataDtoPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
     }
 
     public function pushUpdatedDataToBoard(GrowTilesEvent $event): void
     {
-        foreach ($event->getMonitorings() as $monitoring) {
-            $dto = $this->monitoringDataDtoFactory->createFrom($monitoring);
-            try {
-                $this->monitoringDataPush->invoke($dto);
-            } catch (PushClientException $exception) {
-                $this->logger->error($exception->getMessage(), ['exception' => $exception]);
-            }
-        }
+        $this->monitoringDataDocumentPush->invoke($event->getMonitorings());
     }
 }
