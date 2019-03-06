@@ -28,7 +28,7 @@ class MonitoringDataDtoFactoryServiceTest extends TestCase
             'id 1', 'ok', new DateTimeImmutable(), 'p', 1, 60, $date, 'a.b', 5, null
         );
 
-        $dto = $this->subject->createFrom($document);
+        $dto = $this->subject->create($document);
         self::assertSame('id 1', $dto->getId());
         self::assertSame('ok', $dto->getStatus());
         self::assertSame('p', $dto->getPayload());

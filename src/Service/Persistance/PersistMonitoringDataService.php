@@ -40,7 +40,7 @@ class PersistMonitoringDataService implements PersistMonitoringData
 
         $this->monitoringDataRepository->save($monitoringDataDocument);
 
-        return $this->monitoringDataDtoFactory->createFrom($monitoringDataDocument);
+        return $this->monitoringDataDtoFactory->create($monitoringDataDocument);
     }
 
     private function getStatusChangedAt(MonitoringDataDto $monitoringDataDto, ?MonitoringData $oldMonitoringDataDocument): DateTimeInterface

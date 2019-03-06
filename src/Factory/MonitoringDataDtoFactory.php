@@ -9,5 +9,5 @@ use App\Dto\MonitoringData as MonitoringDataDto;
 
 interface MonitoringDataDtoFactory
 {
-    public function createFrom(MonitoringDataDocument $monitoringData): MonitoringDataDto;
+    public function create(MonitoringDataDocument $monitoringData): MonitoringDataDto;
 }

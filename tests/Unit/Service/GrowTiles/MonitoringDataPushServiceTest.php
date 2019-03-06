@@ -42,8 +42,8 @@ class MonitoringDataPushServiceTest extends TestCase
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
-        $this->monitoringDataDtoFactory->createFrom($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
-        $this->monitoringDataDtoFactory->createFrom($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory->create($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory->create($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
         $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2);
         $this->logger->error(Argument::cetera())->shouldNotBeCalled();
 
@@ -57,8 +57,8 @@ class MonitoringDataPushServiceTest extends TestCase
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
-        $this->monitoringDataDtoFactory->createFrom($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
-        $this->monitoringDataDtoFactory->createFrom($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory->create($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory->create($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
         $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2)->willThrow(PushClientException::class);
         $this->logger->error(Argument::cetera())->shouldBeCalledTimes(2);
 

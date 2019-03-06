@@ -28,7 +28,7 @@ class MonitoringDataPushService implements MonitoringDataPush
     public function invoke(array $monitorings): void
     {
         foreach ($monitorings as $monitoring) {
-            $dto = $this->monitoringDataDtoFactory->createFrom($monitoring);
+            $dto = $this->monitoringDataDtoFactory->create($monitoring);
             try {
                 $this->monitoringDataPush->invoke($dto);
             } catch (PushClientException $exception) {

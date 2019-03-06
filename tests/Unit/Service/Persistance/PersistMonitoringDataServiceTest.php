@@ -46,7 +46,7 @@ class PersistMonitoringDataServiceTest extends TestCase
         $monitoringDataDto = new MonitoringDataDto(
             'id', 'satus', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', null, null
         );
-        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
+        $this->monitoringDataDtoFactory->create(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn(null);
         $this->monitoringDataRepository->save(Argument::type(MonitoringData::class))->shouldBeCalledOnce();
 
@@ -64,7 +64,7 @@ class PersistMonitoringDataServiceTest extends TestCase
         $monitoringData = new MonitoringData(
             'id', 'satus', new DateTime('2019-01-01 00:00:00'), 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
         );
-        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
+        $this->monitoringDataDtoFactory->create(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn($monitoringData);
         $this->monitoringDataRepository->save(
             Argument::that(
@@ -88,7 +88,7 @@ class PersistMonitoringDataServiceTest extends TestCase
         $monitoringData = new MonitoringData(
             'id', 'satus', new DateTime('2019-01-01 00:00:00'), 'payload', 5, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
         );
-        $this->monitoringDataDtoFactory->createFrom(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
+        $this->monitoringDataDtoFactory->create(Argument::type(MonitoringData::class))->willReturn($monitoringDataDto);
         $this->monitoringDataRepository->find('id')->shouldBeCalledOnce()->willReturn($monitoringData);
         $this->monitoringDataRepository->save(
             Argument::that(
