@@ -36,11 +36,9 @@ class MonitoringDataDeletionServiceTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'some.path');
-
-        $this->serializer->serialize($monitoringDataDto->getId(), 'json')->willReturn($monitoringDataDto->getId());
+        $this->serializer->serialize('monitoringDataId', 'json')->willReturn('monitoringDataId');
         $channel = new Channel('delete');
-        $this->pushClient->send($monitoringDataDto->getId(), $channel)->shouldBeCalledOnce();
-        $this->subject->invoke($monitoringDataDto);
+        $this->pushClient->send('monitoringDataId', $channel)->shouldBeCalledOnce();
+        $this->subject->invoke('monitoringDataId');
     }
 }
