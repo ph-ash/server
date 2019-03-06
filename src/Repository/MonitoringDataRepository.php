@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Document\MonitoringData;
-use App\Dto\MonitoringData as MonitoringDataDto;
 use App\Exception\PersistenceLayerException;
 use App\Repository\MonitoringData as MonitoringDataInterface;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
