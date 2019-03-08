@@ -47,6 +47,8 @@ class ApiPostTestCommand extends Command
                 \random_int(1, 15),
                 \random_int(1, 240),
                 new DateTimeImmutable(),
+                null,
+                null,
                 null
             );
             try {

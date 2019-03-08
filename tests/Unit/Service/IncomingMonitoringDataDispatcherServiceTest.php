@@ -46,7 +46,9 @@ class IncomingMonitoringDataDispatcherServiceTest extends TestCase
             5,
             60,
             new DateTimeImmutable(),
-            'somePath'
+            'somePath',
+            null,
+            null
         );
 
         $monitoringDataEvent = new Event($monitoringData);

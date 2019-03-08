@@ -5,21 +5,27 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Event\DeleteMonitoringDataEvent;
+use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\ZMQClientException;
 use App\Service\Board\MonitoringDataDeletion;
-use App\Service\Board\MonitoringDataPush;
+use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
+use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use UnexpectedValueException;
 
 class BoardSubscriber implements EventSubscriberInterface
 {
-    private $monitoringDataPush;
+    private $monitoringDataDtoPush;
+    private $monitoringDataDocumentPush;
     private $monitoringDataDeletion;
 
-    public function __construct(MonitoringDataPush $monitoringDataPush, MonitoringDataDeletion $monitoringDataDeletion)
-    {
-        $this->monitoringDataPush = $monitoringDataPush;
+    public function __construct(
+        MonitoringDataDtoPush $monitoringDataDtoPush,
+        MonitoringDataDocumentPush $monitoringDataDocumentPush
+    ) {
+        $this->monitoringDataDtoPush = $monitoringDataDtoPush;
+        $this->monitoringDataDocumentPush = $monitoringDataDocumentPush;
         $this->monitoringDataDeletion = $monitoringDataDeletion;
     }
 
@@ -27,6 +33,7 @@ class BoardSubscriber implements EventSubscriberInterface
     {
         return [
             IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['pushDataToBoard', -20],
+            GrowTilesEvent::EVENT_NAME => ['pushUpdatedDataToBoard', -20]
             DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['onDeleteMonitoringData', -20]
         ];
     }
@@ -46,6 +53,11 @@ class BoardSubscriber implements EventSubscriberInterface
      */
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        $this->monitoringDataPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        $this->monitoringDataDtoPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+    }
+
+    public function pushUpdatedDataToBoard(GrowTilesEvent $event): void
+    {
+        $this->monitoringDataDocumentPush->invoke($event->getMonitorings());
     }
 }

@@ -26,6 +26,12 @@ class MonitoringData
     private $status;
 
     /**
+     * @var DateTime
+     * @MongoDB\Field(type="date")
+     */
+    private $statusChangedAt;
+
+    /**
      * @var string
      * @MongoDB\Field(type="string")
      */
@@ -55,22 +61,46 @@ class MonitoringData
      */
     private $path;
 
+    /**
+     * @var int|null
+     * @MongoDB\Field(type="int")
+     */
+    private $tileExpansionIntervalCount;
+
+    /**
+     * @var string|null
+     * @MongoDB\Field(type="string")
+     */
+    private $tileExpansionGrowthExpression;
+
+    /**
+     * @var DateTime
+     * @MongoDB\Field(type="date")
+     */
+    private $lastTileExpansion;
+
     public function __construct(
         string $id,
         string $status,
+        DateTimeInterface $statusChangedAt,
         string $payload,
         int $priority,
         int $idleTimeoutInSeconds,
         DateTimeInterface $date,
-        ?string $path
+        ?string $path,
+        ?int $tileExpansionIntervalCount,
+        ?string $tileExpansionGrowthExpression
     ) {
         $this->id = $id;
         $this->status = $status;
+        $this->statusChangedAt = $statusChangedAt;
         $this->payload = $payload;
         $this->priority = $priority;
         $this->idleTimeoutInSeconds = $idleTimeoutInSeconds;
         $this->date = $date;
         $this->path = $path;
+        $this->tileExpansionIntervalCount = $tileExpansionIntervalCount;
+        $this->tileExpansionGrowthExpression = $tileExpansionGrowthExpression;
     }
 
     public function getId(): string
@@ -83,6 +113,11 @@ class MonitoringData
         return $this->status;
     }
 
+    public function getStatusChangedAt(): DateTimeInterface
+    {
+        return $this->statusChangedAt;
+    }
+
     public function getPayload(): string
     {
         return $this->payload;
@@ -91,6 +126,11 @@ class MonitoringData
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    public function setPriority(int $priority): void
+    {
+        $this->priority = $priority;
     }
 
     public function getIdleTimeoutInSeconds(): int
@@ -106,5 +146,25 @@ class MonitoringData
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getTileExpansionIntervalCount(): ?int
+    {
+        return $this->tileExpansionIntervalCount;
+    }
+
+    public function getTileExpansionGrowthExpression(): ?string
+    {
+        return $this->tileExpansionGrowthExpression;
+    }
+
+    public function getLastTileExpansion(): ?DateTimeInterface
+    {
+        return $this->lastTileExpansion;
+    }
+
+    public function setLastTileExpansion(DateTimeInterface $lastTileExpansion): void
+    {
+        $this->lastTileExpansion = $lastTileExpansion;
     }
 }

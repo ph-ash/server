@@ -37,21 +37,8 @@ class MonitoringDataValidationServiceTest extends TestCase
      */
     public function testWithError(): void
     {
-        $dateTime = new DateTimeImmutable();
-        $id = 'id';
-        $status = 'status';
-        $payload = 'payload';
-        $priority = 1;
-        $idleTimeoutInSeconds = 50;
-        $path = 'path';
         $monitoringData = new MonitoringData(
-            $id,
-            $status,
-            $payload,
-            $priority,
-            $idleTimeoutInSeconds,
-            $dateTime,
-            $path
+            'id', 'status', 'payload', 1, 50, new DateTimeImmutable(), 'path', null, null
         );
 
         $message = 'constraintViolation';
@@ -77,21 +64,8 @@ class MonitoringDataValidationServiceTest extends TestCase
      */
     public function testWithoutError(): void
     {
-        $dateTime = new DateTimeImmutable();
-        $id = 'id';
-        $status = 'status';
-        $payload = 'payload';
-        $priority = 1;
-        $idleTimeoutInSeconds = 50;
-        $path = 'path';
         $monitoringData = new MonitoringData(
-            $id,
-            $status,
-            $payload,
-            $priority,
-            $idleTimeoutInSeconds,
-            $dateTime,
-            $path
+            'id', 'status', 'payload', 1, 50, new DateTimeImmutable(), 'path', null, null
         );
 
 

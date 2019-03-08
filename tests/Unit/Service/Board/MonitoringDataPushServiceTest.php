@@ -38,7 +38,7 @@ class MonitoringDataPushServiceTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'some.path');
+        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'some.path', null, null);
 
         $this->serializer->serialize($monitoringDataDto, 'json')->willReturn('someString');
         $channel = new Channel('push');
