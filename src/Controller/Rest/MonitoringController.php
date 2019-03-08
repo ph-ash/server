@@ -72,11 +72,6 @@ class MonitoringController extends AbstractFOSRestController
      *     description="When authentication header is missing or wrong credentials are given"
      * )
      *
-     * @SWG\Response(
-     *     response=400,
-     *     description="When you try to delete a branch which has leafs"
-     * )
-     *
      * @SWG\Tag(name="Single-Monitoring")
      *
      * @throws Exception
