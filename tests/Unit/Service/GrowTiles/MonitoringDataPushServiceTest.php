@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Service\GrowTiles;
 
 use App\Document\MonitoringData as MonitoringDataDocument;
 use App\Dto\MonitoringData as MonitoringDataDto;
-use App\Exception\PushClientException;
+use App\Exception\ZMQClientException;
 use App\Factory\MonitoringDataDtoFactory;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use App\Service\GrowTiles\MonitoringDataPushService;
@@ -31,14 +31,38 @@ class MonitoringDataPushServiceTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
 
         $this->subject = new MonitoringDataPushService(
-            $this->monitoringDataPush->reveal(), $this->monitoringDataDtoFactory->reveal(), $this->logger->reveal()
+            $this->monitoringDataPush->reveal(),
+            $this->monitoringDataDtoFactory->reveal(),
+            $this->logger->reveal()
         );
     }
 
     public function testInvoke(): void
     {
-        $monitoringData1 = new MonitoringDataDocument('1', 'ok', new DateTimeImmutable(), '', 1, 60, new DateTimeImmutable(), null, null, null);
-        $monitoringData2 = new MonitoringDataDocument('2', 'ok', new DateTimeImmutable(), '', 1, 60, new DateTimeImmutable(), null, null, null);
+        $monitoringData1 = new MonitoringDataDocument(
+            '1',
+            'ok',
+            new DateTimeImmutable(),
+            '',
+            1,
+            60,
+            new DateTimeImmutable(),
+            null,
+            null,
+            null
+        );
+        $monitoringData2 = new MonitoringDataDocument(
+            '2',
+            'ok',
+            new DateTimeImmutable(),
+            '',
+            1,
+            60,
+            new DateTimeImmutable(),
+            null,
+            null,
+            null
+        );
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
@@ -52,14 +76,36 @@ class MonitoringDataPushServiceTest extends TestCase
 
     public function testInvokeException(): void
     {
-        $monitoringData1 = new MonitoringDataDocument('1', 'ok', new DateTimeImmutable(), '', 1, 60, new DateTimeImmutable(), null, null, null);
-        $monitoringData2 = new MonitoringDataDocument('2', 'ok', new DateTimeImmutable(), '', 1, 60, new DateTimeImmutable(), null, null, null);
+        $monitoringData1 = new MonitoringDataDocument(
+            '1',
+            'ok',
+            new DateTimeImmutable(),
+            '',
+            1,
+            60,
+            new DateTimeImmutable(),
+            null,
+            null,
+            null
+        );
+        $monitoringData2 = new MonitoringDataDocument(
+            '2',
+            'ok',
+            new DateTimeImmutable(),
+            '',
+            1,
+            60,
+            new DateTimeImmutable(),
+            null,
+            null,
+            null
+        );
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
         $this->monitoringDataDtoFactory->create($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
         $this->monitoringDataDtoFactory->create($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
-        $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2)->willThrow(PushClientException::class);
+        $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2)->willThrow(ZMQClientException::class);
         $this->logger->error(Argument::cetera())->shouldBeCalledTimes(2);
 
         $this->subject->invoke($monitorings);

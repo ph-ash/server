@@ -22,7 +22,8 @@ class BoardSubscriber implements EventSubscriberInterface
 
     public function __construct(
         MonitoringDataDtoPush $monitoringDataDtoPush,
-        MonitoringDataDocumentPush $monitoringDataDocumentPush
+        MonitoringDataDocumentPush $monitoringDataDocumentPush,
+        MonitoringDataDeletion $monitoringDataDeletion
     ) {
         $this->monitoringDataDtoPush = $monitoringDataDtoPush;
         $this->monitoringDataDocumentPush = $monitoringDataDocumentPush;
@@ -33,7 +34,7 @@ class BoardSubscriber implements EventSubscriberInterface
     {
         return [
             IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['pushDataToBoard', -20],
-            GrowTilesEvent::EVENT_NAME => ['pushUpdatedDataToBoard', -20]
+            GrowTilesEvent::EVENT_NAME => ['pushUpdatedDataToBoard', -20],
             DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['onDeleteMonitoringData', -20]
         ];
     }
