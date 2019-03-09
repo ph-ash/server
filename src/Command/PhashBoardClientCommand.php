@@ -198,7 +198,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             function ($payload) {
                 if ($this->thruwayClient->getSession()) {
                     $this->consoleLogger->info(self::THRUWAY_PREFIX . 'publishing {payload}', ['payload' => $payload]);
-                    $this->thruwayClient->getSession()->publish('phashtopic-push', [$payload]);
+                    $this->thruwayClient->getSession()->publish('phashtopic.push', [$payload]);
                 } else {
                     $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no session available, please reconnect');
                 }
@@ -210,7 +210,7 @@ class PhashBoardClientCommand extends ContainerAwareCommand
             function ($payload) {
                 if ($this->thruwayClient->getSession()) {
                     $this->consoleLogger->info(self::THRUWAY_PREFIX . 'deleting {payload}', ['payload' => $payload]);
-                    $this->thruwayClient->getSession()->publish('phashtopic-delete', [$payload]);
+                    $this->thruwayClient->getSession()->publish('phashtopic.delete', [$payload]);
                 } else {
                     $this->consoleLogger->critical(self::THRUWAY_PREFIX . 'no session available, please reconnect');
                 }
