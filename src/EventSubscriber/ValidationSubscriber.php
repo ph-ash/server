@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Event\DeleteMonitoringDataEvent;
 use App\Event\IncomingMonitoringDataEvent;
-use App\Event\MonitoringDataEvent;
 use App\Service\Validation\MonitoringDataValidation;
 use Exception;
-use RuntimeException;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ValidationSubscriber implements EventSubscriberInterface
