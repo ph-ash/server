@@ -1,0 +1,12 @@
+dist: xenial
+
+language: minimal
+
+services:
+  - docker
+
+install:
+  - docker build . -t phashserver
+
+script:
+  - docker run --rm -it --entrypoint /var/www/html/docker/runTests.sh phashserver
