@@ -32,11 +32,6 @@ class ValidationSubscriber implements EventSubscriberInterface
      */
     public function validateMonitoringData(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        try {
-            $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
-        } catch (Exception $exception) {
-            $incomingMonitoringDataEvent->stopPropagation();
-            throw $exception;
-        }
+        $this->monitoringDataValidation->invoke($incomingMonitoringDataEvent->getMonitoringData());
     }
 }

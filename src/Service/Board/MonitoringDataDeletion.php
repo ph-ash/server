@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service\Board;
 
-use App\Dto\MonitoringData;
 use App\Exception\ZMQClientException;
 use UnexpectedValueException;
 
-interface MonitoringDataPush
+interface MonitoringDataDeletion
 {
     /**
      * @throws ZMQClientException
      * @throws UnexpectedValueException
      */
-    public function invoke(MonitoringData $monitoringData): void;
+    public function invoke(string $monitoringDataId);
 }

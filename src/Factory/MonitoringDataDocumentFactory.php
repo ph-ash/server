@@ -2,25 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Persistance;
+namespace App\Factory;
 
 use App\Document\MonitoringData;
 use App\Dto\MonitoringData as MonitoringDataDto;
-use App\Repository\MonitoringDataRepository;
 use DateTimeInterface;
 
-class PersistMonitoringDataService implements PersistMonitoringData
+class MonitoringDataDocumentFactory implements MonitoringDataDocument
 {
-    private $monitoringDataRepository;
-
-    public function __construct(MonitoringDataRepository $monitoringDataRepository)
+    public function createFrom(MonitoringDataDto $monitoringDataDto, DateTimeInterface $statusChangedAt): MonitoringData
     {
-        $this->monitoringDataRepository = $monitoringDataRepository;
-    }
-
-    public function invoke(MonitoringDataDto $monitoringDataDto, DateTimeInterface $statusChangedAt): void
-    {
-        $monitoringDataDocument = new MonitoringData(
+        return new MonitoringData(
             $monitoringDataDto->getId(),
             $monitoringDataDto->getStatus(),
             $statusChangedAt,
@@ -32,7 +24,5 @@ class PersistMonitoringDataService implements PersistMonitoringData
             $monitoringDataDto->getTileExpansionIntervalCount(),
             $monitoringDataDto->getTileExpansionGrowthExpression()
         );
-
-        $this->monitoringDataRepository->save($monitoringDataDocument);
     }
 }

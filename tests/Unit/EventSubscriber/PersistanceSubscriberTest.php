@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\EventSubscriber;
 
+use App\Document\MonitoringData as MonitoringDataDocumentEntity;
 use App\Dto\MonitoringData;
 use App\Event\IncomingMonitoringDataEvent;
 use App\EventSubscriber\PersistanceSubscriber;
-use App\Service\Persistance\PersistMonitoringData;
+use App\Factory\MonitoringDataDocument;
+use App\Repository\MonitoringDataRepository;
 use App\Service\Persistance\Priority;
 use App\Service\Persistance\StatusChanged;
 use DateTimeImmutable;
@@ -15,7 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class PersistanceSubscriberTest extends TestCase
 {
-    private $persistMonitoringData;
+    private $monitoringDataRepository;
+    private $monitoringDataDocument;
     private $statusChanged;
     private $priority;
     /** @var PersistanceSubscriber */
@@ -24,12 +27,16 @@ class PersistanceSubscriberTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->persistMonitoringData = $this->prophesize(PersistMonitoringData::class);
         $this->statusChanged = $this->prophesize(StatusChanged::class);
         $this->priority = $this->prophesize(Priority::class);
+        $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);
+        $this->monitoringDataDocument = $this->prophesize(MonitoringDataDocument::class);
 
         $this->subject = new PersistanceSubscriber(
-            $this->persistMonitoringData->reveal(), $this->statusChanged->reveal(), $this->priority->reveal()
+            $this->monitoringDataRepository->reveal(),
+            $this->monitoringDataDocument->reveal(),
+            $this->statusChanged->reveal(),
+            $this->priority->reveal()
         );
     }
 
@@ -42,8 +49,17 @@ class PersistanceSubscriberTest extends TestCase
     public function testPersistMonitoringData(): void
     {
         $monitoringData = new MonitoringData(
-            'id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'root.branch.leaf', 5, '* 2'
+            'id',
+            'status',
+            'payload',
+            1,
+            60,
+            new DateTimeImmutable(),
+            'root.branch.leaf',
+            5,
+            '* 2'
         );
+
         $event = new IncomingMonitoringDataEvent($monitoringData);
         $statusChanged = new DateTimeImmutable('2019-01-01 00:00:00');
         $priority = 15;
@@ -51,7 +67,13 @@ class PersistanceSubscriberTest extends TestCase
         $this->statusChanged->calculate($monitoringData)->shouldBeCalled()->willReturn($statusChanged);
         $this->priority->calculate($monitoringData)->shouldBeCalled()->willReturn($priority);
 
-        $this->persistMonitoringData->invoke($monitoringData, $statusChanged)->shouldBeCalled();
+        $monitoringDataDocument = $this->prophesize(MonitoringDataDocumentEntity::class);
+
+        $this->monitoringDataDocument->createFrom($monitoringData, $statusChanged)->willReturn(
+            $monitoringDataDocument->reveal()
+        );
+
+        $this->monitoringDataRepository->save($monitoringDataDocument);
 
         $this->subject->persistMonitoringData($event);
 

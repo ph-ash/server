@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service\GrowTiles;
 
-use App\Exception\PushClientException;
+use App\Exception\ZMQClientException;
 use App\Factory\MonitoringDataDtoFactory;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use Psr\Log\LoggerInterface;
+use UnexpectedValueException;
 
 class MonitoringDataPushService implements MonitoringDataPush
 {
@@ -31,7 +32,7 @@ class MonitoringDataPushService implements MonitoringDataPush
             $dto = $this->monitoringDataDtoFactory->create($monitoring);
             try {
                 $this->monitoringDataPush->invoke($dto);
-            } catch (PushClientException $exception) {
+            } catch (ZMQClientException | UnexpectedValueException $exception) {
                 $this->logger->error($exception->getMessage(), ['exception' => $exception]);
             }
         }

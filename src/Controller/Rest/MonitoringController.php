@@ -6,14 +6,12 @@ namespace App\Controller\Rest;
 
 use App\Dto\BulkMonitoringData;
 use App\Dto\MonitoringData;
-use App\Exception\BulkValidationException;
-use App\Exception\PersistenceLayerException;
-use App\Exception\ValidationException;
 use App\Service\BulkIncomingMonitoringDataDispatcher;
+use App\Service\DeleteMonitoringDataDispatcher;
 use App\Service\IncomingMonitoringDataDispatcher;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OutOfBoundsException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,24 +45,43 @@ class MonitoringController extends AbstractFOSRestController
      *     required=true,
      *     allowEmptyValue=false,
      *     @SWG\Schema(ref=@Model(type=MonitoringData::class))
-     *
      * )
      *
-     * @SWG\Tag(name="Monitoring")
+     * @SWG\Tag(name="Single-Monitoring")
      *
      * @ParamConverter("monitoringData", converter="fos_rest.request_body")
      *
-     * @throws OutOfBoundsException
-     * @throws PersistenceLayerException
-     * @throws ValidationException
+     * @throws Exception
      */
     public function postMonitoringData(
         IncomingMonitoringDataDispatcher $incomingMonitoringDataDispatcher,
         MonitoringData $monitoringData
     ): JsonResponse {
-        //TODO add tests
         $incomingMonitoringDataDispatcher->invoke($monitoringData);
         return new JsonResponse(null, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/monitoring/{id}", methods={"DELETE"})
+     * @SWG\Response(
+     *     response=204,
+     *     description="When the data has been deleted successfully"
+     * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="When authentication header is missing or wrong credentials are given"
+     * )
+     *
+     * @SWG\Tag(name="Single-Monitoring")
+     *
+     * @throws Exception
+     */
+    public function deleteMonitoringData(
+        DeleteMonitoringDataDispatcher $deleteMonitoringDataDispatcher,
+        string $id
+    ): JsonResponse {
+        $deleteMonitoringDataDispatcher->invoke($id);
+        return new JsonResponse();
     }
 
     /**
@@ -89,16 +106,13 @@ class MonitoringController extends AbstractFOSRestController
      *     required=true,
      *     allowEmptyValue=false,
      *     @SWG\Schema(ref=@Model(type=BulkMonitoringData::class))
-     *
      * )
      *
-     * @SWG\Tag(name="Monitoring")
+     * @SWG\Tag(name="Bulk-Monitoring")
      *
      * @ParamConverter("bulkMonitoringData", converter="fos_rest.request_body")
      *
-     * @throws OutOfBoundsException
-     * @throws PersistenceLayerException
-     * @throws BulkValidationException
+     * @throws Exception
      */
     public function postBulkMonitoringData(
         BulkIncomingMonitoringDataDispatcher $bulkIncomingMonitoringDataDispatcher,

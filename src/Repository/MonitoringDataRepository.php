@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Document\MonitoringData;
 use App\Exception\PersistenceLayerException;
+use App\Repository\MonitoringData as MonitoringDataInterface;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 use Doctrine\ODM\MongoDB\Cursor;
@@ -16,7 +17,7 @@ use Exception;
 use LogicException;
 use MongoRegex;
 
-class MonitoringDataRepository extends ServiceDocumentRepository
+class MonitoringDataRepository extends ServiceDocumentRepository implements MonitoringDataInterface
 {
     /**
      * @throws LogicException
@@ -66,9 +67,6 @@ class MonitoringDataRepository extends ServiceDocumentRepository
         }
     }
 
-    /**
-     * @throws PersistenceLayerException
-     */
     public function findLeafs(string $path): Cursor
     {
         $qb = $this->getDocumentManager()->createQueryBuilder(MonitoringData::class);
@@ -77,6 +75,19 @@ class MonitoringDataRepository extends ServiceDocumentRepository
             return $qb->getQuery()->execute();
         } catch (Exception $exception) {
             throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
+        }
+    }
+
+    public function delete(string $id): void
+    {
+        try {
+            $qb = $this->createQueryBuilder();
+            $qb->remove()
+                ->field('id')->equals($id)
+                ->getQuery()
+                ->execute();
+        } catch (Exception $exception) {
+            throw new PersistenceLayerException(sprintf('Failed to delete monitoringData with id %s.', $id), 0, $exception);
         }
     }
 }

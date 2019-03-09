@@ -9,6 +9,7 @@ use App\Dto\MonitoringData as MonitoringDataDto;
 use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\EventSubscriber\BoardSubscriber;
+use App\Service\Board\MonitoringDataDeletion;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
 use DateTimeImmutable;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class BoardSubscriberTest extends TestCase
 {
+    private $monitoringDataDeletion;
     private $monitoringDataDtoPush;
     private $monitoringDataDocumentPush;
     /** @var BoardSubscriber */
@@ -27,8 +29,13 @@ class BoardSubscriberTest extends TestCase
 
         $this->monitoringDataDtoPush = $this->prophesize(MonitoringDataDtoPush::class);
         $this->monitoringDataDocumentPush = $this->prophesize(MonitoringDataDocumentPush::class);
+        $this->monitoringDataDeletion = $this->prophesize(MonitoringDataDeletion::class);
 
-        $this->subject = new BoardSubscriber($this->monitoringDataDtoPush->reveal(), $this->monitoringDataDocumentPush->reveal());
+        $this->subject = new BoardSubscriber(
+            $this->monitoringDataDtoPush->reveal(),
+            $this->monitoringDataDocumentPush->reveal(),
+            $this->monitoringDataDeletion->reveal()
+        );
     }
 
     public function testGetSubscribedEvents(): void

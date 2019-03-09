@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service\Board;
 
-use App\Dto\MonitoringData;
 use App\Service\Board\ZMQ\Client;
 use App\ValueObject\Channel;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class MonitoringDataPushService implements MonitoringDataPush
+class MonitoringDataDeletionService implements MonitoringDataDeletion
 {
     private $pushClient;
     private $serializer;
@@ -20,9 +19,9 @@ class MonitoringDataPushService implements MonitoringDataPush
         $this->serializer = $serializer;
     }
 
-    public function invoke(MonitoringData $monitoringData): void
+    public function invoke(string $monitoringDataId): void
     {
-        $channel = new Channel(Channel::PUSH);
-        $this->pushClient->send($this->serializer->serialize($monitoringData, 'json'), $channel);
+        $channel = new Channel(Channel::DELETE);
+        $this->pushClient->send($this->serializer->serialize($monitoringDataId, 'json'), $channel);
     }
 }
