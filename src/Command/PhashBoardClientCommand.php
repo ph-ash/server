@@ -144,7 +144,8 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                     $this->thruwayClient->getSession(),
                     'phashcontrol',
                     function ($payload) {
-                        if ($payload[0] === 'boardAvailable') {
+                        $firstPayload = \json_decode($payload[0]); // is there a way with SerializerInterface?
+                        if ($firstPayload === 'boardAvailable') {
                             $this->consoleLogger->info(self::THRUWAY_PREFIX . 'a new board connected');
                             $this->thruwayClient->emit('resendMonitoringData');
                         } else {
