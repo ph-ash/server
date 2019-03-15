@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Repository\MonitoringDataRepository;
+use App\Service\DeleteMonitoringDataFromBoardDispatcher;
 use App\ValueObject\Channel;
 use Exception;
 use Psr\Log\NullLogger;
@@ -42,17 +43,20 @@ class PhashBoardClientCommand extends ContainerAwareCommand
     private $serializer;
     private $monitoringDataRepository;
     private $voryxConfig;
+    private $deleteMonitoringDataFromBoardDispatcher;
 
 
     public function __construct(
         SerializerInterface $serializer,
         MonitoringDataRepository $monitoringDataRepository,
+        DeleteMonitoringDataFromBoardDispatcher $deleteMonitoringDataFromBoardDispatcher,
         array $voryxConfig
     ) {
         parent::__construct();
         $this->serializer = $serializer;
         $this->monitoringDataRepository = $monitoringDataRepository;
         $this->voryxConfig = $voryxConfig;
+        $this->deleteMonitoringDataFromBoardDispatcher = $deleteMonitoringDataFromBoardDispatcher;
     }
 
     /**
@@ -148,6 +152,11 @@ class PhashBoardClientCommand extends ContainerAwareCommand
                         if ($firstPayload === 'boardAvailable') {
                             $this->consoleLogger->info(self::THRUWAY_PREFIX . 'a new board connected');
                             $this->thruwayClient->emit('resendMonitoringData');
+                        } elseif ($firstPayload === 'deleteMonitoring') {
+                            $monitoringIdToDelete = \json_decode($payload[1]);
+                            $this->consoleLogger->info(self::THRUWAY_PREFIX . 'deleting monitoring from board: ' . $monitoringIdToDelete);
+                            $this->deleteMonitoringDataFromBoardDispatcher->invoke($monitoringIdToDelete);
+                            $this->thruwayClient->emit('deleteMonitoringData', [\json_encode($monitoringIdToDelete)]);
                         } else {
                             $this->consoleLogger->critical(
                                 self::THRUWAY_PREFIX . 'unknown payload {payload}',
