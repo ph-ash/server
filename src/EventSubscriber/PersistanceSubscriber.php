@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Event\DeleteMonitoringDataEvent;
+use App\Event\DeleteMonitoringDataFromBoardEvent;
+use App\Event\DeleteMonitoringDataInterface;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\PersistenceLayerException;
 use App\Factory\MonitoringDataDocument;
@@ -36,14 +38,15 @@ class PersistanceSubscriber implements EventSubscriberInterface
     {
         return [
             IncomingMonitoringDataEvent::EVENT_INCOMING_MONITORING_DATA => ['persistMonitoringData', -10],
-            DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['onDeleteMonitoringData', -10]
+            DeleteMonitoringDataEvent::EVENT_DELETE_MONITORING_DATA => ['onDeleteMonitoringData', -10],
+            DeleteMonitoringDataFromBoardEvent::EVENT_DELETE_MONITORING_FROM_BOARD_DATA => ['onDeleteMonitoringData', -10]
         ];
     }
 
     /**
      * @throws PersistenceLayerException
      */
-    public function onDeleteMonitoringData(DeleteMonitoringDataEvent $deleteMonitoringDataEvent): void
+    public function onDeleteMonitoringData(DeleteMonitoringDataInterface $deleteMonitoringDataEvent): void
     {
         $monitoringDataId = $deleteMonitoringDataEvent->getMonitoringDataId();
         $this->monitoringDataRepository->delete($monitoringDataId);

@@ -6,9 +6,9 @@ namespace App\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class DeleteMonitoringDataEvent extends Event implements DeleteMonitoringDataInterface
+class DeleteMonitoringDataFromBoardEvent extends Event implements DeleteMonitoringDataInterface
 {
-    public const EVENT_DELETE_MONITORING_DATA = 'monitoring.delete_data';
+    public const EVENT_DELETE_MONITORING_FROM_BOARD_DATA = 'monitoring.delete_data.from_board';
 
     private $monitoringDataId;
 
