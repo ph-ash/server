@@ -115,7 +115,7 @@ class MonitoringData
 
     public function getStatusChangedAt(): DateTimeInterface
     {
-        return $this->statusChangedAt;
+        return $this->statusChangedAt ?? $this->date;
     }
 
     public function getPayload(): string
