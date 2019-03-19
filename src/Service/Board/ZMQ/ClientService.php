@@ -54,12 +54,6 @@ final class ClientService implements Client
         }
     }
 
-    private function teardown(): void
-    {
-        $this->loop->run();
-        $this->socket->close();
-    }
-
     public function send(string $message, Channel $channel): void
     {
         if ($this->loop === null || $this->socket === null) {
@@ -71,6 +65,11 @@ final class ClientService implements Client
             $this->loop->cancelTimer($timer);
         });
 
-        $this->teardown();
+        $this->loop->run();
+    }
+
+    public function __destruct()
+    {
+        $this->socket->close();
     }
 }
