@@ -19,21 +19,10 @@ ENV APP_ENV=prod \
     WAMP_HOST=board \
     WAMP_REALM=realm1
 
-RUN apk add autoconf \
-       gcc \
-       libzmq \
-       zeromq-dev \
-       zeromq \
-       coreutils \
-       build-base \
-       zlib-dev \
+RUN apk add --no-cache php7-pecl-zmq \
+       php7-pecl-mongodb \
        supervisor \
        fcgi \
-    && pecl install zmq-beta \
-       mongodb \
-    && docker-php-ext-install zip \
-    && docker-php-ext-enable zmq \
-       mongodb \
     && php bin/console cache:warmup \
     && crontab /var/www/html/docker/crontab
 
