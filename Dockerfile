@@ -9,7 +9,7 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
 
 # next stage #
 
-FROM php:7.2-fpm-alpine
+FROM alpine:3.9
 COPY --from=composer /var/www/html /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod \
@@ -19,7 +19,15 @@ ENV APP_ENV=prod \
     WAMP_HOST=board \
     WAMP_REALM=realm1
 
-RUN apk add --no-cache php7-pecl-zmq \
+RUN apk add --no-cache php7-fpm \
+       php7-cli \
+       php7-ctype \
+       php7-dom \
+       php7-iconv \
+       php7-mbstring \
+       php7-tokenizer \
+       php7-zip \
+       php7-pecl-zmq \
        php7-pecl-mongodb \
        supervisor \
        fcgi \
