@@ -5,6 +5,7 @@ cd /var/www/html
 
 # install missing extensions only needed for tests
 apk add php7-curl \
+        php7-pdo \
         php7-simplexml \
         php7-xml \
         php7-xmlwriter \
