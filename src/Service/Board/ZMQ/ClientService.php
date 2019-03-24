@@ -70,6 +70,8 @@ final class ClientService implements Client
 
     public function __destruct()
     {
-        $this->socket->close();
+        if ($this->socket) {
+            $this->socket->close();
+        }
     }
 }
