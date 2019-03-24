@@ -25,13 +25,18 @@ RUN apk add --no-cache php7-fpm \
        php7-dom \
        php7-iconv \
        php7-mbstring \
+       php7-openssl \
+       php7-session \
        php7-tokenizer \
        php7-zip \
        php7-pecl-zmq \
        php7-pecl-mongodb \
        supervisor \
        fcgi \
+    && cp docker/*-fpm.conf /etc/php7/php-fpm.d/ \
     && php bin/console cache:warmup \
     && crontab /var/www/html/docker/crontab
+
+EXPOSE 9000
 
 ENTRYPOINT ["supervisord", "--configuration", "/var/www/html/docker/supervisord.conf"]
