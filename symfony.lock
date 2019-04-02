@@ -338,9 +338,6 @@
     "symfony/templating": {
         "version": "v4.1.7"
     },
-    "symfony/test-pack": {
-        "version": "v1.0.4"
-    },
     "symfony/twig-bridge": {
         "version": "v4.1.7"
     },

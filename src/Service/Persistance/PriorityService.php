@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Persistance;
 
 use App\Dto\MonitoringData;
+use App\Enum\MonitoringStatus;
 use App\Repository\MonitoringDataRepository;
 
 class PriorityService implements Priority
@@ -21,7 +22,10 @@ class PriorityService implements Priority
         $oldMonitoringDataDocument = $this->monitoringDataRepository->find($monitoringData->getId());
         $priority = $monitoringData->getPriority();
 
-        if ($oldMonitoringDataDocument && $oldMonitoringDataDocument->getPriority() > $monitoringData->getPriority()) {
+        if ($oldMonitoringDataDocument &&
+            $oldMonitoringDataDocument->getPriority() > $monitoringData->getPriority() &&
+            $monitoringData->getStatus() === MonitoringStatus::ERROR()->getValue()
+        ) {
             $priority = $oldMonitoringDataDocument->getPriority();
         }
 
