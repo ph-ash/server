@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Document\MonitoringData;
+use App\Enum\MonitoringStatus;
 use App\Exception\PersistenceLayerException;
 use App\Repository\MonitoringData as MonitoringDataInterface;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
@@ -35,7 +36,7 @@ class MonitoringDataRepository extends ServiceDocumentRepository implements Moni
 
     public function findAllErroneousMonitorings(): array
     {
-        return $this->findBy(['status' => 'error']);
+        return $this->findBy(['status' => MonitoringStatus::ERROR()->getValue()]);
     }
 
     /**
