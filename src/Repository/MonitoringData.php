@@ -6,7 +6,6 @@ namespace App\Repository;
 
 use App\Document\MonitoringData as MonitoringDataDocument;
 use App\Exception\PersistenceLayerException;
-use Doctrine\ODM\MongoDB\Cursor;
 
 interface MonitoringData
 {
@@ -20,7 +19,12 @@ interface MonitoringData
     /**
      * @throws PersistenceLayerException
      */
-    public function findLeafs(string $path): Cursor;
+    public function isPathIncludedInBranch(string $path): bool;
+
+    /**
+     * @throws PersistenceLayerException
+     */
+    public function isLeafIncludedInPath(string $path): bool;
 
     /**
      * @throws PersistenceLayerException

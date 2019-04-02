@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Validator\Constraints;
 
 use App\Exception\PersistenceLayerException;
-use App\Repository\MonitoringDataRepository;
+use App\Repository\MonitoringData as MonitoringDataRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -30,14 +30,10 @@ class IsBranchValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, IsBranch::class);
         }
 
-        if ($value !== null) {
-            $result = $this->monitoringDataRepository->findLeafs($value);
-
-            if ($result->count(true)) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{path}}', $value)
-                    ->addViolation();
-            }
+        if (($value !== null) && $this->monitoringDataRepository->isPathIncludedInBranch($value)) {
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{path}}', $value)
+                ->addViolation();
         }
     }
 }

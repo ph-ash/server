@@ -9,7 +9,6 @@ use App\Exception\PersistenceLayerException;
 use App\Repository\MonitoringData as MonitoringDataInterface;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
-use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\LockException;
 use Doctrine\ODM\MongoDB\LockMode;
 use Doctrine\ODM\MongoDB\Mapping\MappingException;
@@ -67,15 +66,33 @@ class MonitoringDataRepository extends ServiceDocumentRepository implements Moni
         }
     }
 
-    public function findLeafs(string $path): Cursor
+    public function isPathIncludedInBranch(string $path): bool
     {
         $qb = $this->getDocumentManager()->createQueryBuilder(MonitoringData::class);
         try {
             $qb->field('path')->equals(new MongoRegex('/' . $path . '..*/'))->limit(1);
-            return $qb->getQuery()->execute();
+            return $qb->getQuery()->execute()->count(true) > 0;
         } catch (Exception $exception) {
-            throw new PersistenceLayerException('Failed to find leafs.', 0, $exception);
+            throw new PersistenceLayerException('Failed to find branches including path.', 0, $exception);
         }
+    }
+
+    public function isLeafIncludedInPath(string $path): bool
+    {
+        $fragments = explode('.', $path);
+        while (count($fragments) >= 1) {
+            $potentialId = array_pop($fragments);
+            $potentialPath = implode('.', $fragments) ?: null;
+            try {
+                $matchedById = $this->find($potentialId);
+            } catch (Exception $exception) {
+                throw new PersistenceLayerException('Failed to find potential leafs included in path.', 0, $exception);
+            }
+            if ($matchedById && $matchedById->getPath() === $potentialPath) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function delete(string $id): void
