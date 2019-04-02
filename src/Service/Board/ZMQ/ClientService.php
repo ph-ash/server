@@ -60,7 +60,7 @@ final class ClientService implements Client
             $this->initSocket();
         }
 
-        $this->loop->addPeriodicTimer(1, function ($timer) use ($message, $channel) {
+        $this->loop->addPeriodicTimer(0.001, function ($timer) use ($message, $channel) {
             $this->socket->sendmulti([$channel, $message]);
             $this->loop->cancelTimer($timer);
         });
