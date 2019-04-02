@@ -39,7 +39,7 @@ class PriorityServiceTest extends TestCase
         self::assertSame($expectedPriority, $this->subject->calculate($newMonitoringData));
     }
 
-    public function provideMonitoringData()
+    public function provideMonitoringData(): array
     {
         return [
             'old monitoring prio > new monitoring prio (both error)' => [
@@ -100,7 +100,7 @@ class PriorityServiceTest extends TestCase
         ];
     }
 
-    private function createMonitoringDataDto(string $status, int $priority)
+    private function createMonitoringDataDto(string $status, int $priority): MonitoringDataDto
     {
         return new MonitoringDataDto(
             'id',
@@ -115,7 +115,7 @@ class PriorityServiceTest extends TestCase
         );
     }
 
-    private function createMonitoringDataDocument(string $status, int $priority)
+    private function createMonitoringDataDocument(string $status, int $priority): MonitoringDataDocument
     {
         return new MonitoringDataDocument(
             'id',

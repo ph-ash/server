@@ -10,14 +10,4 @@ class MonitoringStatus extends Enum
 {
     private const OK = 'ok';
     private const ERROR = 'error';
-
-    public static function OK(): MonitoringStatus
-    {
-        return new MonitoringStatus(self::OK);
-    }
-
-    public static function ERROR(): MonitoringStatus
-    {
-        return new MonitoringStatus(self::ERROR);
-    }
 }
