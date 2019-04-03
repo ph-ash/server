@@ -2,6 +2,7 @@ App\Dto\MonitoringData:
     properties:
         path:
             - \App\Validator\Constraints\IsBranch: ~
+            - \App\Validator\Constraints\IsLeaf: ~
         tileExpansionGrowthExpression:
             - Regex:
                 pattern: '/[\+\*]\s*\d+/'

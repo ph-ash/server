@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class IsBranchValidator extends ConstraintValidator
+class IsLeafValidator extends ConstraintValidator
 {
     private $monitoringDataRepository;
 
@@ -26,11 +26,11 @@ class IsBranchValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof IsBranch) {
-            throw new UnexpectedTypeException($constraint, IsBranch::class);
+        if (!$constraint instanceof IsLeaf) {
+            throw new UnexpectedTypeException($constraint, IsLeaf::class);
         }
 
-        if (($value !== null) && $this->monitoringDataRepository->isPathIncludedInBranch($value)) {
+        if (($value !== null) && $this->monitoringDataRepository->isLeafIncludedInPath($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{path}}', $value)
                 ->addViolation();
