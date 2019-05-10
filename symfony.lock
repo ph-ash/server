@@ -314,9 +314,6 @@
             "ref": "5f514d9d3b8a8aac3d62ae6a86b18b90ed0c7826"
         }
     },
-    "symfony/security": {
-        "version": "v4.2.3"
-    },
     "symfony/security-bundle": {
         "version": "3.3",
         "recipe": {
@@ -328,6 +325,15 @@
     },
     "symfony/security-core": {
         "version": "v4.1.7"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.2.8"
+    },
+    "symfony/security-guard": {
+        "version": "v4.2.8"
+    },
+    "symfony/security-http": {
+        "version": "v4.2.8"
     },
     "symfony/serializer": {
         "version": "v4.1.7"
