@@ -17,7 +17,7 @@ class FilterGrowableTilesSubscriberTest extends TestCase
     /** @var FilterGrowableTilesSubscriber */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->filterGrowableTiles = $this->prophesize(FilterGrowableTiles::class);

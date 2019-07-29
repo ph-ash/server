@@ -14,7 +14,7 @@ class ExceptionNormalizerTest extends TestCase
     /** @var ExceptionNormalizer */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

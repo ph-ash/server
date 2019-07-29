@@ -18,7 +18,7 @@ class PriorityServiceTest extends TestCase
     /** @var PriorityService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);

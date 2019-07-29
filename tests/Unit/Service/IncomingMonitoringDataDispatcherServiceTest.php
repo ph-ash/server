@@ -22,7 +22,7 @@ class IncomingMonitoringDataDispatcherServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);

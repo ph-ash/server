@@ -23,7 +23,7 @@ class MonitoringDataPushServiceTest extends TestCase
     /** @var MonitoringDataPushService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->monitoringDataPush = $this->prophesize(MonitoringDataDtoPush::class);

@@ -18,7 +18,7 @@ class StatusChangedServiceTest extends TestCase
     /** @var StatusChangedService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);

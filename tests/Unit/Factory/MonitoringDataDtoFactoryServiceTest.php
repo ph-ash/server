@@ -14,7 +14,7 @@ class MonitoringDataDtoFactoryServiceTest extends TestCase
     /** @var MonitoringDataDtoFactoryService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

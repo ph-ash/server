@@ -17,7 +17,7 @@ class PersistGrowingTilesSubscriberTest extends TestCase
     /** @var PersistGrowingTilesSubscriber */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->persistGrowingTiles = $this->prophesize(PersistGrowingTiles::class);

@@ -24,7 +24,7 @@ class PersistanceSubscriberTest extends TestCase
     /** @var PersistanceSubscriber */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->statusChanged = $this->prophesize(StatusChanged::class);

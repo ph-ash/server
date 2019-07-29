@@ -20,7 +20,7 @@ class TokenAuthenticatorTest extends TestCase
     /** @var TokenAuthenticator */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
