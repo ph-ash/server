@@ -27,6 +27,7 @@ RUN apk add --no-cache php7-fpm \
        php7-mbstring \
        php7-openssl \
        php7-session \
+       php7-simplexml \
        php7-tokenizer \
        php7-zip \
        php7-pecl-zmq \
