@@ -22,7 +22,7 @@ class BulkIncomingMonitoringDataDispatcherServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->incomingMonitoringDataDispatcher = $this->prophesize(IncomingMonitoringDataDispatcher::class);

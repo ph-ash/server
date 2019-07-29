@@ -19,7 +19,7 @@ class DetermineTileGrowthServiceTest extends TestCase
     /** @var DetermineTileGrowthService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->priorityGrowth = $this->prophesize(PriorityGrowth::class);

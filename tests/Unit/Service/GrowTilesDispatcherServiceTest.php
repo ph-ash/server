@@ -17,7 +17,7 @@ class GrowTilesDispatcherServiceTest extends TestCase
     /** @var GrowTilesDispatcherService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);

@@ -24,7 +24,7 @@ class MonitoringDataValidationServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->validator = $this->prophesize(ValidatorInterface::class);

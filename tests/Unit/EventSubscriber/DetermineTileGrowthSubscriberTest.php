@@ -17,7 +17,7 @@ class DetermineTileGrowthSubscriberTest extends TestCase
     /** @var DetermineTileGrowthSubscriber */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->determineTileGrowth = $this->prophesize(DetermineTileGrowth::class);

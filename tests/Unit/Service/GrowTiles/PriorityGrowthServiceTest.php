@@ -14,7 +14,7 @@ class PriorityGrowthServiceTest extends TestCase
     /** @var PriorityGrowthService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class PriorityGrowthServiceTest extends TestCase
             'addition' => [3, 1, '+2'],
             'multiplication' => [6, 2, '* 3'],
             'upper bound addition' => [PHP_INT_MAX, PHP_INT_MAX - 10, '+ 20'],
-            'upper bound multiplication' => [PHP_INT_MAX, PHP_INT_MAX / 10, '*30'],
+            'upper bound multiplication' => [PHP_INT_MAX, (int) (PHP_INT_MAX / 10), '*30'],
         ];
     }
 }

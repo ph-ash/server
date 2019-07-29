@@ -15,7 +15,7 @@ class GrowableFilterServiceTest extends TestCase
     /** @var GrowableFilterService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

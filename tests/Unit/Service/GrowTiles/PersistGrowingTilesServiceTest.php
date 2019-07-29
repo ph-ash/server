@@ -20,7 +20,7 @@ class PersistGrowingTilesServiceTest extends TestCase
     /** @var PersistGrowingTilesService */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);
