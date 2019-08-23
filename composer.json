@@ -37,7 +37,7 @@
         "symfony/browser-kit": "*",
         "symfony/css-selector": "*",
         "symfony/dotenv": "*",
-        "symfony/phpunit-bridge": "*",
+        "symfony/phpunit-bridge": "dev-master",
         "symfony/profiler-pack": "^1.0",
         "symfony/web-server-bundle": "*"
     },
