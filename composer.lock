@@ -110,8 +110,8 @@
             "authors": [
                 {
                     "name": "Chris Boden",
-                    "role": "Developer",
-                    "email": "cboden@gmail.com"
+                    "email": "cboden@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "PHP WebSocket library",
@@ -2062,8 +2062,8 @@
             "authors": [
                 {
                     "name": "Chris Boden",
-                    "role": "Developer",
-                    "email": "cboden@gmail.com"
+                    "email": "cboden@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "RFC6455 WebSocket protocol handler",
@@ -2808,16 +2808,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.3.3",
+            "version": "v4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9"
+                "reference": "de63799239b3881b8a08f8481b22348f77ed7b36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9",
-                "reference": "8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/de63799239b3881b8a08f8481b22348f77ed7b36",
+                "reference": "de63799239b3881b8a08f8481b22348f77ed7b36",
                 "shasum": ""
             },
             "require": {
@@ -2879,7 +2879,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-07-24T17:13:59+00:00"
+            "time": "2019-08-26T08:26:39+00:00"
         },
         {
             "name": "symfony/debug",
@@ -5726,13 +5726,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Pawl WebSocket Transport for Thruway Client",
@@ -5845,19 +5845,19 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "role": "Lead Developer",
                     "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org"
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "role": "Project Founder",
-                    "email": "armin.ronacher@active-4.com"
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Twig Team",
-                    "role": "Contributors",
-                    "homepage": "https://twig.symfony.com/contributors"
+                    "homepage": "https://twig.symfony.com/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -5911,13 +5911,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Thruway WAMP router core",
@@ -5974,13 +5974,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "WebSockets (WAMP2) integration for Symfony2",
@@ -6027,13 +6027,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "WAMP2 Common Library for Thruway",
@@ -6400,20 +6400,20 @@
             "authors": [
                 {
                     "name": "Manuel Pichler",
-                    "role": "Project Founder",
                     "email": "github@manuel-pichler.de",
-                    "homepage": "https://github.com/manuelpichler"
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Marc Würth",
-                    "role": "Project Maintainer",
                     "email": "ravage@bluewin.ch",
-                    "homepage": "https://github.com/ravage84"
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 },
                 {
                     "name": "Other contributors",
-                    "role": "Contributors",
-                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors"
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
@@ -6433,12 +6433,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ea693fa060702164985511acc3ceb5389c9ac761"
+                "reference": "3a9ab646603efdccb4f7c4acbb3b36974ef257d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ea693fa060702164985511acc3ceb5389c9ac761",
-                "reference": "ea693fa060702164985511acc3ceb5389c9ac761",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3a9ab646603efdccb4f7c4acbb3b36974ef257d8",
+                "reference": "3a9ab646603efdccb4f7c4acbb3b36974ef257d8",
                 "shasum": ""
             },
             "conflict": {
@@ -6462,6 +6462,7 @@
                 "contao/core-bundle": ">=4,<4.4.39|>=4.5,<4.7.5",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/newsletter-bundle": ">=4,<4.1",
+                "datadog/dd-trace": ">=0.30,<0.30.2",
                 "david-garcia/phpwhois": "<=4.3.1",
                 "doctrine/annotations": ">=1,<1.2.7",
                 "doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
@@ -6549,6 +6550,7 @@
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
                 "stormpath/sdk": ">=0,<9.9.99",
+                "studio-42/elfinder": "<2.1.48",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
                 "sylius/grid": ">=1,<1.1.19|>=1.2,<1.2.18|>=1.3,<1.3.13|>=1.4,<1.4.5|>=1.5,<1.5.1",
@@ -6635,12 +6637,12 @@
             "authors": [
                 {
                     "name": "Marco Pivetta",
-                    "role": "maintainer",
-                    "email": "ocramius@gmail.com"
+                    "email": "ocramius@gmail.com",
+                    "role": "maintainer"
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-07-18T15:17:58+00:00"
+            "time": "2019-09-26T17:56:56+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -6929,12 +6931,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "04fdc2eb1dab09e2ae511da805fa0acd5c97848d"
+                "reference": "a7cd3b9192c91b5e911d8100919232202127c879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/04fdc2eb1dab09e2ae511da805fa0acd5c97848d",
-                "reference": "04fdc2eb1dab09e2ae511da805fa0acd5c97848d",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/a7cd3b9192c91b5e911d8100919232202127c879",
+                "reference": "a7cd3b9192c91b5e911d8100919232202127c879",
                 "shasum": ""
             },
             "require": {
@@ -6986,7 +6988,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2019-08-26T09:05:36+00:00"
+            "time": "2019-09-24T16:05:28+00:00"
         },
         {
             "name": "symfony/process",
