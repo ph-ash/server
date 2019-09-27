@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Service\GrowTiles;
 
 use App\Document\MonitoringData as MonitoringDataDocument;
-use App\Dto\MonitoringData as MonitoringDataDto;
+use App\Dto\Outgoing\MonitoringData as MonitoringDataDto;
 use App\Exception\ZMQClientException;
 use App\Factory\MonitoringDataDtoFactory;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
@@ -66,8 +66,14 @@ class MonitoringDataPushServiceTest extends TestCase
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
-        $this->monitoringDataDtoFactory->create($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
-        $this->monitoringDataDtoFactory->create($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory
+            ->createOutgoingFromDocument($monitoringData1)
+            ->shouldBeCalledOnce()
+            ->willReturn($dto);
+        $this->monitoringDataDtoFactory
+            ->createOutgoingFromDocument($monitoringData2)
+            ->shouldBeCalledOnce()
+            ->willReturn($dto);
         $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2);
         $this->logger->error(Argument::cetera())->shouldNotBeCalled();
 
@@ -103,8 +109,12 @@ class MonitoringDataPushServiceTest extends TestCase
         $monitorings = [$monitoringData1, $monitoringData2];
         $dto = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
 
-        $this->monitoringDataDtoFactory->create($monitoringData1)->shouldBeCalledOnce()->willReturn($dto);
-        $this->monitoringDataDtoFactory->create($monitoringData2)->shouldBeCalledOnce()->willReturn($dto);
+        $this->monitoringDataDtoFactory->createOutgoingFromDocument($monitoringData1)->shouldBeCalledOnce()->willReturn(
+            $dto
+        );
+        $this->monitoringDataDtoFactory->createOutgoingFromDocument($monitoringData2)->shouldBeCalledOnce()->willReturn(
+            $dto
+        );
         $this->monitoringDataPush->invoke($dto)->shouldBeCalledTimes(2)->willThrow(ZMQClientException::class);
         $this->logger->error(Argument::cetera())->shouldBeCalledTimes(2);
 

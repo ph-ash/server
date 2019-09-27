@@ -29,7 +29,7 @@ class MonitoringDataPushService implements MonitoringDataPush
     public function invoke(array $monitorings): void
     {
         foreach ($monitorings as $monitoring) {
-            $dto = $this->monitoringDataDtoFactory->create($monitoring);
+            $dto = $this->monitoringDataDtoFactory->createOutgoingFromDocument($monitoring);
             try {
                 $this->monitoringDataPush->invoke($dto);
             } catch (ZMQClientException | UnexpectedValueException $exception) {
