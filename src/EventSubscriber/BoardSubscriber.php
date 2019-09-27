@@ -8,9 +8,12 @@ use App\Event\DeleteMonitoringDataEvent;
 use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\Exception\ZMQClientException;
+use App\Factory\MonitoringDataDtoFactory;
+use App\Repository\MonitoringDataRepository;
 use App\Service\Board\MonitoringDataDeletion;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use UnexpectedValueException;
 
@@ -19,15 +22,21 @@ class BoardSubscriber implements EventSubscriberInterface
     private $monitoringDataDtoPush;
     private $monitoringDataDocumentPush;
     private $monitoringDataDeletion;
+    private $monitoringDataDtoFactory;
+    private $monitoringDataRepository;
 
     public function __construct(
         MonitoringDataDtoPush $monitoringDataDtoPush,
         MonitoringDataDocumentPush $monitoringDataDocumentPush,
-        MonitoringDataDeletion $monitoringDataDeletion
+        MonitoringDataDeletion $monitoringDataDeletion,
+        MonitoringDataDtoFactory $monitoringDataDtoFactory,
+        MonitoringDataRepository $monitoringDataRepository
     ) {
         $this->monitoringDataDtoPush = $monitoringDataDtoPush;
         $this->monitoringDataDocumentPush = $monitoringDataDocumentPush;
         $this->monitoringDataDeletion = $monitoringDataDeletion;
+        $this->monitoringDataDtoFactory = $monitoringDataDtoFactory;
+        $this->monitoringDataRepository = $monitoringDataRepository;
     }
 
     public static function getSubscribedEvents(): array
@@ -49,12 +58,21 @@ class BoardSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws ZMQClientException
-     * @throws UnexpectedValueException
+     * @throws Exception
      */
     public function pushDataToBoard(IncomingMonitoringDataEvent $incomingMonitoringDataEvent): void
     {
-        $this->monitoringDataDtoPush->invoke($incomingMonitoringDataEvent->getMonitoringData());
+        $incomingMonitoringData = $incomingMonitoringDataEvent->getMonitoringData();
+        $monitoringDataDocument = $this->monitoringDataRepository->find($incomingMonitoringData->getId());
+        if (!$monitoringDataDocument) {
+            throw new Exception(
+                sprintf('Could not find Document for id %s in %s', $incomingMonitoringData->getId(), __METHOD__)
+            );
+        }
+        $outgoingMonitoring = $this->monitoringDataDtoFactory->createOutgoingFromDocument(
+            $monitoringDataDocument
+        );
+        $this->monitoringDataDtoPush->invoke($outgoingMonitoring);
     }
 
     public function pushUpdatedDataToBoard(GrowTilesEvent $event): void
