@@ -9,7 +9,7 @@
         "ext-simplexml": "*",
         "ext-zmq": "*",
         "alcaeus/mongo-php-adapter": "^1.1",
-        "doctrine/mongodb-odm-bundle": "^3.5",
+        "doctrine/mongodb-odm-bundle": "^4.0",
         "friendsofsymfony/rest-bundle": "^2.4",
         "myclabs/php-enum": "^1.6",
         "nelmio/api-doc-bundle": "^3.3",
