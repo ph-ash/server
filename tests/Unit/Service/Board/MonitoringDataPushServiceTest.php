@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service\Board;
 
-use App\Dto\MonitoringData;
+use App\Dto\Outgoing\MonitoringData;
 use App\Service\Board\MonitoringDataPushService;
 use App\Service\Board\ZMQ\Client;
 use App\ValueObject\Channel;
@@ -38,7 +38,17 @@ class MonitoringDataPushServiceTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $monitoringDataDto = new MonitoringData('id', 'status', 'payload', 1, 60, new DateTimeImmutable(), 'some.path', null, null);
+        $monitoringDataDto = new MonitoringData(
+            'id',
+            'status',
+            'payload',
+            1,
+            60,
+            new DateTimeImmutable(),
+            'some.path',
+            null,
+            null
+        );
 
         $this->serializer->serialize($monitoringDataDto, 'json')->willReturn('someString');
         $channel = new Channel('push');

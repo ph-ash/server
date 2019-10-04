@@ -6,9 +6,12 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\Document\MonitoringData as MonitoringDataDocument;
 use App\Dto\MonitoringData as MonitoringDataDto;
+use App\Dto\Outgoing\MonitoringData as OutgoingMonitoringDataDto;
 use App\Event\GrowTilesEvent;
 use App\Event\IncomingMonitoringDataEvent;
 use App\EventSubscriber\BoardSubscriber;
+use App\Factory\MonitoringDataDtoFactory;
+use App\Repository\MonitoringDataRepository;
 use App\Service\Board\MonitoringDataDeletion;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
@@ -17,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class BoardSubscriberTest extends TestCase
 {
+    private $monitoringDataRepository;
+    private $monitoringDataDtoFactory;
     private $monitoringDataDeletion;
     private $monitoringDataDtoPush;
     private $monitoringDataDocumentPush;
@@ -30,11 +35,15 @@ class BoardSubscriberTest extends TestCase
         $this->monitoringDataDtoPush = $this->prophesize(MonitoringDataDtoPush::class);
         $this->monitoringDataDocumentPush = $this->prophesize(MonitoringDataDocumentPush::class);
         $this->monitoringDataDeletion = $this->prophesize(MonitoringDataDeletion::class);
+        $this->monitoringDataDtoFactory = $this->prophesize(MonitoringDataDtoFactory::class);
+        $this->monitoringDataRepository = $this->prophesize(MonitoringDataRepository::class);
 
         $this->subject = new BoardSubscriber(
             $this->monitoringDataDtoPush->reveal(),
             $this->monitoringDataDocumentPush->reveal(),
-            $this->monitoringDataDeletion->reveal()
+            $this->monitoringDataDeletion->reveal(),
+            $this->monitoringDataDtoFactory->reveal(),
+            $this->monitoringDataRepository->reveal()
         );
     }
 
@@ -47,10 +56,51 @@ class BoardSubscriberTest extends TestCase
 
     public function testPushDataToBoard(): void
     {
-        $monitoringData = new MonitoringDataDto('id', 'ok', '', 1, 60, new DateTimeImmutable(), null);
-        $incomingEvent = new IncomingMonitoringDataEvent($monitoringData);
+        $id = 'id';
+        $status = 'ok';
+        $payload = '';
+        $priority = 1;
+        $idletimeOut = 60;
+        $date = new DateTimeImmutable();
+        $incomingMonitoringData = new MonitoringDataDto(
+            $id,
+            $status,
+            $payload,
+            $priority,
+            $idletimeOut,
+            $date,
+            null
+        );
+        $incomingEvent = new IncomingMonitoringDataEvent($incomingMonitoringData);
+        $outgoingMonitoringData = new OutgoingMonitoringDataDto(
+            $id,
+            $status,
+            $payload,
+            $priority,
+            $idletimeOut,
+            $date,
+            null
+        );
+        $monitoringDataDocument = new MonitoringDataDocument(
+            $id,
+            $status,
+            $date,
+            $payload,
+            $priority,
+            $idletimeOut,
+            $date,
+            null,
+            null,
+            null
+        );
 
-        $this->monitoringDataDtoPush->invoke($monitoringData)->shouldBeCalled();
+        $this->monitoringDataRepository->find($id)->willReturn($monitoringDataDocument);
+
+        $this->monitoringDataDtoFactory->createOutgoingFromDocument($monitoringDataDocument)->willReturn(
+            $outgoingMonitoringData
+        );
+
+        $this->monitoringDataDtoPush->invoke($outgoingMonitoringData)->shouldBeCalled();
 
         $this->subject->pushDataToBoard($incomingEvent);
     }

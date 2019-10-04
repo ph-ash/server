@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Board;
 
-use App\Dto\MonitoringData;
+use App\Dto\Outgoing\MonitoringData;
 use App\Exception\ZMQClientException;
 use UnexpectedValueException;
 

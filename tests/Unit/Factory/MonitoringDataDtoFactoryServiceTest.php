@@ -21,14 +21,23 @@ class MonitoringDataDtoFactoryServiceTest extends TestCase
         $this->subject = new MonitoringDataDtoFactoryService();
     }
 
-    public function testCreateFrom(): void
+    public function testCreateFromDocument(): void
     {
         $date = new DateTimeImmutable();
         $document = new MonitoringDataDocument(
-            'id 1', 'ok', new DateTimeImmutable(), 'p', 1, 60, $date, 'a.b', 5, null
+            'id 1',
+            'ok',
+            new DateTimeImmutable(),
+            'p',
+            1,
+            60,
+            $date,
+            'a.b',
+            5,
+            null
         );
 
-        $dto = $this->subject->create($document);
+        $dto = $this->subject->createOutgoingFromDocument($document);
         self::assertSame('id 1', $dto->getId());
         self::assertSame('ok', $dto->getStatus());
         self::assertSame('p', $dto->getPayload());

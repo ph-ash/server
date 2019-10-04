@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Document\MonitoringData as MonitoringDataDocument;
-use App\Dto\MonitoringData as MonitoringDataDto;
+use App\Dto\Outgoing\MonitoringData as MonitoringDataDto;
 
 class MonitoringDataDtoFactoryService implements MonitoringDataDtoFactory
 {
-    public function create(MonitoringDataDocument $monitoringData): MonitoringDataDto
+    public function createOutgoingFromDocument(MonitoringDataDocument $monitoringData): MonitoringDataDto
     {
         return new MonitoringDataDto(
             $monitoringData->getId(),
@@ -20,7 +20,8 @@ class MonitoringDataDtoFactoryService implements MonitoringDataDtoFactory
             $monitoringData->getDate(),
             $monitoringData->getPath(),
             $monitoringData->getTileExpansionIntervalCount(),
-            $monitoringData->getTileExpansionGrowthExpression()
+            $monitoringData->getTileExpansionGrowthExpression(),
+            $monitoringData->getStatusChangedAt()
         );
     }
 }
