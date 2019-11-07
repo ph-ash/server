@@ -16,6 +16,7 @@ use App\Service\Board\MonitoringDataDeletion;
 use App\Service\Board\MonitoringDataPush as MonitoringDataDtoPush;
 use App\Service\GrowTiles\MonitoringDataPush as MonitoringDataDocumentPush;
 use DateTimeImmutable;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use PHPUnit\Framework\TestCase;
 
 class BoardSubscriberTest extends TestCase
@@ -62,6 +63,7 @@ class BoardSubscriberTest extends TestCase
         $priority = 1;
         $idletimeOut = 60;
         $date = new DateTimeImmutable();
+        $documentManager = $this->prophesize(DocumentManager::class);
         $incomingMonitoringData = new MonitoringDataDto(
             $id,
             $status,
@@ -100,6 +102,7 @@ class BoardSubscriberTest extends TestCase
             $outgoingMonitoringData
         );
 
+        $this->monitoringDataRepository->getDocumentManager()->willReturn($documentManager);
         $this->monitoringDataDtoPush->invoke($outgoingMonitoringData)->shouldBeCalled();
 
         $this->subject->pushDataToBoard($incomingEvent);
