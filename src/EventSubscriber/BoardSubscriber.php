@@ -64,6 +64,7 @@ class BoardSubscriber implements EventSubscriberInterface
     {
         $incomingMonitoringData = $incomingMonitoringDataEvent->getMonitoringData();
         $monitoringDataDocument = $this->monitoringDataRepository->find($incomingMonitoringData->getId());
+        $this->monitoringDataRepository->getDocumentManager()->refresh($monitoringDataDocument);
         if (!$monitoringDataDocument) {
             throw new Exception(
                 sprintf('Could not find Document for id %s in %s', $incomingMonitoringData->getId(), __METHOD__)
