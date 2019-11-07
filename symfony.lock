@@ -366,7 +366,7 @@
         "version": "v4.1.7"
     },
     "symfony/templating": {
-        "version": "v4.1.7"
+        "version": "v4.3.6"
     },
     "symfony/translation-contracts": {
         "version": "v1.1.5"

@@ -24,6 +24,7 @@
         "symfony/monolog-bundle": "^3.3",
         "symfony/security-bundle": "*",
         "symfony/serializer": "*",
+        "symfony/templating": "4.3.*",
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/yaml": "*",
