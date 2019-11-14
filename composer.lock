@@ -5019,16 +5019,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v4.3.7",
+            "version": "v4.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "a69ed0f87a0640db794951a397950981ed5b6e83"
+                "reference": "18f30003dbe7178dcc1f75901ecb9f4937d146f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/a69ed0f87a0640db794951a397950981ed5b6e83",
-                "reference": "a69ed0f87a0640db794951a397950981ed5b6e83",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/18f30003dbe7178dcc1f75901ecb9f4937d146f5",
+                "reference": "18f30003dbe7178dcc1f75901ecb9f4937d146f5",
                 "shasum": ""
             },
             "require": {
@@ -5095,7 +5095,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2019-11-06T16:10:14+00:00"
+            "time": "2019-11-13T07:29:07+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5696,13 +5696,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Thruway WAMP client",
@@ -5797,13 +5797,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Ratchet Transport for Thruway",
@@ -5930,13 +5930,13 @@
             "authors": [
                 {
                     "name": "Matt Bonneau",
-                    "role": "Developer",
-                    "email": "matt@bonneau.net"
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
                 },
                 {
                     "name": "David Dan",
-                    "role": "Developer",
-                    "email": "davidwdan@gmail.com"
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Thruway WAMP router core",
@@ -6420,20 +6420,20 @@
             "authors": [
                 {
                     "name": "Manuel Pichler",
-                    "role": "Project Founder",
                     "email": "github@manuel-pichler.de",
-                    "homepage": "https://github.com/manuelpichler"
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Marc Würth",
-                    "role": "Project Maintainer",
                     "email": "ravage@bluewin.ch",
-                    "homepage": "https://github.com/ravage84"
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 },
                 {
                     "name": "Other contributors",
-                    "role": "Contributors",
-                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors"
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
