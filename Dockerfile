@@ -9,7 +9,7 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
 
 # next stage #
 
-FROM alpine:3.9
+FROM alpine:3.11.0
 COPY --from=composer /var/www/html /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod \
