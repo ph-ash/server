@@ -9,7 +9,7 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
 
 # next stage #
 
-FROM alpine:3.9
+FROM alpine:3.11
 COPY --from=composer /var/www/html /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod \
@@ -31,9 +31,9 @@ RUN apk add --no-cache php7-fpm \
        php7-tokenizer \
        php7-zip \
        php7-pecl-zmq \
-       php7-pecl-mongodb \
        supervisor \
        fcgi \
+    && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ php7-pecl-mongodb \
     && cp docker/*-fpm.conf /etc/php7/php-fpm.d/ \
     && php bin/console cache:warmup \
     && crontab /var/www/html/docker/crontab
