@@ -87,11 +87,6 @@
         "symfony": {
             "allow-contrib": false,
             "require": "4.3.*"
-        },
-        "hooks": {
-            "pre-commit": [
-                "hooks/pre-commit"
-            ]
         }
     }
 }
