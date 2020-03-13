@@ -9,7 +9,7 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs \
 
 # next stage #
 
-FROM alpine:3.11
+FROM alpine:edge
 COPY --from=composer /var/www/html /var/www/html
 WORKDIR /var/www/html
 ENV APP_ENV=prod \
@@ -33,6 +33,7 @@ RUN apk add --no-cache php7-fpm \
        php7-pecl-zmq \
        supervisor \
        fcgi \
+       icu-libs \
     && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ php7-pecl-mongodb \
     && cp docker/*-fpm.conf /etc/php7/php-fpm.d/ \
     && php bin/console cache:warmup \
